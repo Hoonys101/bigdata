@@ -11,6 +11,5 @@ public interface MemberMapper {
     public boolean login(String id, String pwd);
     Member findById(String id);
 
-
     void insertMember(Member member);
 }
