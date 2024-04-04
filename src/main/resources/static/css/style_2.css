@@ -1,0 +1,271 @@
+@import url('https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css');
+
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Spoqa Han Sans Neo", "sans-serif";
+    font-size: 16px;
+    line-height: 20px;
+    color: #767676;
+    position: relative;
+    height: 100vh;
+    background-color: #f2f2f2;
+}
+
+.container {
+    background: #fff;
+    width: 520px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
+    padding-bottom: 9px;
+}
+
+h1 {
+    padding: 20px 0 18px 0;
+    margin:0;
+    border-bottom: 1px solid #c4c4c4;
+    font-size: 1em;
+    line-height: 1em;
+    font-weight: 500;
+    color: #000;
+    text-align: center;
+}
+
+.close {
+    position: absolute;
+    right: 24px;
+    top: 22px;
+    background: url('images/close.png') no-repeat;
+    width: 16px;
+    height: 16px;
+    color: transparent;
+}
+
+.login {
+    margin: 2px 24px;
+}
+
+h2 {
+    font-size: 1.25rem;
+    color: #000;
+    line-height: 1.2em;
+    padding: 24px 0;
+    font-weight: 500;
+}
+
+.container .login form input {
+    border: 1px solid #c4c4c4;
+    border-radius: 5px;
+    width: 472px;
+    padding: 16px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+
+input::placeholder {
+    font-size: 1em;
+}
+
+.check_wrap {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
+    margin: 6px 0;
+}
+
+.check_wrap input[type="checkbox"] {
+    display: none;
+}
+
+.check_wrap input[type="checkbox"]+label {
+    display: inline-block;
+    font-size: 1em;
+    position: relative;
+    cursor: pointer;
+}
+
+.check_wrap input[type="checkbox"]+label::before {
+    content: "";
+    display: block;
+    background: url('images/icon_check_empty.png') no-repeat;
+    width: 22px;
+    height: 22px;
+}
+
+.check_wrap input[type="checkbox"]:checked+label::before {
+    background: url('images/icon_check.png') no-repeat;
+}
+
+.check_txt {
+    margin-left: 8px;
+}
+
+.login ul {
+    display: block;
+    text-align: center;
+    list-style: none;
+    width: 472px;
+    padding: 0;
+}
+
+.login>ul li a {
+    text-decoration: none;
+}
+
+.login>ul li button:hover {
+    background-color: #2e77d6;
+}
+
+.login>ul li button {
+    width: 472px;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #fff;
+    padding: 14px 0;
+    border-style: none;
+    border-radius: 5px;
+    background-color: #2F80ED;
+    margin: 4px 0;
+    cursor: pointer;
+}
+
+.login ul .login_txt {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    margin: 16px;
+}
+
+.login ul .login_txt li {
+    position: relative;
+    padding: 0 14px;
+}
+
+.login>ul .login_txt li:first-child::after {
+    position: absolute;
+    display: inline-block;
+    width: 1px;
+    height: 14px;
+    top: 5px;
+    right: 0;
+    background-color: #767676;
+    content: " ";
+}
+
+.login>ul .login_txt li a {
+    color: #767676;
+    font-size: 0.875em;
+    line-height: 0.9em;
+}
+
+.or {
+    display: block;
+    margin: 20px 0;
+    padding-top: 10px;
+    position: relative;
+    font-size: 0.875rem;;
+}
+
+.or::before {
+    content: '';
+    position: absolute;
+    background-color: #c4c4c4;
+    width: 210px;
+    height: 1px;
+    left: 0;
+    top: 20px;
+}
+
+.or::after {
+    content: '';
+    position: absolute;
+    background-color: #c4c4c4;
+    width: 210px;
+    height: 1px;
+    right: 0;
+    top: 20px;
+}
+
+li .btn:hover {
+    color: #5e5d5d;
+}
+
+li .btn {
+    color: #767676;
+    display: block;
+    font-size: 1em;
+    text-align: center;
+    border: 1px solid;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    padding: 15px 0;
+    position: relative;
+    cursor: pointer;
+}
+
+li .btn::before {
+    position: absolute;
+    content: "";
+    width: 28px;
+    height: 28px;
+    left: 12px;
+    top: 25%;
+    background: #000;
+}
+
+li .btn1:hover {
+    border-color: #6d6d6d;
+}
+
+li .btn1 {
+    border-color: #8f8f8f;
+}
+
+li .btn2:hover {
+    border-color: #4d97c2;
+}
+
+li .btn2 {
+    border-color: #59B1E3;
+}
+
+li .btn3:hover {
+    border-color: #3db14d;
+}
+
+li .btn3 {
+    border-color: #49D15A;
+}
+
+li .btn4:hover {
+    border-color: #F2C94C;
+}
+
+li .btn4 {
+    border-color: #F4D26A;
+}
+
+li .btn1::before {
+    background: url('images/css_sprites_retina.png') -52px -10px;
+    background-size: 117px 84px;
+}
+
+li .btn2::before {
+    background: url('images/css_sprites_retina.png') -90px -10px;
+    background-size: 117px 84px;
+}
+
+li .btn3::before {
+    background: url('images/css_sprites_retina.png') -10px -10px;
+    background-size: 117px 84px;
+}
+
+li .btn4::before {
+    background: url('images/css_sprites_retina.png') -10px -52px;
+    background-size: 117px 84px;
+}
