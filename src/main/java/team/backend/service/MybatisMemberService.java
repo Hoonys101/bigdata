@@ -19,14 +19,6 @@ public class MybatisMemberService implements MemberService {
         return member != null && member.getPwd().equals(pwd);
     }
     public void join(Member member) {
-        //member = new Member();
-        //member.setId(member.getId());
-       // member.setPwd(member.getPwd());
-        //member.setName(member.getName());
-        //member.setEmail(member.getEmail());
-        ///member.setBirth_date(member.getBirth_date());
-        //member.setGender(member.getGender());
-        //member.setSignup_date(member.getSignup_date());
         mapper.insertMember(member);
     }
 
