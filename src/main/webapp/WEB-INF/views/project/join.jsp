@@ -122,8 +122,23 @@
             </tr>
             <tr class="join-tr">
                 <th class="join-th"><label for="signup_date">가입일자</label></th>
-                <td><input type="date" id="signup_date" name="signup_date" value="<%= java.time.LocalDate.now() %>"></td>
-            </tr>
+                <td><input type="text" id="signup_date" name="signup_date" readonly></td>
+            <script>
+                // 현재 날짜를 가져오는 함수
+                function getCurrentDate() {
+                    var now = new Date();
+                    var year = now.getFullYear();
+                    var month = String(now.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1 필요
+                    var day = String(now.getDate()).padStart(2, '0');
+                    return year + '-' + month + '-' + day;
+                }
+
+                // 페이지가 로드될 때 실행되는 함수
+                window.onload = function() {
+                    // 현재 날짜를 가져와서 입력 필드에 설정
+                    document.getElementById('signup_date').value = getCurrentDate();
+                };
+            </script>
         </table>
         <div class="foot">
             <button type="button" class="btn-cancel" onclick="goBack()">취소</button>
