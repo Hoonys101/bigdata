@@ -1,12 +1,8 @@
 import FinanceDataReader as fdr
 import ATO as db
-import pandas_datareader as web
 import datetime as time
 import pandas as pd
-import matplotlib.pyplot as plt
-import os
-from pykrx import stock
-from pykrx import bond
+
 
 strs=['KRX-DESC', 'S&P500','KRX/INDEX/list'] #for stacklisting 'KRX', 'NASDAQ', 'NYSE', 'AMEX' 제외
 kr_index=['KS11','KQ11','KS50','KS100','KRX100','KS200']#for DataReader

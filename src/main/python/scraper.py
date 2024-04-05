@@ -24,9 +24,10 @@ def stockprice(db_name='', code='005930', startdate='20120101', lastdate='202201
     if db_name=='Index':
         df=stock.get_index_ohlcv(startdate, lastdate, code)[['시가','고가','저가','종가','거래량']]
         df.rename(columns={'시가':'Open','고가':'High','저가':'Low','종가':'Close','거래량':'Volume'},inplace=True)
-        df.rename_axis('Date',inplace=True)
+        df.rename_axis('data_date',inplace=True)
     else:
         df = fdr.DataReader(code, startdate,lastdate)[['Open','High','Low','Close','Volume']]
+        df.rename_axis('data_date',inplace=True)
     return df
 
 # Sector, Code를 받아서 웹으로부터 20120101~20220101 데이터의 필요 컬럼을 선정하여 df로 반환
@@ -34,14 +35,13 @@ def stock_data(stock_code='IBM', db_name='sdfklj', startdate='20120101',lastdate
     if db_name=='Index':
         df=stock.get_index_ohlcv(startdate, lastdate, stock_code)[['시가','고가','저가','종가','거래량']]
         df.rename(columns={'시가':'Open','고가':'High','저가':'Low','종가':'Close','거래량':'Volume'},inplace=True)
-        df.rename_axis('Date',inplace=True)
+        df.rename_axis('data_date',inplace=True)
         
     else:
         df = fdr.DataReader(stock_code, startdate,lastdate)[['Open','High','Low','Close','Volume']]
+        df.rename_axis('data_date',inplace=True)
     data_processing(df,db_name,stock_code)
     return df
-
-
 
 # dataFrame, str DB명, stock_code를 받아서, dataFrame에 stock_code,db_name가 추가된 df로  stock_data의 딸림
 def data_processing(df,db_name,stock_code):
@@ -49,14 +49,12 @@ def data_processing(df,db_name,stock_code):
         df.insert(loc=0,column="stock_code",value=stock_code)
         return df
 
-connection=db.connect_to_oracle()
-df1=insert_data=stock_data('IBM','SnP500')
-df2=insert_data=stock_data('1008','Index')
-db.insert_data_to_table(connection,df1)
-db.insert_data_to_table(connection,df2)
-db.close_connection(connection)
-
-
+# connection=db.connect_to_oracle()
+# df1=insert_data=stock_data('IBM','SnP500')
+# df2=insert_data=stock_data('1008','Index')
+# db.insert_data_to_table(connection,df1)
+# db.insert_data_to_table(connection,df2)
+# db.close_connection(connection)
 
 # 8자리 날짜 str을 datetime으로 반환
 def str_to_date(str_date='20121212'):
@@ -125,17 +123,17 @@ def delay_df(df1,df2,days):
     return df1,df2
 
 #Sector와 Code를 입력받아서, 동일한 코드 생성
-
-list=['add_data','KOSPI','004710']
-
 def add_data(list=[]):
     db_name=list[1]
     stock_code=list[2]
-    df=stockprice(db_name,stock_code)
-    refine_df=data_processing(df,db_name,stock_code)
+#    df=stockprice(db_name,stock_code)
+    df=stock_data(db_name,stock_code)
     connect=db.connect_to_oracle()
 #    db.create_table_from_dataframe(connect,refine_df,"ArchivedData")
-    db.insert_data_to_table(connect,refine_df,"ArchivedData")
+    db.insert_data_to_table(connect,df)
+    db.close_connection(connect)
+
+
 #add_data(list)
 #cal_corr()
 #print(stockprice())
@@ -151,14 +149,14 @@ def add_data(list=[]):
 #pd.set_option('display.max_columns', None)
 
 
-strs=['KRX-DESC', 'S&P500','KRX/INDEX/list'] #for stckListing 제외'KRX', 'NASDAQ', 'NYSE', 'AMEX'
-kr_index=[ 'KS11','KQ11','KS50','KS100','KRX100','KS200']#for DataReader
-us_index=['DJI','IXIC','US500','VIX']#for DataReader
-global_index=['JP225','STOXX50E','CSI300','HSI','FTSE','DAX','CAC']#for DataReader
-current_trade=['USD/KRW','USD/EUR','USD/JPY','USD/RUB']#for DataReader
-crypto=['BTC/KRW','ETH/KRW','XRP/KRW','BCH/KRW','EOS/KRW','LTC/KRW','XLM/KRW']#for DataReader
+# strs=['KRX-DESC', 'S&P500','KRX/INDEX/list'] #for stckListing 제외'KRX', 'NASDAQ', 'NYSE', 'AMEX'
+# kr_index=[ 'KS11','KQ11','KS50','KS100','KRX100','KS200']#for DataReader
+# us_index=['DJI','IXIC','US500','VIX']#for DataReader
+# global_index=['JP225','STOXX50E','CSI300','HSI','FTSE','DAX','CAC']#for DataReader
+# current_trade=['USD/KRW','USD/EUR','USD/JPY','USD/RUB']#for DataReader
+# crypto=['BTC/KRW','ETH/KRW','XRP/KRW','BCH/KRW','EOS/KRW','LTC/KRW','XLM/KRW']#for DataReader
 
-columns=[]
+# columns=[]
 #for str in strs:
 #    columns.append(str)
 #    columns.append(fdr.DataReader() StockListing(str).columns.tolist())
