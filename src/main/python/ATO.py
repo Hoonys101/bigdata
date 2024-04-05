@@ -18,6 +18,7 @@ def connect_to_oracle():
 #str으로 8자리 str을 받아서 /로 구분되는 문자열 생성
 def str_to_date(str_date='20121212'): 
 #    str_date='20121212'
+    print(str_date)
     year=str_date[0:4]
     month=str_date[4:6]
     day=str_date[6:8]
@@ -41,7 +42,7 @@ def read_date(connection,start='20120101',last='20220101',TABLE_NAME='archivedda
     last=str_to_date(last)
     print(start, last)
     try:
-        query = f"SELECT * FROM {TABLE_NAME} WHERE \"Date\" >= TO_DATE(:1, 'YYYY/MM/DD') AND \"Date\" <= TO_DATE(:2,'YYYY/MM/DD')"
+        query = f"SELECT * FROM {TABLE_NAME} WHERE data_date >= TO_DATE(:1, 'YYYY/MM/DD') AND data_date <= TO_DATE(:2,'YYYY/MM/DD')"
         cursor.execute(query,(start,last))
         result = cursor.fetchall()
         if result:
@@ -49,8 +50,8 @@ def read_date(connection,start='20120101',last='20220101',TABLE_NAME='archivedda
             columns = [desc[0] for desc in cursor.description]
             df = pd.DataFrame(result, columns=columns)
             print(df)
-            if 'Date' in df.columns:
-                df.set_index('Date', inplace=True)
+            if 'data_date' in df.columns:
+                df.set_index('data_date', inplace=True)
             return df
         else:
             print("No data found for the given name.")
@@ -64,7 +65,7 @@ def read_code_date(connection,db_name='KRX',stock_code='005930',start='20120101'
     last=str_to_date(last)
     print(start, last)
     try:
-        query = f"SELECT * FROM {TABLE_NAME} WHERE \"db_name\"=:1 AND \"stock_code\"=:2 AND \"Date\" >= TO_DATE(:3, 'YYYY/MM/DD') AND \"Date\" <= TO_DATE(:4,'YYYY/MM/DD')"
+        query = f"SELECT * FROM {TABLE_NAME} WHERE db_name=:1 AND stock_code=:2 AND data_date >= TO_DATE(:3, 'YYYY/MM/DD') AND data_date <= TO_DATE(:4,'YYYY/MM/DD')"
         cursor.execute(query,(db_name,stock_code,start,last))
         result = cursor.fetchall()
         if result:
@@ -73,7 +74,7 @@ def read_code_date(connection,db_name='KRX',stock_code='005930',start='20120101'
             df = pd.DataFrame(result, columns=columns)
             print(df)
 #            if 'Date' in df.columns:
-            df.set_index('Date', inplace=True)
+            df.set_index('DATA_DATE', inplace=True)
             return df
         else:
             print("No data found for the given name.")
@@ -84,7 +85,7 @@ def read_code_date(connection,db_name='KRX',stock_code='005930',start='20120101'
 def read_db_code(connection,data_base='KRX',code='005930',TABLE_NAME='archiveddata'):
     cursor = connection.cursor()
     try:
-        query = f"SELECT * FROM {TABLE_NAME} WHERE \"data_base\" = :1 AND \"Code\" = :2"
+        query = f"SELECT * FROM {TABLE_NAME} WHERE data_base = :1 AND stock_code = :2"
         cursor.execute(query,(data_base,code))
         result = cursor.fetchall()
         if result:
@@ -118,7 +119,7 @@ def create_table_from_dataframe(connection, df, table_name):
         cursor = connection.cursor()
 
         # DataFrame의 인덱스를 임시로 해제
-        if 'Date' in df.columns:
+        if 'data_date' in df.columns:
             df.reset_index(inplace=True)
 #        df.reset_index(inplace=True)
 
@@ -173,8 +174,8 @@ def insert_data_to_table(connection,df, table_name='ArchivedData'):
         print(f"{len(df)}건의 데이터를 {table_name} 테이블에 입력 완료")
 
         # DataFrame의 인덱스를 다시 설정
-        if 'Date' in df.columns:
-            df.set_index('Date', inplace=True)
+        if 'data_date' in df.columns:
+            df.set_index('data_date', inplace=True)
 
     except Exception as e:
         print(f"데이터 입력 중 오류 발생: {e}")
