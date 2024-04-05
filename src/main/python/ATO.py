@@ -56,6 +56,29 @@ def read_date(connection,start='20120101',last='20220101',TABLE_NAME='archivedda
             print("No data found for the given name.")
     finally:
         cursor.close()
+        
+# connection, 날짜1,2(8자리 str), 테이블명을 받고 Read 기능을 수행하는 함수 <-- 테이블명 필요 없음, 기업명 인자 필요
+def read_code_date(connection,db_name='KRX',stock_code='005930',start='20120101',last='20220101',TABLE_NAME='archiveddata'):
+    cursor = connection.cursor()
+    start=str_to_date(start)
+    last=str_to_date(last)
+    print(start, last)
+    try:
+        query = f"SELECT * FROM {TABLE_NAME} WHERE \"db_name\"=:1 AND \"stock_code\"=:2 AND \"Date\" >= TO_DATE(:3, 'YYYY/MM/DD') AND \"Date\" <= TO_DATE(:4,'YYYY/MM/DD')"
+        cursor.execute(query,(db_name,stock_code,start,last))
+        result = cursor.fetchall()
+        if result:
+            # 판다스 DataFrame으로 변환
+            columns = [desc[0] for desc in cursor.description]
+            df = pd.DataFrame(result, columns=columns)
+            print(df)
+#            if 'Date' in df.columns:
+            df.set_index('Date', inplace=True)
+            return df
+        else:
+            print("No data found for the given name.")
+    finally:
+        cursor.close()
 
 # connection, DB명, code, table명을 받아서 df 출력
 def read_db_code(connection,data_base='KRX',code='005930',TABLE_NAME='archiveddata'):
@@ -128,7 +151,7 @@ def create_table_from_dataframe(connection, df, table_name):
         cursor.close()
 
 #connection, df, table_name을 받아서 DB에 내용 저장
-def insert_data_to_table(connection,df, table_name):
+def insert_data_to_table(connection,df, table_name='ArchivedData'):
     try:
         # Oracle 연결
         cursor = connection.cursor()
@@ -136,6 +159,37 @@ def insert_data_to_table(connection,df, table_name):
 #        if 'Date' in df.columns:
 #            df.reset_index(inplace=True)
         df.reset_index(inplace=True)
+        #DataFrame의 nan 값을 ""로 수정
+        df.fillna('null',inplace=True)
+        # DataFrame의 데이터를 테이블에 입력하는 쿼리 실행
+        insert_query = f"INSERT INTO {table_name} VALUES ("
+        for _, row in df.iterrows():
+            values = ", ".join([format_value(value) for value in row])
+#            print(insert_query + values + ")")
+            cursor.execute(insert_query + values + ")")
+
+        # 변경사항 커밋
+        connection.commit()
+        print(f"{len(df)}건의 데이터를 {table_name} 테이블에 입력 완료")
+
+        # DataFrame의 인덱스를 다시 설정
+        if 'Date' in df.columns:
+            df.set_index('Date', inplace=True)
+
+    except Exception as e:
+        print(f"데이터 입력 중 오류 발생: {e}")
+
+    finally:
+        cursor.close()
+        
+def insert_data_menu_to_table(connection,df, table_name):
+    try:
+        # Oracle 연결
+        cursor = connection.cursor()
+        # DataFrame의 인덱스를 임시로 해제
+        if 'Date' in df.columns:
+            df.reset_index(inplace=True)
+#        df.reset_index(inplace=True)
         #DataFrame의 nan 값을 ""로 수정
         df.fillna('null',inplace=True)
         # DataFrame의 데이터를 테이블에 입력하는 쿼리 실행

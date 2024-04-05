@@ -81,7 +81,8 @@ def save_data():
 #    db.create_table_from_dataframe(connection,df,'AvailableData')
     df['Sector']=df['Sector'].str.replace("'","")
     df['Name']=df['Name'].str.replace("'","")
-    db.insert_data_to_table(connection,df,'AvailableData')
+    print(df)
+    db.insert_data_menu_to_table(connection,df,'AvailableData')
     db.close_connection(connection)
 
 save_data()
