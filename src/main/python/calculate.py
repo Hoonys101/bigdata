@@ -1,19 +1,16 @@
-import FinanceDataReader as fdr
-import pandas_datareader as web
-import datetime as time
 import ATO as db
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
-from pykrx import stock
 
 # df를 str으로 받아서, -100~100까지로 정규화된 df 반환
-def normal(df, default='Close'):
+def normal(df, default='CLOSE'):
     # Close 컬럼의 최대값과 최소값 계산
-    max_close = df['Close'].max()
-    min_close = df['Close'].min()
+    print(df)
+    max_close = df['CLOSE'].max()
+    min_close = df['CLOSE'].min()
     # Close 값을 -100부터 100까지의 범위로 정규화하여 새로운 열 추가
-    df['Close_normal'] = ((df['Close'] - min_close) / (max_close - min_close)) * 200 - 100
+    df['Close_normal'] = ((df['CLOSE'] - min_close) / (max_close - min_close)) * 200 - 100
     return df
 
 # 2개의 df와 filename을 받아서, plot 저장하고 corr 리턴
@@ -81,5 +78,5 @@ def cal_data(list,days=7):
     result_list.extend(filename_list)
     return result_list
 
-list=['cal_data','1008','Index','IBM','SnP500','20120101','20130202']
-print(cal_data(list))
+#list=['cal_data','1008','Index','IBM','SnP500','20120101','20130202']
+#print(cal_data(list))
