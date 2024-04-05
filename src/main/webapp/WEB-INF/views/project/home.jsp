@@ -113,6 +113,19 @@ body {
  .analyze-button:hover {
    background-color: #45a049; /* 호버 시 배경색 변경 */
  }
+ .welcome-message {
+     font-size: 28px;
+     font-weight: bold;
+     color: #fff;
+     background-color: #007bff;
+     padding: 15px 30px;
+     border-radius: 10px;
+     display: inline-block;
+     margin-bottom: 20px;
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+ }
+
 </style>
 </head>
 <body>
@@ -121,21 +134,24 @@ body {
 </header>
     <nav>
         <c:if test = "${ empty sessionScope.id}">
-                <p>로그인이 필요합니다.<br/>
+                <div class="welcome-message">로그인이 필요합니다.</div>
+                <div>
                     <a href="login.do">로그인</a>|
                     <a href="join.do">회원가입</a>|
                     <a href="#">아이디찾기</a>|
                     <a href="#">비밀번호찾기</a>
-                </p>
+                </div>
             </c:if>
             <c:if test="${not empty sessionScope.id }">
-                <p>${sessionScope.id}님 환영합니다.</p>
+                <div class="welcome-message">${sessionScope.id}님 환영합니다.</div>
+                <div>
                 <a href="#">내 정보</a>|
-                <a href="logout.do">로그아웃</a>|
-                <a href="#">회원탈퇴</a>
+                <a href="logout.do" id="logout-link">로그아웃</a>|
+               <a href="withdraw.do?id=${sessionScope.id}" id="withdraw-link">회원탈퇴</a>
+               </div>
                 <div class="analyze-buttons">
                         <a href="analysis_page.do" class="analyze-button">분석하기</a>|
-                        <a href="analysis_page.do" class="analyze-button">히스토리</a>|
+                        <a href="history.do" class="analyze-button">히스토리</a>|
                         <a href="add.do" class="analyze-button">기업추가</a>
                     </div>
             </c:if>
@@ -147,5 +163,18 @@ body {
 <footer>
     <p>&copy; &copy; 2024 빅 데이터 분석 플랫폼</p>
 </footer>
+<script>
+    // 로그아웃 메시지 표시
+    var logoutLink = document.getElementById('logout-link');
+    logoutLink.addEventListener('click', function() {
+        alert('로그아웃이 되었습니다.');
+    });
+
+    // 회원탈퇴 메시지 표시
+    var withdrawLink = document.getElementById('withdraw-link');
+    withdrawLink.addEventListener('click', function() {
+        alert('회원탈퇴가 되었습니다.');
+    });
+</script>
 </body>
 </html>

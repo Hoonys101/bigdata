@@ -21,6 +21,9 @@ public class MybatisMemberService implements MemberService {
     public void join(Member member) {
         mapper.insertMember(member);
     }
+    public void withdraw(String id){
+        mapper.deleteUser(id);
+    }
 
 }
 

@@ -52,7 +52,7 @@
         function loadStockCodes() {
             var country = document.getElementById("country").value;
             if (country != "") {
-                fetch('getStockCodes.jsp?country=' + country)
+                fetch('add.jsp?country=' + country)
                     .then(response => response.json())
                     .then(data => {
                         var stockCodes = document.getElementById("stockCodes");
@@ -69,7 +69,7 @@
         function loadIndustries() {
             var stockCode = document.getElementById("stockCodes").value;
             if (stockCode != "") {
-                fetch('getIndustries.jsp?stockCode=' + stockCode)
+                fetch('add.jsp?stockCode=' + stockCode)
                     .then(response => response.json())
                     .then(data => {
                         var industries = document.getElementById("industries");
@@ -87,7 +87,7 @@
 </head>
 <body>
     <h2>데이터 선택</h2>
-    <form action="result.jsp" method="post"> <!-- 선택한 결과를 보여줄 페이지로 이동합니다. -->
+    <form action="list1.jsp" method="post"> <!-- 선택한 결과를 보여줄 페이지로 이동합니다. -->
         <select name="country" id="country" onchange="loadStockCodes()">
             <option value="">국가 선택</option>
             <c:forEach items="${countries}" var="country">

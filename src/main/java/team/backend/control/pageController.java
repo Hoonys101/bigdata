@@ -18,7 +18,7 @@ public class pageController {
     @Autowired
     private MybatisMemberService service;
 
-    @GetMapping("home.do")
+    @GetMapping("home.do") //메인화면
     public String home(HttpSession session, HttpServletRequest request) {
         System.out.println("회원가입");
         if (session != null) {
@@ -38,7 +38,7 @@ public class pageController {
         }
         return "/project/home";
     }
-    @GetMapping("login.do")
+    @GetMapping("login.do") //로그인화면
     public String login(HttpSession session) {
         // 이미 로그인한 사용자라면 홈 페이지로 리다이렉트
         if (session.getAttribute("id") != null) {
@@ -47,7 +47,7 @@ public class pageController {
         return "/project/login";
     }
     // POST 방식으로 "/login" 엔드포인트에 접근할 때 사용자의 아이디와 비밀번호를 확인하여 로그인합니다.
-    @PostMapping("login.do")
+    @PostMapping("login.do") //로그인
     public String login(@RequestParam("id") String id,
                         @RequestParam("pwd") String pwd,
                         HttpSession session,
@@ -60,7 +60,7 @@ public class pageController {
             return "redirect:login.do"; // 로그인 실패 시 다시 로그인 페이지로 이동
         }
     }
-    @GetMapping("logout.do")
+    @GetMapping("logout.do") //로그아웃
     public String logout(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
         System.out.println("logout test");
         //Enumeration<String> attributeNames = session.getAttributeNames();
@@ -81,38 +81,49 @@ public class pageController {
         }
         return "redirect:home.do";
     }
-    @GetMapping("join.do")
+    @GetMapping("join.do") //회원가입 창
     public String join(Model model){
         model.addAttribute("member", new Member());
         return "/project/join";
     }
 
-    @PostMapping("join.do")
+    @PostMapping("join.do") //회원가입
     public String join(@ModelAttribute("member") Member member, HttpSession session) {
         System.out.println("member" + member);
         service.join(member);
         System.out.println("member" + member);
         return "redirect:home.do";
     }
+    @GetMapping("withdraw.do") //회원탈퇴
+    public String withdraw(@RequestParam("id") String id) {
+        System.out.println("id"+id);
+        service.withdraw(id);
+        System.out.println("id"+id);
+        return "redirect:logout.do"; // 로그아웃 페이지로 리다이렉트 또는 다른 페이지로 이동할 수 있습니다.
+    }
 
-    @GetMapping("analysis_page.do")
+    @GetMapping("analysis_page.do") //분석하기
     public String analysis_page(){
         return "/project/analysis_page";
     }
-    @GetMapping("list1.do")
+    @GetMapping("history.do") //히스토리
+    public String history(){
+        return "/project/history";
+    }
+    @GetMapping("list1.do") //기업1
     public String list_1(){
         return  "/project/list1";
     }
-    @GetMapping("list2.do")
+    @GetMapping("list2.do") //기업2
     public String list_2(){
         return  "/project/list2";
     }
-    @GetMapping("chart.do")
+    @GetMapping("chart.do") //결과값
     public String chart(){
         return  "/project/chart";
     }
 
-    @GetMapping("add.do")
+    @GetMapping("add.do") //기업추가
     public String add(){
         return  "/project/add";
     }

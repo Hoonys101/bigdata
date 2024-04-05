@@ -10,14 +10,63 @@
         .join-title {
             text-align: center;
         }
+        .btn-cancel {
+            background-color: #f44336; /* 배경색 */
+            color: white; /* 텍스트 색상 */
+            padding: 10px 20px; /* 내부 여백 */
+            border: none; /* 테두리 없음 */
+            border-radius: 5px; /* 테두리 둥글게 */
+            cursor: pointer; /* 커서 모양 */
+            transition: background-color 0.3s; /* 배경색 변경 시 부드러운 애니메이션 적용 */
+        }
+
+        .btn-cancel:hover {
+            background-color: #d32f2f; /* 호버시 배경색 변경 */
+        }
     </style>
+     <script>
+            function validateForm() {
+                var id = document.getElementById("id").value;
+                var pwd = document.getElementById("pwd").value;
+                var userName = document.getElementById("user_name").value;
+                var email = document.getElementById("email").value;
+                var birthDate = document.getElementById("birth_date").value;
+                var gender = document.querySelector('input[name="gender"]:checked');
+
+                if (id === "") {
+                    alert("아이디를 입력하세요.");
+                    return false;
+                }
+                if (pwd === "") {
+                    alert("비밀번호를 입력하세요.");
+                    return false;
+                }
+                if (userName === "") {
+                    alert("이름을 입력하세요.");
+                    return false;
+                }
+                if (email === "") {
+                    alert("이메일을 입력하세요.");
+                    return false;
+                }
+                if (birthDate === "") {
+                    alert("생년월일을 입력하세요.");
+                    return false;
+                }
+                if (!gender) {
+                    alert("성별을 입력하세요.");
+                    return false;
+                }
+                return true;
+            }
+        </script>
 </head>
 <body>
 <div>
     <h1 class="join-title">회원가입</h1>
 </div>
 <div class="form-wrap">
-    <form action="join.do" method="post">
+    <form action="join.do" method="post" onsubmit="return validateForm();">
         <table class="join-table">
             <tr class="join-tr">
                 <th class="join-th"> <label for="id">ID</label></th>
@@ -73,14 +122,19 @@
             </tr>
             <tr class="join-tr">
                 <th class="join-th"><label for="signup_date">가입일자</label></th>
-                <td><input type="date" id="signup_date" name="signup_date"></td>
+                <td><input type="date" id="signup_date" name="signup_date" value="<%= java.time.LocalDate.now() %>"></td>
             </tr>
         </table>
         <div class="foot">
-            <button type="button" class="btn-cancle">취소</button>
+            <button type="button" class="btn-cancel" onclick="goBack()">취소</button>
             <button type="submit" class="btn-join">회원가입</button>
         </div>
     </form>
 </div>
+<script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
 </body>
 </html>
