@@ -13,6 +13,7 @@
 <body>
     <section class="container">
         <header>
+            <a href="home.do" style="display: block; text-align: center;"><h2>홈</h2></a>
             <h1>로그인 또는 회원가입</h1>
         </header>
         <div class="login">
@@ -31,7 +32,7 @@
             <ul>
                 <li><button>로그인</button></li>
                 <ul class="login_txt">
-                    <li><a href="#">회원가입</a></li>
+                    <li><a href="join.do">회원가입</a></li>
                     <li><a href="#">아이디/비밀번호 찾기</a></li>
                 </ul>
                 </form>

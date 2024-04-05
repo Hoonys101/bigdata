@@ -12,4 +12,6 @@ public interface MemberMapper {
     Member findById(String id);
 
     void insertMember(Member member);
+
+    void deleteUser(String id);
 }

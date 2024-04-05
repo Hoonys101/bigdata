@@ -7,14 +7,16 @@
         <id property="id" column="id"/>
         <result property="pwd" column="pwd"/>
     </resultMap>
-
     <select id="findById" resultMap="memberResultMap">
         SELECT id, pwd
         FROM ID
         WHERE id = #{id}
     </select>
     <insert id="insertMember" parameterType="team.backend.domain.Member">
-        INSERT INTO ID (ID, PWD, USER_NAME, EMAIL, BIRTH_DATE, GENDER, SIGNUP_DATE)
-        VALUES (#{id}, #{pwd}, #{user_name}, #{email}, #{birth_date}, #{gender}, #{signup_date})
+        INSERT INTO ID (ID, PWD, USER_NAME, EMAIL, BIRTH_DATE, GENDER)
+        VALUES (#{id}, #{pwd}, #{user_name}, #{email}, #{birth_date}, #{gender})
     </insert>
+    <delete id="deleteUser" parameterType="String">
+        DELETE FROM ID WHERE ID = #{id}
+    </delete>
 </mapper>

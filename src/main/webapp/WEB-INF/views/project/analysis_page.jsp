@@ -49,12 +49,13 @@ pageEncoding="UTF-8"%>
       font-size: 24px;
       font-weight: bold;
     }
+
 </style>
 </head>
 <body>
-<header style="text-align: center;">
-  <a href="home.do" class="button">홈</a>
-</header>
+<h1 style="position: absolute; top: 0; left: 50%; transform: translateX(-50%);">
+   <a href="home.do" style="text-decoration: none;">홈</a>
+</h1>
 <div class="button-container">
   <button onclick="window.location.href='list1.do'">첫번째 기업 검색</button>
   <button onclick="window.location.href='list2.do'">두번째 기업 검색</button>

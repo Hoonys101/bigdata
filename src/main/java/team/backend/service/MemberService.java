@@ -10,4 +10,5 @@ public interface MemberService {
     public void join(Member member);
 
 
+    void withdraw(String id);
 }
