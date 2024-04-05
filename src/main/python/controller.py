@@ -16,9 +16,9 @@ import calculate as cal
 #print(cal.cal_data(list))
 
 
-# input_data=['add_data','1008','Index']
-# scr.add_data(input_data)
-# input_data=['add_data','IBM','SnP500']
-# scr.add_data(input_data)
+input_data=['add_data','1008','Index']
+scr.add_data(input_data)
+input_data=['add_data','IBM','SnP500']
+scr.add_data(input_data)
 input_data=['cal_data','1008','Index','IBM','SnP500','20120101','20130202']
 print(cal.cal_data(input_data))
