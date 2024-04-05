@@ -122,7 +122,7 @@
             </tr>
             <tr class="join-tr">
                 <th class="join-th"><label for="signup_date">가입일자</label></th>
-                <td><input type="date" id="signup_date" name="signup_date" value="<%= java.time.LocalDate.now() %>"></td>
+                <td><input type="date" id="signup_date" name="signup_date" value="<%= dto.getSignup_date() %>"></td>
             </tr>
         </table>
         <div class="foot">
