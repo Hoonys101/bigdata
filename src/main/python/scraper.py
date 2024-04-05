@@ -8,7 +8,7 @@ import os
 from pykrx import stock
 #from pykrx import bond
 
-# DB를 list로 받아서, 각 DB의 column명을 list의 list로 반환
+# DB를 list로 받아서, 각 DB의 column명을 list의 list로 반환 depressed
 def stocklisting(strs=['KOSPI']):
     results=[]
     for str in strs:
@@ -19,7 +19,7 @@ def stocklisting(strs=['KOSPI']):
     transfered_results=pd.concat(results,ignore_index=True)
     return transfered_results
 
-# 시작 날짜, 끝 날짜를 8자리 str으로 받고, 검색 대상을 str으로 받아서(한국주식은 6자리 코드) df로 반환
+# 시작 날짜, 끝 날짜를 8자리 str으로 받고, 검색 대상을 str으로 받아서(한국주식은 6자리 코드) df로 반환 depressed
 def stockprice(db_name='', code='005930', startdate='20120101', lastdate='20220101'):
     if db_name=='Index':
         df=stock.get_index_ohlcv(startdate, lastdate, code)[['시가','고가','저가','종가','거래량']]
@@ -29,11 +29,34 @@ def stockprice(db_name='', code='005930', startdate='20120101', lastdate='202201
         df = fdr.DataReader(code, startdate,lastdate)[['Open','High','Low','Close','Volume']]
     return df
 
-# dataFrame, str DB명, stock_code를 받아서, dataFrame에 stock_code,db_name가 추가된 df로 반환
+# Sector, Code를 받아서 웹으로부터 20120101~20220101 데이터의 필요 컬럼을 선정하여 df로 반환
+def stock_data(stock_code='IBM', db_name='sdfklj', startdate='20120101',lastdate='20220101', default='Close'):
+    if db_name=='Index':
+        df=stock.get_index_ohlcv(startdate, lastdate, stock_code)[['시가','고가','저가','종가','거래량']]
+        df.rename(columns={'시가':'Open','고가':'High','저가':'Low','종가':'Close','거래량':'Volume'},inplace=True)
+        df.rename_axis('Date',inplace=True)
+        
+    else:
+        df = fdr.DataReader(stock_code, startdate,lastdate)[['Open','High','Low','Close','Volume']]
+    data_processing(df,db_name,stock_code)
+    return df
+
+
+
+# dataFrame, str DB명, stock_code를 받아서, dataFrame에 stock_code,db_name가 추가된 df로  stock_data의 딸림
 def data_processing(df,db_name,stock_code):
         df.insert(loc=0,column="db_name",value=db_name)
         df.insert(loc=0,column="stock_code",value=stock_code)
         return df
+
+connection=db.connect_to_oracle()
+df1=insert_data=stock_data('IBM','SnP500')
+df2=insert_data=stock_data('1008','Index')
+db.insert_data_to_table(connection,df1)
+db.insert_data_to_table(connection,df2)
+db.close_connection(connection)
+
+
 
 # 8자리 날짜 str을 datetime으로 반환
 def str_to_date(str_date='20121212'):
@@ -51,13 +74,15 @@ def row_price_date(startdate='20150101',enddate='20220101',subject='DCOILWTICO')
     return result
 
 # Sector, Code와 날짜 2개를 str으로 받아서, -100~100까지로 정규화된 df 반환
-def normal(code='IMO', db_name='sdfklj', startdate='20150101',lastdate='20220101', default='Close'):
+'''def normal(code='IMO', db_name='sdfklj', startdate='20150101',lastdate='20220101', default='Close'):
     if db_name=='Index':
         df=stock.get_index_ohlcv(startdate, lastdate, code)[['시가','고가','저가','종가','거래량']]
         df.rename(columns={'시가':'Open','고가':'High','저가':'Low','종가':'Close','거래량':'Volume'},inplace=True)
         df.rename_axis('Date',inplace=True)
     else:
         df = fdr.DataReader(code, startdate,lastdate)
+'''
+def normal(df, default='Close'):
     # Close 컬럼의 최대값과 최소값 계산
     max_close = df[default].max()
     min_close = df[default].min()
@@ -112,7 +137,7 @@ def add_data(list=[]):
 #    db.create_table_from_dataframe(connect,refine_df,"ArchivedData")
     db.insert_data_to_table(connect,refine_df,"ArchivedData")
 #add_data(list)
-cal_corr()
+#cal_corr()
 #print(stockprice())
 #pd=stock.get_index_ohlcv("20190101", "20220711", "1008")[['시가','고가','저가','종가','거래량']]
 #pd.rename(columns={'시가':'Open','고가':'High','저가':'Low','종가':'Close','거래량':'Volume'},inplace=True)
