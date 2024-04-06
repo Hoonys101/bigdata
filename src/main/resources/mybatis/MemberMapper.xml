@@ -13,8 +13,8 @@
         WHERE id = #{id}
     </select>
     <insert id="insertMember" parameterType="team.backend.domain.Member">
-        INSERT INTO ID (ID, PWD, USER_NAME, EMAIL, BIRTH_DATE, GENDER)
-        VALUES (#{id}, #{pwd}, #{user_name}, #{email}, #{birth_date}, #{gender})
+        INSERT INTO ID (ID, PWD, USER_NAME, EMAIL, BIRTH_DATE, GENDER, SIGNUP_DATE)
+        VALUES (#{id}, #{pwd}, #{user_name}, #{email}, #{birth_date}, #{gender},SYSDATE)
     </insert>
     <delete id="deleteUser" parameterType="String">
         DELETE FROM ID WHERE ID = #{id}

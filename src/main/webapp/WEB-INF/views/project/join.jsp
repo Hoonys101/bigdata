@@ -122,6 +122,7 @@
             </tr>
             <tr class="join-tr">
                 <th class="join-th"><label for="signup_date">가입일자</label></th>
+<%--
                 <td><input type="text" id="signup_date" name="signup_date" readonly></td>
             <script>
                 // 현재 날짜를 가져오는 함수
@@ -139,6 +140,10 @@
                     document.getElementById('signup_date').value = getCurrentDate();
                 };
             </script>
+
+                <td><input type="date" id="signup_date" name="signup_date" value="<%= dto.getSignup_date() %>"></td>
+            </tr>
+-->
         </table>
         <div class="foot">
             <button type="button" class="btn-cancel" onclick="goBack()">취소</button>
