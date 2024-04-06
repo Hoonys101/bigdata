@@ -8,8 +8,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import team.backend.domain.AvailableData;
 import team.backend.domain.Member;
+import team.backend.service.MybatisAvailableDataService;
 import team.backend.service.MybatisMemberService;
+
+import java.util.List;
 
 @RequestMapping("project")
 @Controller
@@ -17,25 +21,14 @@ import team.backend.service.MybatisMemberService;
 public class pageController {
     @Autowired
     private MybatisMemberService service;
+    @Autowired
+    private MybatisAvailableDataService availableDataService;
 
     @GetMapping("home.do") //메인화면
     public String home(HttpSession session, HttpServletRequest request) {
         System.out.println("회원가입");
-        if (session != null) {
-            // 세션이 존재하는 경우
-            Object id = session.getAttribute("id");
-            System.out.println("id"+id);
-            if (id != null) {
-                // 세션에 id 속성이 있는 경우
-                System.out.println("1");
-            } else {
-                // 세션에 id 속성이 없는 경우
-                System.out.println("2");
-            }
-        } else {
-            // 세션이 없는 경우
-            System.out.println("없다");
-        }
+        AvailableData availableData = (AvailableData) session.getAttribute("availableData");
+
         return "/project/home";
     }
     @GetMapping("login.do") //로그인화면
@@ -123,8 +116,21 @@ public class pageController {
         return  "/project/chart";
     }
 
-    @GetMapping("add.do") //기업추가
-    public String add(){
-        return  "/project/add";
+    @GetMapping("add2.do") //기업추가
+    public String add2(Model model){
+        List<String> stockCodes = availableDataService.getStockCodes();
+        List<AvailableData> filteredData = availableDataService.getAvailableDataByFilters(null, null, null, null,null);
+        model.addAttribute("filteredData", filteredData);
+        System.out.println(stockCodes);
+        return  "/project/add2";
     }
+    @PostMapping("add2.do")
+    public String add2(@ModelAttribute("availableData") AvailableData availableData, HttpSession session) {
+        System.out.println("Post add2");
+        session.setAttribute("availableData", availableData);
+        System.out.println("세션에 저장된 데이터: " + availableData.toString());
+        return "redirect:add2.do";
+    }
+
+
 }

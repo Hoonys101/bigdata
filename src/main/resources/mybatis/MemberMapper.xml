@@ -19,4 +19,5 @@
     <delete id="deleteUser" parameterType="String">
         DELETE FROM ID WHERE ID = #{id}
     </delete>
+
 </mapper>

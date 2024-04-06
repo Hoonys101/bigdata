@@ -21,40 +21,40 @@ create table ID(
 ); 
 create sequence ID_SEQ increment by 1 start with 1 nocache;
 
-insert into ID values(ID_SEQ.nextval, '11111', '»´±Êµø', 'human@naver.com', '1980-01-01', '≥≤º∫', '2024-04-01');
-insert into ID values(ID_SEQ.nextval, '22222', '¿Ãº¯Ω≈', 'human1@naver.com', '1985-02-02', '≥≤º∫', '2024-05-01');
-insert into ID values(ID_SEQ.nextval, '33333', '∞≠∞®¬˘', 'human2@naver.com', '1990-03-03', '≥≤º∫', '2024-06-01');
-insert into ID values(ID_SEQ.nextval, '44444', '¿Ø∞¸º¯', 'human3@naver.com', '1995-04-04', 'ø©º∫', '2024-07-01');
+insert into ID values(ID_SEQ.nextval, '11111', 'ÌôçÍ∏∏Îèô', 'human@naver.com', '1980-01-01', 'ÎÇ®ÏÑ±', '2024-04-01');
+insert into ID values(ID_SEQ.nextval, '22222', 'Ïù¥ÏàúÏã†', 'human1@naver.com', '1985-02-02', 'ÎÇ®ÏÑ±', '2024-05-01');
+insert into ID values(ID_SEQ.nextval, '33333', 'Í∞ïÍ∞êÏ∞¨', 'human2@naver.com', '1990-03-03', 'ÎÇ®ÏÑ±', '2024-06-01');
+insert into ID values(ID_SEQ.nextval, '44444', 'Ïú†Í¥ÄÏàú', 'human3@naver.com', '1995-04-04', 'Ïó¨ÏÑ±', '2024-07-01');
 
 
 CREATE TABLE AvailableData (
    "Nation" VARCHAR2(255), 
    "db_name" VARCHAR2(255), 
-   "stock_code" VARCHAR2(255), 
+   "stock_code" VARCHAR2(255),
    "Name" VARCHAR2(255), 
    "Sector" VARCHAR2(255)
    );
-alter table availabledata add primary key ("stock_code");
+alter table availabledata add primary key (stock_code);
 
 CREATE TABLE addition (
    ID varchar2(100),
    stock_code VARCHAR2(255),
    FOREIGN KEY (ID) REFERENCES ID(ID),
-   FOREIGN KEY (stock_code) REFERENCES AvailableData("stock_code")
+   FOREIGN KEY (stock_code) REFERENCES AvailableData(stock_code)
 );
 
 CREATE TABLE ArchivedData (
-   "Date" DATE, 
-   "stock_code" VARCHAR2(255),
-   "db_name" VARCHAR2(255), 
-   "Open" NUMBER, 
-   "High" NUMBER, 
-   "Low" NUMBER, 
-   "Close" NUMBER, 
-   "Volume" NUMBER
+   data_date DATE, 
+   stock_code VARCHAR2(255),
+   db_name VARCHAR2(255), 
+   open NUMBER, 
+   high NUMBER, 
+   low NUMBER, 
+   close NUMBER, 
+   volume NUMBER
    );
 ALTER TABLE ArchivedData ADD CONSTRAINT fk_ArchivedData_AvailableData
-   FOREIGN KEY ("stock_code") REFERENCES AvailableData("stock_code");
+   FOREIGN KEY (stock_code) REFERENCES AvailableData(stock_code);
 
 CREATE TABLE ServiceUsage (
    db1_name VARCHAR2(255),
@@ -64,7 +64,7 @@ CREATE TABLE ServiceUsage (
    start_date DATE,
    end_date DATE,
    ID VARCHAR2(30),
-   FOREIGN KEY (ID) REFERENCES ID(ID)  -- ID∏¶ ¬¸¡∂«œ¥¬ ø‹∑° ≈∞ ¡¶æ‡ ¡∂∞«
+   FOREIGN KEY (ID) REFERENCES ID(ID)  -- IDÎ•º Ï∞∏Ï°∞ÌïòÎäî Ïô∏Îûò ÌÇ§ Ï†úÏïΩ Ï°∞Í±¥
 );
    
 commit;
