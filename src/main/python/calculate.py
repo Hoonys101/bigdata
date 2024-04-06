@@ -6,7 +6,6 @@ import os
 # df를 str으로 받아서, -100~100까지로 정규화된 df 반환
 def normal(df, default='CLOSE'):
     # Close 컬럼의 최대값과 최소값 계산
-    print(df)
     max_close = df['CLOSE'].max()
     min_close = df['CLOSE'].min()
     # Close 값을 -100부터 100까지의 범위로 정규화하여 새로운 열 추가
@@ -43,17 +42,11 @@ def delay_df(df1,df2,days):
 def cal_data(list,days=7):
     #파라미터 설정
     first_com=list[1]
-#    print(first_com)
     first_db=list[2]
-#    print(first_db)
     second_com=list[3]
-#    print(second_com)
     second_db=list[4]
-#    print(second_db)
     startdate=list[5]
-#    print(startdate)
     lastdate=list[6]
-#    print(lastdate)
 
     #data read
     connection=db.connect_to_oracle()
@@ -63,9 +56,7 @@ def cal_data(list,days=7):
     df2=df2.sort_index()
     #calculate data
     df1=normal(df1)
-    print(df1.index.name)
     df2=normal(df2)
-    print(df2.index.name)
     
     #1주씩 늦춰가며 비교 저장
     result_list=[]
@@ -76,7 +67,7 @@ def cal_data(list,days=7):
         df1,df2=delay_df(df1,df2,days)
         filename_list.append(filename)
     result_list.extend(filename_list)
+    connection.close()
     return result_list
 
 #list=['cal_data','1008','Index','IBM','SnP500','20120101','20130202']
-#print(cal_data(list))

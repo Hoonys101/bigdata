@@ -12,7 +12,7 @@ public class JavaPythonExample {
         System.out.println(connect.connectPython("add_data", list));
     }
     List<String> connectPython(String methodName, List<String> parameter) {
-        ProcessBuilder pb = new ProcessBuilder("python", "controller.py");
+        ProcessBuilder pb = new ProcessBuilder("python", "python\\controller.py");
         try{
             Process p = pb.start();
             OutputStream outStream = p.getOutputStream();
