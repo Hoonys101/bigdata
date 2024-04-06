@@ -1,14 +1,15 @@
+package main.python;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 public class JavaPythonExample {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args){
         JavaPythonExample connect= new JavaPythonExample();
         ArrayList<String> list = new ArrayList<>();
-        list.add("para1");
-        list.add("para2");
+        list.add("004710");
+        list.add("KOSPI");
 
-        System.out.println(connect.connectPython("input", list));
+        System.out.println(connect.connectPython("add_data", list));
     }
     List<String> connectPython(String methodName, List<String> parameter) {
         ProcessBuilder pb = new ProcessBuilder("python", "controller.py");

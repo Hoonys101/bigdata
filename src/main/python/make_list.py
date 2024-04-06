@@ -15,14 +15,10 @@ crypto=['BTC/KRW','ETH/KRW','XRP/KRW','BCH/KRW','EOS/KRW','LTC/KRW','XLM/KRW']#f
 def stocklisting(strs=['KRX-DESC']):
     results=[]
     for str in strs:
-        print(str)
         result=fdr.StockListing(str)
-        print(str)
         if str in ['KRX-DESC', 'KRX/INDEX/list']:
-            print(str)
             result.insert(loc=1,column="Nation",value="KR")
         elif str in ['NASDAQ', 'NYSE', 'AMEX', 'S&P500']:
-            print(str)
             result.insert(loc=1,column='Nation',value="US")
         result.insert(loc=2, column="db_name", value=str)
         results.append(result)
@@ -33,19 +29,19 @@ def stocklisting(strs=['KRX-DESC']):
 def db_rename_listing(strs):
     result=[]
     for str in strs:
-        print(str)
         if str=='KRX-DESC':
-            re=fdr.StockListing(str)[['Market','Code','Name','Sector']].rename(columns={'Market':'db_name','Code':'stock_code'})
-            re.insert(loc=0,column="Nation",value="KR")
+            re=fdr.StockListing(str)[['Code','Market','Sector','Name']].rename(columns={'Market':'db_name','Code':'stock_code'})
+            re.insert(loc=1,column="Nation",value="KR")
             re.loc[re['Sector'].isnull(), 'Sector'] = '우선주'
+            print(re)
             result.append(re)
-            print(str)
         elif str=='S&P500':
-            print(str)
-            snp500=fdr.StockListing(str)[['Name','Sector','Symbol']]
-            snp500.insert(loc=1,column='db_name', value='SnP500')
+            snp500=fdr.StockListing(str)[['Symbol','Sector','Name']]
+            snp500.insert(loc=1,column='Nation',value="US")
+            snp500.insert(loc=2,column='db_name', value='SnP500')
             snp500.rename(columns={'Symbol':'stock_code'},inplace=True)
-            snp500.insert(loc=0,column='Nation',value="US")
+            
+            print(snp500)
             result.append(snp500)
         elif str=='KRX/INDEX/list':
             index=fdr.SnapDataReader(str)[['Market','Code','Name']]
@@ -55,7 +51,6 @@ def db_rename_listing(strs):
             result.append(index)
         else:
             rest=fdr.StockListing(str)[['Name','Industry','Symbol']]
-            print(str)
             rest.insert(loc=1,column='db_name', value=str)
             rest.rename(columns={'Symbol':'stock_code','Industry':'Sector'}, inplace=True)
             rest.insert(loc=0,column='Nation',value="US")
@@ -77,7 +72,6 @@ def save_data():
 #    db.create_table_from_dataframe(connection,df,'AvailableData')
     df['Sector']=df['Sector'].str.replace("'","")
     df['Name']=df['Name'].str.replace("'","")
-    print(df)
     db.insert_data_menu_to_table(connection,df,'AvailableData')
     db.close_connection(connection)
 

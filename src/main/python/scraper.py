@@ -12,7 +12,6 @@ from pykrx import stock
 def stocklisting(strs=['KOSPI']):
     results=[]
     for str in strs:
-        print(str)
         result=fdr.StockListing(str)
         result.insert(loc=0, column="data_base", value=str)
         results.append(result)

@@ -28,20 +28,12 @@ insert into ID values(ID_SEQ.nextval, '44444', '유관순', 'human3@naver.com', 
 
 
 CREATE TABLE AvailableData (
-   "Nation" VARCHAR2(255), 
-   "db_name" VARCHAR2(255), 
-   "stock_code" VARCHAR2(255),
-   "Name" VARCHAR2(255), 
-   "Sector" VARCHAR2(255)
+   stock_code VARCHAR2(255) constraint AvailableData_PK primary key, 
+   Nation VARCHAR2(255), 
+   db_name VARCHAR2(255),
+   Sector VARCHAR2(255),
+   Name VARCHAR2(255)
    );
-alter table availabledata add primary key (stock_code);
-
-CREATE TABLE addition (
-   ID varchar2(100),
-   stock_code VARCHAR2(255),
-   FOREIGN KEY (ID) REFERENCES ID(ID),
-   FOREIGN KEY (stock_code) REFERENCES AvailableData(stock_code)
-);
 
 CREATE TABLE ArchivedData (
    data_date DATE, 
@@ -51,10 +43,16 @@ CREATE TABLE ArchivedData (
    high NUMBER, 
    low NUMBER, 
    close NUMBER, 
-   volume NUMBER
+   volume NUMBER,
+   FOREIGN KEY (stock_code) REFERENCES AvailableData(stock_code)
    );
-ALTER TABLE ArchivedData ADD CONSTRAINT fk_ArchivedData_AvailableData
-   FOREIGN KEY (stock_code) REFERENCES AvailableData(stock_code);
+
+CREATE TABLE addition (
+   ID varchar2(100),
+   stock_code VARCHAR2(255),
+   FOREIGN KEY (ID) REFERENCES ID(ID),
+   FOREIGN KEY (stock_code) REFERENCES AvailableData(stock_code)
+);
 
 CREATE TABLE ServiceUsage (
    db1_name VARCHAR2(255),

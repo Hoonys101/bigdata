@@ -40,7 +40,6 @@ def read_date(connection,start='20120101',last='20220101',TABLE_NAME='archivedda
     cursor = connection.cursor()
     start=str_to_date(start)
     last=str_to_date(last)
-    print(start, last)
     try:
         query = f"SELECT * FROM {TABLE_NAME} WHERE data_date >= TO_DATE(:1, 'YYYY/MM/DD') AND data_date <= TO_DATE(:2,'YYYY/MM/DD')"
         cursor.execute(query,(start,last))
@@ -49,12 +48,11 @@ def read_date(connection,start='20120101',last='20220101',TABLE_NAME='archivedda
             # 판다스 DataFrame으로 변환
             columns = [desc[0] for desc in cursor.description]
             df = pd.DataFrame(result, columns=columns)
-            print(df)
             if 'data_date' in df.columns:
                 df.set_index('data_date', inplace=True)
             return df
         else:
-            print("No data found for the given name.")
+            pass
     finally:
         cursor.close()
         
@@ -63,7 +61,6 @@ def read_code_date(connection,db_name='KRX',stock_code='005930',start='20120101'
     cursor = connection.cursor()
     start=str_to_date(start)
     last=str_to_date(last)
-    print(start, last)
     try:
         query = f"SELECT * FROM {TABLE_NAME} WHERE db_name=:1 AND stock_code=:2 AND data_date >= TO_DATE(:3, 'YYYY/MM/DD') AND data_date <= TO_DATE(:4,'YYYY/MM/DD')"
         cursor.execute(query,(db_name,stock_code,start,last))
@@ -72,12 +69,12 @@ def read_code_date(connection,db_name='KRX',stock_code='005930',start='20120101'
             # 판다스 DataFrame으로 변환
             columns = [desc[0] for desc in cursor.description]
             df = pd.DataFrame(result, columns=columns)
-            print(df)
 #            if 'Date' in df.columns:
             df.set_index('DATA_DATE', inplace=True)
             return df
         else:
-            print("No data found for the given name.")
+            # print("No data found for the given name.")
+            pass
     finally:
         cursor.close()
 
@@ -197,7 +194,7 @@ def insert_data_menu_to_table(connection,df, table_name):
         insert_query = f"INSERT INTO {table_name} VALUES ("
         for _, row in df.iterrows():
             values = ", ".join([format_value(value) for value in row])
-#            print(insert_query + values + ")")
+            print(insert_query + values + ")")
             cursor.execute(insert_query + values + ")")
 
         # 변경사항 커밋
