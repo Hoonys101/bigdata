@@ -5,6 +5,12 @@ public class JavaPython {
         JavaPython java = new JavaPython();
         java.save_data();
     }
+    Stirng strParameter(String[] args){
+        for(int i=0;i++;i<args.length){
+            
+        }
+
+    }
     void pln(String str){
         System.out.println(str);
     }
@@ -15,17 +21,14 @@ public class JavaPython {
         String data="";
         try{
             pp = pb.start();
-
             // 파이썬 스크립트에 데이터 전달
             OutputStream outputStream = pp.getOutputStream();
             PrintWriter writer = new PrintWriter(outputStream);
-            data = "add_data\n1008\nIndex";
-
+            data = "cal_data\n1008\nIndex\nIBM\nSnP500\n20130101\n20140101";
             writer.println(data);
             writer.flush();
             writer.close();
             outputStream.close();
-
         }catch(IOException ie){
             System.out.println("ie: "+ie);
         }
@@ -33,7 +36,6 @@ public class JavaPython {
         BufferedReader reader = new BufferedReader(new InputStreamReader(pp.getInputStream()));
         String line="";
         try{
-
             while ((line = reader.readLine()) != null) {
                 System.out.println("Python output: " + line);
             }
