@@ -14,41 +14,21 @@
         select db_name, count(db_name) from AvailableData where stock_code not in (select stock_code
         from ArchivedData group by stock_code) and nation=#{nation} group by db_name
     </select>
-
-    <select id="getStockCode" parameterType="String" resultType="String">
-        SELECT STOCK_CODE FROM AvailableData WHERE db_name = #{db_name} GROUP BY STOCK_CODE
-    </select>
-
     <select id="getSector" parameterType="String" resultType="String">
         select sector, count(sector) from AvailableData where stock_code not in
         (select stock_code from
-        ArchivedData group by stock_code) and nation=#{nation} and db_name=#{db_name}
+        ArchivedData group by stock_code) and db_name=#{db_name}
         group by sector
     </select>
 
     <select id="getName" parameterType="String" resultType="String">
         select name, stock_code from AvailableData where stock_code not in
-        (select stock_code from ArchivedData group by stock_code) and nation=#{nation}
-        and db_name=#{db_name} and sector=#{sector}
+        (select stock_code from ArchivedData group by stock_code) and sector=#{sector}
     </select>
-    <select id="getAvailableDataByFilters" parameterType="team.backend.domain.AvailableData" resultType="team.backend.domain.AvailableData">
-        SELECT * FROM AvailableData
-        <where>
-            <if test="nation != null and nation != ''">
-                AND nation = #{nation}
-            </if>
-            <if test="db_name != null and db_name != ''">
-                AND db_name = #{db_name}
-            </if>
-            <if test="stock_code != null and stock_code != ''">
-                AND stock_code = #{stock_code}
-            </if>
-            <if test="sector != null and sector != ''">
-                AND sector = #{sector}
-            </if>
-            <if test="name != null and name != ''">
-                AND name = #{name}
-            </if>
-        </where>
+    <select id="getStockCode" parameterType="String" resultType="String">
+        SELECT STOCK_CODE FROM AvailableData WHERE name = #{name} GROUP BY STOCK_CODE
+    </select>
+    <select id="getAvailableDataByFilters" parameterType="String" resultType="String">
+        SELECT name FROM AvailableData WHERE nation=#{nation} AND db_name=#{db_name} AND sector=#{sector} AND name=#{name} AND stock_code=#{stock_code}
     </select>
 </mapper>

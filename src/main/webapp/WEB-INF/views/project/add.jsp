@@ -52,7 +52,7 @@
 </head>
 <body>
     <h2>데이터 선택</h2>
-    <form action="list1.do" method="post"> <!-- 선택한 결과를 보여줄 페이지로 이동합니다. -->
+    <form action="add.do" method="post"> <!-- 선택한 결과를 보여줄 페이지로 이동합니다. -->
         <%--<select name="stock_code" id="stock_code" onchange="loadIndustries()">
             <option value="">종목 코드 선택</option>
             <c:forEach items="${stock_code}" var="stock_code">
@@ -84,6 +84,12 @@
                 <option value="${name}">${name}</option> <!-- 회사 ID를 선택값으로 사용합니다. -->
             </c:forEach>
         </select>
+        <select name="stock_code">
+                    <option value="">코드 선택</option>
+                    <c:forEach items="${stock_code}" var="stock_code">
+                        <option value="${stock_code}">${stock_code}</option> <!-- 회사 ID를 선택값으로 사용합니다. -->
+                    </c:forEach>
+                </select>
         <button type="submit">데이터 확인</button>
     </form>
 </body>

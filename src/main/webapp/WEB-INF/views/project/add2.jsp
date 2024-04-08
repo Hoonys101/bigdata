@@ -53,32 +53,32 @@
     <h2>데이터 선택</h2>
     <form action="add2.do" method="post">
         <!-- 국가 선택 창 -->
-        <select name="nation" id="nation" >
+        <select name="nation" id="nation" onchange="loadDBNames()">
             <option value="">국가 선택</option>
-            <c:forEach items="${nation}" var="nation">
+            <c:forEach items="${nation}" var="nation" >
                 <option value="${nation}">${nation}</option>
             </c:forEach>
         </select>
 
         <!-- DB 선택 창 -->
-        <select name="db_name" id="db_name" onchange="loadDBNames()">
+        <select name="db_name" id="db_name" onchange="loadSectors()">
             <option value="">DB 선택</option>
 
         </select>
 
-        <!-- 종목 코드 선택 창 -->
-        <select name="stock_code" id="stock_code" onchange="loadStockCodes()">
+        <!-- 종목 코드 선택 창
+        <select name="stock_code" id="stock_code" onchange="loadSectors()">
                     <option value="">종목 코드 선택</option>
-                </select>
+                </select>-->
 
         <!-- 업종 선택 창 -->
-        <select name="sector" id="sector" onchange="loadSectors()">
+        <select name="sector" id="sector" onchange="loadCompanies()">
             <option value="">업종 선택</option>
             <!-- 이 부분은 JavaScript를 사용하여 동적으로 채워질 것입니다. -->
         </select>
 
         <!-- 회사명 선택 창 -->
-        <select name="name" id="name" onchange="loadCompanies()">
+        <select name="name" id="name">
             <option value="">회사명 선택</option>
             <!-- 이 부분은 JavaScript를 사용하여 동적으로 채워질 것입니다. -->
         </select>
@@ -89,14 +89,14 @@
     <!-- jQuery 라이브러리 추가 -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+
    // 국가 선택 시 DB 목록 가져오기
            function loadDBNames() {
                var selectedDb = $("#nation").val();
                $.ajax({
                    url: "../project/url.do",
                    method: "POST",
-                   contentType: "application/json",
-                   data: JSON.stringify({ action: "getDb", nation: selectedDb }),
+                   data: { selectedNation:"KR", action:"getDb" },
                    dataType: "json",
                    success: function(data) {
                        $("#db_name").empty().append("<option value=''>DB 선택</option>");
@@ -112,7 +112,6 @@
                     $.ajax({
                         url: "../project/url.do",
                         method: "POST",
-                        contentType: "application/json",
                         data: JSON.stringify({ action: "getStockCode", db_name: selectedStock_code }),
                         dataType: "json",
                         success: function(data) {
@@ -131,7 +130,6 @@
             $.ajax({
                 url: "../project/url.do",
                 method: "POST",
-                contentType: "application/json",
                 data: JSON.stringify({ action: "getSector", stock_code: selectedSector }),
                 dataType: "json",
                 success: function(data) {
@@ -149,7 +147,6 @@
             $.ajax({
                 url: "../project/url.do",
                 method: "POST",
-                contentType: "application/json",
                 data:JSON.stringify({ action: "getName", sector: selectedName }),
                 dataType: "json",
                 success: function(data) {

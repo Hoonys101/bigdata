@@ -35,38 +35,29 @@ public class MybatisAvailableDataService implements AvailableDataService {
         return dbs;
     }
 
-    @Override
-    public List<String> getStockCode(String db_name) {
-        List<String> dbs = availableDataMapper.getStockCode(db_name);
-        //System.out.println("dbs3"+dbs);
-        return dbs;
-    }
+
 
     @Override
-    public List<String> getSector(String stock_code) {
-        List<String> dbs = availableDataMapper.getSector(stock_code);
+    public List<String> getSector( String db_name) {
         //System.out.println("dbs4"+dbs);
-        return dbs;
+        return availableDataMapper.getSector(db_name);
     }
 
     @Override
     public List<String> getName(String sector) {
-        List<String> dbs = availableDataMapper.getName(sector);
         //System.out.println("dbs5"+dbs);
-        return dbs;
+        return availableDataMapper.getName(sector);
     }
 
     @Override
-    public List<AvailableData> getAvailableDataByFilters( String nation, String db_name,String stock_code, String sector, String name) {
-        AvailableData data = new AvailableData();
-
-        data.setNation(nation);
-        data.setDb_name(db_name);
-        data.setStock_code(stock_code);
-        data.setSector(sector);
-        data.setName(name);
-        List<AvailableData> dbs = availableDataMapper.getAvailableDataByFilters(data);
-        System.out.println("dbs6"+dbs);
-        return dbs;
+    public List<String> getStockCode(String name) {
+        //System.out.println("dbs3"+dbs);
+        return availableDataMapper.getStockCode(name);
+    }
+    @Override
+    public List<String> getAvailableDataByFilters(String nation, String db_name,String sector,String name, String stock_code) {
+        List<String> data = availableDataMapper.getAvailableDataByFilters(nation, db_name, sector, name, stock_code);
+        System.out.println(data);
+        return data;
     }
 }
