@@ -10,7 +10,7 @@ def normal(df, default='CLOSE'):
     min_close = df['CLOSE'].min()
     # Close 값을 -100부터 100까지의 범위로 정규화하여 새로운 열 추가
     df['Close_normal'] = ((df['CLOSE'] - min_close) / (max_close - min_close)) * 200 - 100
-    return df
+    return df[['Close_normal']]
 
 # 정규화된 2개의 df를 받아서, 차를 계산한 df 반환
 def diff(df1, df2):
@@ -31,7 +31,7 @@ def saveplot(df,df2,filename):
     correlation=df['Close_normal'].corr(df2['Close_normal'])
     plt.title('Correlation is'+str(correlation))
     # 폴더가 없으면 생성
-    save_dir = '../../../../resources/static/img/plots'
+    save_dir = '../../../resources/static/img/plots'
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
     # 그래프를 'plots' 폴더에 그림 파일로 저장
@@ -50,7 +50,6 @@ def delay_df(df1,df2,days):
     df2=df2.loc[common_dates]
     return df1,df2
 
-list=['cal_data','1008','Index','IBM','SnP500','IBM','SnP500','1008','Index','20120101','20130202']
 #10개의 파라미터를 받아서 파일 5개와 correlation 5개 반환
 def diff_cal_data(list,days=7):
     #파라미터 설정
@@ -94,7 +93,9 @@ def diff_cal_data(list,days=7):
     result_list.extend(filename_list)
     connection.close()
     return result_list
-diff_cal_data(list)
+
+
+
 #6개 파라미터를 받아서, 파일 5개와 correlation 5개 반환
 def cal_data(list,days=7):
     #파라미터 설정
@@ -127,4 +128,3 @@ def cal_data(list,days=7):
     connection.close()
     return result_list
 
-#list=['cal_data','1008','Index','IBM','SnP500','20120101','20130202']
