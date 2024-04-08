@@ -12,6 +12,18 @@ def normal(df, default='CLOSE'):
     df['Close_normal'] = ((df['CLOSE'] - min_close) / (max_close - min_close)) * 200 - 100
     return df
 
+# 정규화된 2개의 df를 받아서, 차를 계산한 df 반환
+def diff(df1, df2):
+    # 두 DataFrame의 인덱스와 열이 일치하도록 정렬
+    df1 = df1.sort_index(axis=0).sort_index(axis=1)
+    df2 = df2.sort_index(axis=0).sort_index(axis=1)
+    
+    # 차분 연산 수행
+    diff_df = df1.subtract(df2, fill_value=0)  # 누락된 값은 0으로 대체
+    
+    return diff_df
+
+
 # 2개의 df와 filename을 받아서, plot 저장하고 corr 리턴
 def saveplot(df,df2,filename):
     plt.plot(df.index, df['Close_normal'])
@@ -38,6 +50,51 @@ def delay_df(df1,df2,days):
     df2=df2.loc[common_dates]
     return df1,df2
 
+list=['cal_data','1008','Index','IBM','SnP500','IBM','SnP500','1008','Index','20120101','20130202']
+#10개의 파라미터를 받아서 파일 5개와 correlation 5개 반환
+def diff_cal_data(list,days=7):
+    #파라미터 설정
+    first_com=list[1]
+    first_db=list[2]
+    diff1_com=list[3]
+    diff1_db=list[4]
+    second_com=list[5]
+    second_db=list[6]
+    diff2_com=list[7]
+    diff2_db=list[8]
+    startdate=list[9]
+    lastdate=list[10]
+
+    #data read
+    connection=db.connect_to_oracle()
+    df1=db.read_code_date(connection,first_db,first_com,startdate,lastdate)
+    df1=df1.sort_index()
+    df1_1=db.read_code_date(connection,diff1_db,diff1_com,startdate,lastdate)
+    df1_1=df1_1.sort_index()
+    df2=db.read_code_date(connection,second_db,second_com,startdate,lastdate)
+    df2=df2.sort_index()
+    df2_1=db.read_code_date(connection,diff2_db,diff2_com,startdate,lastdate)
+    df2_1=df2_1.sort_index()
+    #calculate data
+    df1=normal(df1)
+    df1_1=normal(df1_1)
+    df1=diff(df1,df1_1)
+    df2=normal(df2)
+    df2_1=normal(df2_1)
+    df2=diff(df2,df2_1)
+    
+    #1주씩 늦춰가며 비교 저장
+    result_list=[]
+    filename_list=[]
+    for i in range(5):
+        filename=first_com+'_'+first_com+'_'+startdate+'_'+lastdate+'_'+str(i)+'.png'
+        result_list.append(saveplot(df1,df2,filename)) # save 및 파일명 저장
+        df1,df2=delay_df(df1,df2,days)
+        filename_list.append(filename)
+    result_list.extend(filename_list)
+    connection.close()
+    return result_list
+diff_cal_data(list)
 #6개 파라미터를 받아서, 파일 5개와 correlation 5개 반환
 def cal_data(list,days=7):
     #파라미터 설정
