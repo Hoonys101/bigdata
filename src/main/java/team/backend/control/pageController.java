@@ -176,9 +176,9 @@ public class pageController {
         return "redirect:add2.do";
     }
     @PostMapping("url.do")
-        public List<String> add2(@RequestParam("getDb") String nation,
-                               @RequestParam("getStockCode")String db_name,
-                               @RequestParam("getNation") String stock_code,
+        public List<String> add2(@RequestParam("getDb") String db_name,
+                               @RequestParam("getStockCode")String stock_code,
+                               @RequestParam("getNation") String nation,
                                @RequestParam("getSector") String sector,
                                @RequestParam("getName") String name,
                                @RequestParam("action")String action) {
@@ -194,19 +194,19 @@ public class pageController {
                 break;
             case "getDb":
                 // 데이터베이스에서 db명을 가져옵니다.
-                responseData = availableDataService.getDb(db_name);
+                responseData = availableDataService.getDb(nation);
                 break;
             case "getStockCode":
                 // 데이터베이스에서 StockCodes 가져옵니다.
-                responseData = availableDataService.getStockCode(stock_code);
+                responseData = availableDataService.getStockCode(db_name);
                 break;
             case "getSector":
                 // 데이터베이스에서 업종명 가져옵니다.
-                responseData = availableDataService.getSector(sector);
+                responseData = availableDataService.getSector(stock_code);
                 break;
             case "getName":
                 // 데이터베이스에서 회사명을 가져옵니다.
-                responseData = availableDataService.getName(name);
+                responseData = availableDataService.getName(sector);
                 break;
             default:
                 // 알 수 없는 액션인 경우, null 또는 적절한 오류 응답을 반환합니다.
