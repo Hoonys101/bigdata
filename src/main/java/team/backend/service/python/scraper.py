@@ -125,6 +125,7 @@ def delay_df(df1,df2,days):
 def add_data(list=[]):
     db_name=list[1]
     stock_code=list[2]
+    print(db_name,stock_code)
 #    df=stockprice(db_name,stock_code)
     df=stock_data(db_name,stock_code)
     connect=db.connect_to_oracle()

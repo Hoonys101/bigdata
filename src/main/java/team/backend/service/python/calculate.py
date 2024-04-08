@@ -19,7 +19,7 @@ def saveplot(df,df2,filename):
     correlation=df['Close_normal'].corr(df2['Close_normal'])
     plt.title('Correlation is'+str(correlation))
     # 폴더가 없으면 생성
-    save_dir = '../resources/static/img/plots'
+    save_dir = '../../../../resources/static/img/plots'
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
     # 그래프를 'plots' 폴더에 그림 파일로 저장
