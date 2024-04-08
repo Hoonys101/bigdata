@@ -5,6 +5,12 @@ public class JavaPython {
         JavaPython java = new JavaPython();
         java.save_data();
     }
+    Stirng strParameter(String[] args){
+        for(int i=0;i++;i<args.length){
+            
+        }
+
+    }
     void pln(String str){
         System.out.println(str);
     }

@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 import team.backend.domain.Member;
 
+import java.util.List;
+
 @Mapper
 @Repository
 public interface MemberMapper {
@@ -14,4 +16,6 @@ public interface MemberMapper {
     void insertMember(Member member);
 
     void deleteUser(String id);
+
+
 }
