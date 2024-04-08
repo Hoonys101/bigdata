@@ -108,7 +108,11 @@ public class pageController {
         return "/project/history";
     }
     @GetMapping("list1.do") //기업1
-    public String list_1(){
+    public String list_1(Model model){
+        return  "/project/list1";
+    }
+    @PostMapping("list1.do") //기업1
+    public String list_1(@RequestParam("name") String name){
         return  "/project/list1";
     }
     @GetMapping("list2.do") //기업2
@@ -120,8 +124,8 @@ public class pageController {
         return  "/project/chart";
     }
 
-    @GetMapping("add2.do") //기업추가
-    public String add2(Model model){
+    @GetMapping("add.do") //기업추가
+    public String add(Model model){
         //List<AvailableData> filteredData = availableDataService.getAvailableDataByFilters(null, null, null, null,null);
         //model.addAttribute("filteredData", filteredData);
         /*List<String> nation = availableDataService.getNation();
@@ -130,58 +134,58 @@ public class pageController {
         List<String> sector = availableDataService.getSector(stock_code);
         List<String> name = availableDataService.getName(sector);*/
         List<String> nation = availableDataService.getNation();
+        //List<String> stock_code = availableDataService.getStockCode(name);
         List<String> db_name = new ArrayList<>();
-        List<String> stock_code = new ArrayList<>();
         List<String> sector = new ArrayList<>();
         List<String> name = new ArrayList<>();
-
-        for (String nationName : nation) {
+        List<String> stock_code = new ArrayList<>();
+        for (String nationName : nation)     {
             db_name.addAll(availableDataService.getDb(nationName));
         }
 
         for (String dbName : db_name) {
-            stock_code.addAll(availableDataService.getStockCode(dbName));
+            sector.addAll(availableDataService.getSector(dbName));
         }
-
-        for (String code : stock_code) {
-            sector.addAll(availableDataService.getSector(code));
-        }
-
         for (String sectorName : sector) {
             name.addAll(availableDataService.getName(sectorName));
         }
-
+        for (String code : name) {
+            stock_code.addAll(availableDataService.getStockCode(code));
+        }
         model.addAttribute("nation", nation);
         model.addAttribute("db_name", db_name);
-        model.addAttribute("stock_code", stock_code);
         model.addAttribute("sector", sector);
         model.addAttribute("name", name);
+        model.addAttribute("stock_code", stock_code);
 
         System.out.println("Nation: " + nation);
         System.out.println("DB Name: " + db_name);
-        //System.out.println("Stock Code: " + stock_code);
-        //System.out.println("Sector: " + sector);
-        //System.out.println("Name: " + name);
-        return  "/project/add2";
+        System.out.println("Stock Code: " + stock_code);
+        System.out.println("Sector: " + sector);
+        System.out.println("Name: " + name);
+        return  "/project/add";
 }
-@PostMapping("add2.do")
-    public String add22(@RequestParam("stock_code") String stock_code,
+@PostMapping("add.do")
+    public String add(
                        @RequestParam("nation") String nation,
                        @RequestParam("db_name") String db_name,
                        @RequestParam("sector") String sector,
                        @RequestParam("name") String name,
+                       @RequestParam("stock_code") String stock_code,
                        Model model) {
-        List<AvailableData> filteredData = availableDataService.getAvailableDataByFilters(stock_code,nation, db_name, sector,name);
+        System.out.println("post add");
+        List<String> filteredData = availableDataService.getAvailableDataByFilters(nation, db_name, sector,name,stock_code);
+        System.out.println("filteredData"+filteredData);
         model.addAttribute("filteredData", filteredData);
-        return "redirect:add2.do";
+        return "redirect:list1.do?name=" + name;
     }
     @PostMapping("url.do")
-        public List<String> add2(//@RequestParam("getDb") String nation,
-//                               @RequestParam("getStockCode")String stock_code,
-                               @RequestParam("selectedNation") String selectedNation,
-//                               @RequestParam("getSector") String sector,
-//                               @RequestParam("getName") String name,
-                               @RequestParam("action")String action) {
+        public List<String> add2(@RequestParam("getDb") String action,
+                               //@RequestParam("getStockCode")String db_name,
+                               //@RequestParam("nation") selectedDb,
+                               //@RequestParam("getSector") String stock_code,
+                               //@RequestParam("getName") String sector,
+                               @RequestParam("selectedNation") String selectedNation) {
         System.out.println("서블릿");
         // 요청에 따라 데이터를 로드하고 응답할 리스트를 생성합니다.
         List<String> responseData = null;
@@ -196,21 +200,21 @@ public class pageController {
                 // 데이터베이스에서 db명을 가져옵니다.
                 responseData = availableDataService.getDb(selectedNation);
                 break;
-//            case "getStockCode":
+            /*case "getStockCode":
                 // 데이터베이스에서 StockCodes 가져옵니다.
-//                responseData = availableDataService.getStockCode(db_name);
-//                break;
-//            case "getSector":
+                responseData = availableDataService.getStockCode(db_name);
+                break;
+            case "getSector":
                 // 데이터베이스에서 업종명 가져옵니다.
-//                responseData = availableDataService.getSector(stock_code);
-//                break;
-//            case "getName":
+                responseData = availableDataService.getSector(stock_code);
+                break;
+            case "getName":
                 // 데이터베이스에서 회사명을 가져옵니다.
-//                responseData = availableDataService.getName(sector);
-//                break;
+                responseData = availableDataService.getName(sector);
+                break;
             default:
                 // 알 수 없는 액션인 경우, null 또는 적절한 오류 응답을 반환합니다.
-                break;
+                break;*/
         }
 
         return responseData;

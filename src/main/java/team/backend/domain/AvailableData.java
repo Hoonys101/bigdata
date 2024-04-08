@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 @Data
 public class AvailableData {
     @Id
-    private String stock_code;
     private String nation;
     private String db_name;
     private String sector;
     private String name;
+    private String stock_code;
 
 }
