@@ -53,7 +53,7 @@
     <h2>데이터 선택</h2>
     <form action="add2.do" method="post">
         <!-- 국가 선택 창 -->
-        <select name="nation" id="nation" >
+        <select name="nation" id="nation" onchange="loadDBNames()">
             <option value="">국가 선택</option>
             <c:forEach items="${nation}" var="nation">
                 <option value="${nation}">${nation}</option>
@@ -61,27 +61,28 @@
         </select>
 
         <!-- DB 선택 창 -->
-        <select name="db_name" id="db_name" onchange="loadDBNames()">
+        <select name="db_name" id="db_name" onchange="loadSectors()">
             <option value="">DB 선택</option>
 
         </select>
 
-        <!-- 종목 코드 선택 창 -->
-        <select name="stock_code" id="stock_code" onchange="loadStockCodes()">
-                    <option value="">종목 코드 선택</option>
-                </select>
-
         <!-- 업종 선택 창 -->
-        <select name="sector" id="sector" onchange="loadSectors()">
+        <select name="sector" id="sector" onchange="loadCompanies()">
             <option value="">업종 선택</option>
             <!-- 이 부분은 JavaScript를 사용하여 동적으로 채워질 것입니다. -->
         </select>
 
         <!-- 회사명 선택 창 -->
-        <select name="name" id="name" onchange="loadCompanies()">
+        <select name="name" id="name">
             <option value="">회사명 선택</option>
             <!-- 이 부분은 JavaScript를 사용하여 동적으로 채워질 것입니다. -->
         </select>
+
+
+        <!-- 종목 코드 선택 창 -->
+        <select name="stock_code" >
+                    <option value="">종목 코드 선택</option>
+                </select>
 
         <button type="submit">데이터 확인</button>
     </form>
@@ -91,12 +92,11 @@
     <script>
    // 국가 선택 시 DB 목록 가져오기
            function loadDBNames() {
-               var selectedDb = $("#nation").val();
                $.ajax({
                    url: "../project/url.do",
                    method: "POST",
-                   contentType: "application/json",
-                   data: JSON.stringify({ action: "getDb", nation: selectedDb }),
+//                   contentType: "application/json",
+                   data: { selectedNation: "KR", action:"getDb"},
                    dataType: "json",
                    success: function(data) {
                        $("#db_name").empty().append("<option value=''>DB 선택</option>");

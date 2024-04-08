@@ -165,7 +165,7 @@ public class pageController {
         return  "/project/add2";
 }
 @PostMapping("add2.do")
-    public String add2(@RequestParam("stock_code") String stock_code,
+    public String add22(@RequestParam("stock_code") String stock_code,
                        @RequestParam("nation") String nation,
                        @RequestParam("db_name") String db_name,
                        @RequestParam("sector") String sector,
@@ -176,11 +176,11 @@ public class pageController {
         return "redirect:add2.do";
     }
     @PostMapping("url.do")
-        public List<String> add2(@RequestParam("getDb") String db_name,
-                               @RequestParam("getStockCode")String stock_code,
-                               @RequestParam("getNation") String nation,
-                               @RequestParam("getSector") String sector,
-                               @RequestParam("getName") String name,
+        public List<String> add2(//@RequestParam("getDb") String nation,
+//                               @RequestParam("getStockCode")String stock_code,
+                               @RequestParam("selectedNation") String selectedNation,
+//                               @RequestParam("getSector") String sector,
+//                               @RequestParam("getName") String name,
                                @RequestParam("action")String action) {
         System.out.println("서블릿");
         // 요청에 따라 데이터를 로드하고 응답할 리스트를 생성합니다.
@@ -194,20 +194,20 @@ public class pageController {
                 break;
             case "getDb":
                 // 데이터베이스에서 db명을 가져옵니다.
-                responseData = availableDataService.getDb(nation);
+                responseData = availableDataService.getDb(selectedNation);
                 break;
-            case "getStockCode":
+//            case "getStockCode":
                 // 데이터베이스에서 StockCodes 가져옵니다.
-                responseData = availableDataService.getStockCode(db_name);
-                break;
-            case "getSector":
+//                responseData = availableDataService.getStockCode(db_name);
+//                break;
+//            case "getSector":
                 // 데이터베이스에서 업종명 가져옵니다.
-                responseData = availableDataService.getSector(stock_code);
-                break;
-            case "getName":
+//                responseData = availableDataService.getSector(stock_code);
+//                break;
+//            case "getName":
                 // 데이터베이스에서 회사명을 가져옵니다.
-                responseData = availableDataService.getName(sector);
-                break;
+//                responseData = availableDataService.getName(sector);
+//                break;
             default:
                 // 알 수 없는 액션인 경우, null 또는 적절한 오류 응답을 반환합니다.
                 break;
