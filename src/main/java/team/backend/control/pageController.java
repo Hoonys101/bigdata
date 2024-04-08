@@ -3,6 +3,7 @@ package team.backend.control;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,7 +14,10 @@ import team.backend.domain.Member;
 import team.backend.service.MybatisAvailableDataService;
 import team.backend.service.MybatisMemberService;
 
+import java.util.ArrayList;
 import java.util.List;
+
+@AllArgsConstructor
 
 @RequestMapping("project")
 @Controller
@@ -118,36 +122,98 @@ public class pageController {
 
     @GetMapping("add2.do") //기업추가
     public String add2(Model model){
-        List<String> stock_code = availableDataService.getStockCodes();
-        List<String> nation = availableDataService.getCountriesByStockCode(stock_code.toString());
-        List<String> db_name = availableDataService.getDBsByCountry(nation.toString());
-        List<String> sector = availableDataService.getSectorsByDB(db_name.toString());
-        List<String> name = availableDataService.getCompaniesBySector(sector.toString());
-        List<AvailableData> filteredData = availableDataService.getAvailableDataByFilters(null, null, null, null,null);
-        model.addAttribute("filteredData", filteredData);
-        //model.addAttribute("stock_code", stock_code);
-        //model.addAttribute("nation", nation);
-        //model.addAttribute("db_name", db_name);
-        //model.addAttribute("sector", sector);
-        //model.addAttribute("name", name);
-        System.out.println(stock_code);
-        System.out.println(nation);
-        System.out.println(db_name);
-        System.out.println(sector);
-        System.out.println(name);
+        //List<AvailableData> filteredData = availableDataService.getAvailableDataByFilters(null, null, null, null,null);
+        //model.addAttribute("filteredData", filteredData);
+        /*List<String> nation = availableDataService.getNation();
+        List<String> db_name = availableDataService.getDb(nation);
+        List<String> stock_code = availableDataService.getStockCode(db_name);
+        List<String> sector = availableDataService.getSector(stock_code);
+        List<String> name = availableDataService.getName(sector);*/
+        List<String> nation = availableDataService.getNation();
+        List<String> db_name = new ArrayList<>();
+        List<String> stock_code = new ArrayList<>();
+        List<String> sector = new ArrayList<>();
+        List<String> name = new ArrayList<>();
+
+        for (String nationName : nation) {
+            db_name.addAll(availableDataService.getDb(nationName));
+        }
+
+        for (String dbName : db_name) {
+            stock_code.addAll(availableDataService.getStockCode(dbName));
+        }
+
+        for (String code : stock_code) {
+            sector.addAll(availableDataService.getSector(code));
+        }
+
+        for (String sectorName : sector) {
+            name.addAll(availableDataService.getName(sectorName));
+        }
+
+        model.addAttribute("nation", nation);
+        model.addAttribute("db_name", db_name);
+        model.addAttribute("stock_code", stock_code);
+        model.addAttribute("sector", sector);
+        model.addAttribute("name", name);
+
+        System.out.println("Nation: " + nation);
+        System.out.println("DB Name: " + db_name);
+        //System.out.println("Stock Code: " + stock_code);
+        //System.out.println("Sector: " + sector);
+        //System.out.println("Name: " + name);
         return  "/project/add2";
-    }
-    @PostMapping("add2.do")
+}
+@PostMapping("add2.do")
     public String add2(@RequestParam("stock_code") String stock_code,
                        @RequestParam("nation") String nation,
                        @RequestParam("db_name") String db_name,
                        @RequestParam("sector") String sector,
                        @RequestParam("name") String name,
                        Model model) {
-        List<AvailableData> filteredData = availableDataService.getAvailableDataByFilters(stock_code, nation, db_name, sector,name);
+        List<AvailableData> filteredData = availableDataService.getAvailableDataByFilters(stock_code,nation, db_name, sector,name);
         model.addAttribute("filteredData", filteredData);
-        return "/project/add2";
+        return "redirect:add2.do";
     }
+    @PostMapping("url.do")
+        public List<String> add2(@RequestParam("getDb") String nation,
+                               @RequestParam("getStockCode")String db_name,
+                               @RequestParam("getNation") String stock_code,
+                               @RequestParam("getSector") String sector,
+                               @RequestParam("getName") String name,
+                               @RequestParam("action")String action) {
+        System.out.println("서블릿");
+        // 요청에 따라 데이터를 로드하고 응답할 리스트를 생성합니다.
+        List<String> responseData = null;
 
+        // 요청에 따라 처리합니다.
+        switch (action) {
+            case "getNation":
+                // 데이터베이스에서 나라를 가져옵니다.
+                responseData = availableDataService.getNation();
+                break;
+            case "getDb":
+                // 데이터베이스에서 db명을 가져옵니다.
+                responseData = availableDataService.getDb(db_name);
+                break;
+            case "getStockCode":
+                // 데이터베이스에서 StockCodes 가져옵니다.
+                responseData = availableDataService.getStockCode(stock_code);
+                break;
+            case "getSector":
+                // 데이터베이스에서 업종명 가져옵니다.
+                responseData = availableDataService.getSector(sector);
+                break;
+            case "getName":
+                // 데이터베이스에서 회사명을 가져옵니다.
+                responseData = availableDataService.getName(name);
+                break;
+            default:
+                // 알 수 없는 액션인 경우, null 또는 적절한 오류 응답을 반환합니다.
+                break;
+        }
+
+        return responseData;
+    }
 
 }

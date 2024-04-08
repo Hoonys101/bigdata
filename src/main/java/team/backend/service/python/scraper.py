@@ -48,12 +48,12 @@ def data_processing(df,db_name,stock_code):
         df.insert(loc=0,column="stock_code",value=stock_code)
         return df
 
-# connection=db.connect_to_oracle()
-# df1=insert_data=stock_data('IBM','SnP500')
-# df2=insert_data=stock_data('1008','Index')
-# db.insert_data_to_table(connection,df1)
-# db.insert_data_to_table(connection,df2)
-# db.close_connection(connection)
+connection=db.connect_to_oracle()
+df1=insert_data=stock_data('IBM','SnP500')
+df2=insert_data=stock_data('1008','Index')
+db.insert_data_to_table(connection,df1)
+db.insert_data_to_table(connection,df2)
+db.close_connection(connection)
 
 # 8자리 날짜 str을 datetime으로 반환
 def str_to_date(str_date='20121212'):

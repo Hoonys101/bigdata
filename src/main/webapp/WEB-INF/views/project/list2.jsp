@@ -54,8 +54,8 @@
     <form action="list2.do" method="post">
         <select name="company">
             <option value="">회사명 선택</option>
-            <c:forEach items="${companies}" var="company">
-                <option value="${company.id}">${company.name}</option>
+            <c:forEach items="${name}" var="name">
+                <option value="${name}">${name}</option>
             </c:forEach>
         </select>
         <button type="submit">기업 선택 완료</button>
