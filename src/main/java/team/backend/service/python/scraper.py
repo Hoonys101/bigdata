@@ -48,12 +48,7 @@ def data_processing(df,db_name,stock_code):
         df.insert(loc=0,column="stock_code",value=stock_code)
         return df
 
-connection=db.connect_to_oracle()
-df1=insert_data=stock_data('IBM','SnP500')
-df2=insert_data=stock_data('1008','Index')
-db.insert_data_to_table(connection,df1)
-db.insert_data_to_table(connection,df2)
-db.close_connection(connection)
+
 
 # 8자리 날짜 str을 datetime으로 반환
 def str_to_date(str_date='20121212'):
@@ -123,8 +118,8 @@ def delay_df(df1,df2,days):
 
 #Sector와 Code를 입력받아서, 동일한 코드 생성
 def add_data(list=[]):
-    db_name=list[1]
-    stock_code=list[2]
+    stock_code=list[1]
+    db_name=list[2]
     print(db_name,stock_code)
 #    df=stockprice(db_name,stock_code)
     df=stock_data(db_name,stock_code)
@@ -134,103 +129,3 @@ def add_data(list=[]):
     db.close_connection(connect)
 
 
-#add_data(list)
-#cal_corr()
-#print(stockprice())
-#pd=stock.get_index_ohlcv("20190101", "20220711", "1008")[['시가','고가','저가','종가','거래량']]
-#pd.rename(columns={'시가':'Open','고가':'High','저가':'Low','종가':'Close','거래량':'Volume'},inplace=True)
-#pd.rename_axis('Date',inplace=True)
-#print(pd)
-
-#print(fdr.DataReader('005930','20200101','20240402'))
-
-#print(cal_corr('KS11','005930','20210101','20220101',7))
-#strs=['KRX']
-#pd.set_option('display.max_columns', None)
-
-
-# strs=['KRX-DESC', 'S&P500','KRX/INDEX/list'] #for stckListing 제외'KRX', 'NASDAQ', 'NYSE', 'AMEX'
-# kr_index=[ 'KS11','KQ11','KS50','KS100','KRX100','KS200']#for DataReader
-# us_index=['DJI','IXIC','US500','VIX']#for DataReader
-# global_index=['JP225','STOXX50E','CSI300','HSI','FTSE','DAX','CAC']#for DataReader
-# current_trade=['USD/KRW','USD/EUR','USD/JPY','USD/RUB']#for DataReader
-# crypto=['BTC/KRW','ETH/KRW','XRP/KRW','BCH/KRW','EOS/KRW','LTC/KRW','XLM/KRW']#for DataReader
-
-# columns=[]
-#for str in strs:
-#    columns.append(str)
-#    columns.append(fdr.DataReader() StockListing(str).columns.tolist())
-#print(columns)
-'''
-#df_krx = fdr.StockListing('KRX-DESC')
-#print(df_krx.head())
-df = fdr.DataReader('IMO', '2015-01-01','2016-01-01')
-print(df.head(10))
-#plt.plot(df.index,df['Close'])
-df2=fdr.DataReader('CBOE', '2015-01-01','2016-01-01')
-#plt.plot(df2.index,df2['Close'])
-#plt.show()
-
-# Close 컬럼의 최대값과 최소값 계산
-max_close = df['Close'].max()
-min_close = df['Close'].min()
-
-# Close 값을 -100부터 100까지의 범위로 정규화하여 새로운 열 추가
-df['Close_normal'] = ((df['Close'] - min_close) / (max_close - min_close)) * 200 - 100
-
-# 플롯 생성
-plt.plot(df.index, df['Close_normal'])
-
-# Close 컬럼의 최대값과 최소값 계산
-max_close = df2['Close'].max()
-min_close = df2['Close'].min()
-
-# Close 값을 -100부터 100까지의 범위로 정규화하여 새로운 열 추가
-df2['Close_normal'] = ((df2['Close'] - min_close) / (max_close - min_close)) * 200 - 100
-
-# 플롯 생성
-plt.plot(df2.index, df2['Close_normal'])
-correlation=df['Close_normal'].corr(df2['Close_normal'])
-plt.title('Correlation between "IMO" and "CBOE" is'+str(correlation))
-reverse_correlation=df2['Close_normal'].corr(df['Close_normal'])
-print(correlation,reverse_correlation)
-#plt.show()
-# 폴더가 없으면 생성
-save_dir = 'plots'
-if not os.path.exists(save_dir):
-    os.makedirs(save_dir)
-
-# 그래프를 'plots' 폴더에 그림 파일로 저장
-
-filename='IMO'+'_'+'CBOE'+'_'+'2015-01-01'+'_'+'2016-01-01'+'.png'
-plt.savefig(os.path.join(save_dir, filename))
-
-df_krx = fdr.StockListing('KRX-DESC')
-print(df_krx.head())
-
-df_amex = fdr.StockListing('AMEX')
-print(df_amex.head())
-'''
-
-
-#print(row_price_date())
-
-#print(stockprice())
-#stockpri=stockprice()
-#connection=db.connect_to_oracle()
-#db.create_table_from_dataframe(connection,stockpri,"stock")
-#db.insert_data_to_table(connection,stockpri,"stock")
-#db.TABLE_NAME="stock"
-#db.read_date(connection)
-
-#data_list=stocklisting(strs)
-
-#print(stocklisting(strs))
-#print(stocklisting(['KRX-DESC']))
-
-#connection=db.connect_to_oracle()
-#db.create_table_from_dataframe(connection,data_list,"data_list")
-#db.insert_data_to_table(connection,data_list,"data_list")
-#db.TABLE_NAME="data_list"
-#db.read_date(connection,start='20120704',last='20220101',TABLE_NAME="data_list")
-#db.read_db_code(connection)

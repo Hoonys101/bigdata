@@ -6,7 +6,12 @@ public class JavaPython implements JavaPythonInter {
     public static void main(String[] args){
         JavaPython java = new JavaPython();
 //        java.save_data();
+        java.strParameter("add_data","1008","Index");
+        System.out.println("화학 index 지수를 저장했습니다.");
+        java.strParameter("add_data","IBM","SnP500");
+        System.out.println("IBM 주가를 저장했습니다.");
         java.strParameter("cal_data","1008","Index","IBM","SnP500","20130101","20140101");
+        System.out.println("화학 index 지수와 IBM 주가를 비교했습니다.");
     }
     @Override
     public boolean strParameter(String... args){
@@ -34,11 +39,11 @@ public class JavaPython implements JavaPythonInter {
     void save_data(String data){
 
         // 파이썬 스크립트 실행
-        ProcessBuilder pb = new ProcessBuilder("python", "python\\controller.py");
+        ProcessBuilder pb = new ProcessBuilder("python", "service\\python\\controller.py");
         Process pp=null;
         try{
             pp = pb.start();
-            
+            pln("save_data 실행");
             // 파이썬 스크립트에 데이터 전달
             OutputStream outputStream = pp.getOutputStream();
             PrintWriter writer = new PrintWriter(outputStream);
@@ -66,9 +71,9 @@ public class JavaPython implements JavaPythonInter {
     }
 
     void cal_data(String data){
-
+        pln("cal_data 실행");
         // 파이썬 스크립트 실행
-        ProcessBuilder pb = new ProcessBuilder("python", "python\\controller.py");
+        ProcessBuilder pb = new ProcessBuilder("python", "service\\python\\controller.py");
         Process pp=null;
         try{
             pp = pb.start();
@@ -88,7 +93,6 @@ public class JavaPython implements JavaPythonInter {
         BufferedReader reader = new BufferedReader(new InputStreamReader(pp.getInputStream()));
         String line="";
         try{
-            pln("파이썬 출력을 출력합니다.");
             while ((line = reader.readLine()) != null) {
                 System.out.println("Python output: " + line);
             }
@@ -96,7 +100,6 @@ public class JavaPython implements JavaPythonInter {
             // 프로세스 종료
             reader.close();
             pp.destroy();
-            pln("파이썬 프로그램 종료 완료");
         }catch(IOException ie){
             System.out.println("ie: "+ie);
         }
