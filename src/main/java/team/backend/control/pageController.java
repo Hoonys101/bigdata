@@ -118,18 +118,35 @@ public class pageController {
 
     @GetMapping("add2.do") //기업추가
     public String add2(Model model){
-        List<String> stockCodes = availableDataService.getStockCodes();
+        List<String> stock_code = availableDataService.getStockCodes();
+        List<String> nation = availableDataService.getCountriesByStockCode(stock_code.toString());
+        List<String> db_name = availableDataService.getDBsByCountry(nation.toString());
+        List<String> sector = availableDataService.getSectorsByDB(db_name.toString());
+        List<String> name = availableDataService.getCompaniesBySector(sector.toString());
         List<AvailableData> filteredData = availableDataService.getAvailableDataByFilters(null, null, null, null,null);
         model.addAttribute("filteredData", filteredData);
-        System.out.println(stockCodes);
+        //model.addAttribute("stock_code", stock_code);
+        //model.addAttribute("nation", nation);
+        //model.addAttribute("db_name", db_name);
+        //model.addAttribute("sector", sector);
+        //model.addAttribute("name", name);
+        System.out.println(stock_code);
+        System.out.println(nation);
+        System.out.println(db_name);
+        System.out.println(sector);
+        System.out.println(name);
         return  "/project/add2";
     }
     @PostMapping("add2.do")
-    public String add2(@ModelAttribute("availableData") AvailableData availableData, HttpSession session) {
-        System.out.println("Post add2");
-        session.setAttribute("availableData", availableData);
-        System.out.println("세션에 저장된 데이터: " + availableData.toString());
-        return "redirect:add2.do";
+    public String add2(@RequestParam("stock_code") String stock_code,
+                       @RequestParam("nation") String nation,
+                       @RequestParam("db_name") String db_name,
+                       @RequestParam("sector") String sector,
+                       @RequestParam("name") String name,
+                       Model model) {
+        List<AvailableData> filteredData = availableDataService.getAvailableDataByFilters(stock_code, nation, db_name, sector,name);
+        model.addAttribute("filteredData", filteredData);
+        return "/project/add2";
     }
 
 

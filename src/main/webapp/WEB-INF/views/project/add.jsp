@@ -48,42 +48,7 @@
             background-color: #45a049;
         }
     </style>
-    <script>
-        function loadStockCodes() {
-            var country = document.getElementById("country").value;
-            if (country != "") {
-                fetch('add.do?nation=' + country)
-                    .then(response => response.json())
-                    .then(data => {
-                        var stockCodes = document.getElementById("stockCodes");
-                        stockCodes.innerHTML = "<option value=''>종목 코드 선택</option>";
-                        data.forEach(function(stockCode) {
-                            var option = document.createElement("option");
-                            option.text = stockCode;
-                            stockCodes.add(option);
-                        });
-                    });
-            }
-        }
 
-        function loadIndustries() {
-            var stockCode = document.getElementById("stockCodes").value;
-            if (stockCode != "") {
-                fetch('add.jsp?stockCode=' + stockCode)
-                    .then(response => response.json())
-                    .then(data => {
-                        var industries = document.getElementById("industries");
-                        industries.innerHTML = "<option value=''>업종 선택</option>";
-                        data.forEach(function(industry) {
-                            var option = document.createElement("option");
-                            option.text = industry.name;
-                            option.value = industry.id;
-                            industries.add(option);
-                        });
-                    });
-            }
-        }
-    </script>
 </head>
 <body>
     <h2>데이터 선택</h2>
