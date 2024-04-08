@@ -8,8 +8,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import team.backend.domain.AvailableData;
 import team.backend.domain.Member;
+import team.backend.service.MybatisAvailableDataService;
 import team.backend.service.MybatisMemberService;
+
+import java.util.List;
 
 @RequestMapping("project")
 @Controller
@@ -17,25 +21,14 @@ import team.backend.service.MybatisMemberService;
 public class pageController {
     @Autowired
     private MybatisMemberService service;
+    @Autowired
+    private MybatisAvailableDataService availableDataService;
 
     @GetMapping("home.do") //메인화면
     public String home(HttpSession session, HttpServletRequest request) {
         System.out.println("회원가입");
-        if (session != null) {
-            // 세션이 존재하는 경우
-            Object id = session.getAttribute("id");
-            System.out.println("id"+id);
-            if (id != null) {
-                // 세션에 id 속성이 있는 경우
-                System.out.println("1");
-            } else {
-                // 세션에 id 속성이 없는 경우
-                System.out.println("2");
-            }
-        } else {
-            // 세션이 없는 경우
-            System.out.println("없다");
-        }
+        AvailableData availableData = (AvailableData) session.getAttribute("availableData");
+
         return "/project/home";
     }
     @GetMapping("login.do") //로그인화면
@@ -123,8 +116,38 @@ public class pageController {
         return  "/project/chart";
     }
 
-    @GetMapping("add.do") //기업추가
-    public String add(){
-        return  "/project/add";
+    @GetMapping("add2.do") //기업추가
+    public String add2(Model model){
+        List<String> stock_code = availableDataService.getStockCodes();
+        List<String> nation = availableDataService.getCountriesByStockCode(stock_code.toString());
+        List<String> db_name = availableDataService.getDBsByCountry(nation.toString());
+        List<String> sector = availableDataService.getSectorsByDB(db_name.toString());
+        List<String> name = availableDataService.getCompaniesBySector(sector.toString());
+        List<AvailableData> filteredData = availableDataService.getAvailableDataByFilters(null, null, null, null,null);
+        model.addAttribute("filteredData", filteredData);
+        //model.addAttribute("stock_code", stock_code);
+        //model.addAttribute("nation", nation);
+        //model.addAttribute("db_name", db_name);
+        //model.addAttribute("sector", sector);
+        //model.addAttribute("name", name);
+        System.out.println(stock_code);
+        System.out.println(nation);
+        System.out.println(db_name);
+        System.out.println(sector);
+        System.out.println(name);
+        return  "/project/add2";
     }
+    @PostMapping("add2.do")
+    public String add2(@RequestParam("stock_code") String stock_code,
+                       @RequestParam("nation") String nation,
+                       @RequestParam("db_name") String db_name,
+                       @RequestParam("sector") String sector,
+                       @RequestParam("name") String name,
+                       Model model) {
+        List<AvailableData> filteredData = availableDataService.getAvailableDataByFilters(stock_code, nation, db_name, sector,name);
+        model.addAttribute("filteredData", filteredData);
+        return "/project/add2";
+    }
+
+
 }

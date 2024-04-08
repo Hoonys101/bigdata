@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import team.backend.domain.Member;
 import team.backend.mapper.MemberMapper;
 
+import java.util.List;
+
 @Service
 public class MybatisMemberService implements MemberService {
     @Autowired
@@ -24,6 +26,8 @@ public class MybatisMemberService implements MemberService {
     public void withdraw(String id){
         mapper.deleteUser(id);
     }
+
+
 
 }
 

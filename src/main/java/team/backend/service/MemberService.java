@@ -2,6 +2,8 @@ package team.backend.service;
 
 import team.backend.domain.Member;
 
+import java.util.List;
+
 public interface MemberService {
 
 
@@ -11,4 +13,6 @@ public interface MemberService {
 
 
     void withdraw(String id);
+
+
 }

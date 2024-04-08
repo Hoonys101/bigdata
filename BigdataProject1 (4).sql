@@ -21,10 +21,10 @@ create table ID(
 ); 
 create sequence ID_SEQ increment by 1 start with 1 nocache;
 
-insert into ID values(ID_SEQ.nextval, '11111', 'È«±æµ¿', 'human@naver.com', '1980-01-01', '³²¼º', '2024-04-01');
-insert into ID values(ID_SEQ.nextval, '22222', 'ÀÌ¼ø½Å', 'human1@naver.com', '1985-02-02', '³²¼º', '2024-05-01');
-insert into ID values(ID_SEQ.nextval, '33333', '°­°¨Âù', 'human2@naver.com', '1990-03-03', '³²¼º', '2024-06-01');
-insert into ID values(ID_SEQ.nextval, '44444', 'À¯°ü¼ø', 'human3@naver.com', '1995-04-04', '¿©¼º', '2024-07-01');
+insert into ID values(ID_SEQ.nextval, '11111', 'í™ê¸¸ë™', 'human@naver.com', '1980-01-01', 'ë‚¨ì„±', '2024-04-01');
+insert into ID values(ID_SEQ.nextval, '22222', 'ì´ìˆœì‹ ', 'human1@naver.com', '1985-02-02', 'ë‚¨ì„±', '2024-05-01');
+insert into ID values(ID_SEQ.nextval, '33333', 'ê°•ê°ì°¬', 'human2@naver.com', '1990-03-03', 'ë‚¨ì„±', '2024-06-01');
+insert into ID values(ID_SEQ.nextval, '44444', 'ìœ ê´€ìˆœ', 'human3@naver.com', '1995-04-04', 'ì—¬ì„±', '2024-07-01');
 
 
 CREATE TABLE AvailableData (
@@ -62,7 +62,7 @@ CREATE TABLE ServiceUsage (
    start_date DATE,
    end_date DATE,
    ID VARCHAR2(30),
-   FOREIGN KEY (ID) REFERENCES ID(ID)  -- ID¸¦ ÂüÁ¶ÇÏ´Â ¿Ü·¡ Å° Á¦¾à Á¶°Ç
+   FOREIGN KEY (ID) REFERENCES ID(ID)  -- IDë¥¼ ì°¸ì¡°í•˜ëŠ” ì™¸ë˜ í‚¤ ì œì•½ ì¡°ê±´
 );
    
 commit;

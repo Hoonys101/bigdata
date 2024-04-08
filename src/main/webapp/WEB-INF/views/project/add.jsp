@@ -48,68 +48,40 @@
             background-color: #45a049;
         }
     </style>
-    <script>
-        function loadStockCodes() {
-            var country = document.getElementById("country").value;
-            if (country != "") {
-                fetch('add.jsp?country=' + country)
-                    .then(response => response.json())
-                    .then(data => {
-                        var stockCodes = document.getElementById("stockCodes");
-                        stockCodes.innerHTML = "<option value=''>종목 코드 선택</option>";
-                        data.forEach(function(stockCode) {
-                            var option = document.createElement("option");
-                            option.text = stockCode;
-                            stockCodes.add(option);
-                        });
-                    });
-            }
-        }
 
-        function loadIndustries() {
-            var stockCode = document.getElementById("stockCodes").value;
-            if (stockCode != "") {
-                fetch('add.jsp?stockCode=' + stockCode)
-                    .then(response => response.json())
-                    .then(data => {
-                        var industries = document.getElementById("industries");
-                        industries.innerHTML = "<option value=''>업종 선택</option>";
-                        data.forEach(function(industry) {
-                            var option = document.createElement("option");
-                            option.text = industry.name;
-                            option.value = industry.id;
-                            industries.add(option);
-                        });
-                    });
-            }
-        }
-    </script>
 </head>
 <body>
     <h2>데이터 선택</h2>
-    <form action="list1.jsp" method="post"> <!-- 선택한 결과를 보여줄 페이지로 이동합니다. -->
-        <select name="country" id="country" onchange="loadStockCodes()">
-            <option value="">국가 선택</option>
-            <c:forEach items="${countries}" var="country">
-                <option value="${country.code}">${country.name}</option> <!-- 국가 코드를 선택값으로 사용합니다. -->
-            </c:forEach>
-        </select>
-        <select name="stockCode" id="stockCodes" onchange="loadIndustries()">
+    <form action="list1.do" method="post"> <!-- 선택한 결과를 보여줄 페이지로 이동합니다. -->
+        <select name="stock_code" id="stock_code" onchange="loadIndustries()">
             <option value="">종목 코드 선택</option>
-            <c:forEach items="${stockCodes}" var="stockCode">
-                <option value="${stockCode}">${stockCode}</option>
+            <c:forEach items="${stock_code}" var="stock_code">
+                <option value="${stock_code}">${stock_code}</option>
             </c:forEach>
         </select>
-        <select name="industry" id="industries">
+        <select name="nation" id="nation" onchange="loadStockCodes()">
+            <option value="">국가 선택</option>
+            <c:forEach items="${nation}" var="nation">
+                <option value="${availabledata.nation}">${country.name}</option> <!-- 국가 코드를 선택값으로 사용합니다. -->
+            </c:forEach>
+        </select>
+        <select name="db_name">
+            <option value="">DB</option>
+            <c:forEach items="${db_name}" var="db_name">
+            <option value="${availabledata.db_name}">${availabledata.db_name}</option> <!-- 회사 ID를 선택값으로 사용합니다. -->
+            </c:forEach>
+        </select>
+
+        <select name="sector" id="sector">
             <option value="">업종 선택</option>
-            <c:forEach items="${industries}" var="industry">
-                <option value="${industry.id}">${industry.name}</option>
+            <c:forEach items="${sector}" var="sector">
+                <option value="${availabledata.sector}">${availabledata.sector}</option>
             </c:forEach>
         </select>
-        <select name="company">
+        <select name="dataName">
             <option value="">회사명 선택</option>
-            <c:forEach items="${companies}" var="company">
-                <option value="${company.id}">${company.name}</option> <!-- 회사 ID를 선택값으로 사용합니다. -->
+            <c:forEach items="${dataName}" var="dataName">
+                <option value="${availabledata.dataName}">${availabledata.dataName}</option> <!-- 회사 ID를 선택값으로 사용합니다. -->
             </c:forEach>
         </select>
         <button type="submit">데이터 확인</button>
