@@ -21,10 +21,10 @@ create table ID(
 ); 
 create sequence ID_SEQ increment by 1 start with 1 nocache;
 
-insert into ID values(ID_SEQ.nextval, '11111', '홍길동', 'human@naver.com', '1980-01-01', '남성', '2024-04-01');
-insert into ID values(ID_SEQ.nextval, '22222', '이순신', 'human1@naver.com', '1985-02-02', '남성', '2024-05-01');
-insert into ID values(ID_SEQ.nextval, '33333', '강감찬', 'human2@naver.com', '1990-03-03', '남성', '2024-06-01');
-insert into ID values(ID_SEQ.nextval, '44444', '유관순', 'human3@naver.com', '1995-04-04', '여성', '2024-07-01');
+insert into ID values('1', '11111', '홍길동', 'human@naver.com', '1980-01-01', '남성', '2024-04-01');
+insert into ID values('2', '22222', '이순신', 'human1@naver.com', '1985-02-02', '남성', '2024-05-01');
+insert into ID values('3', '33333', '강감찬', 'human2@naver.com', '1990-03-03', '남성', '2024-06-01');
+insert into ID values('4', '44444', '유관순', 'human3@naver.com', '1995-04-04', '여성', '2024-07-01');
 
 
 CREATE TABLE AvailableData (
@@ -65,6 +65,8 @@ CREATE TABLE ServiceUsage (
    FOREIGN KEY (ID) REFERENCES ID(ID)  -- ID를 참조하는 외래 키 제약 조건
 );
    
+insert into addition values('1','IBM');
+insert into addition values('1','1008');
 commit;
 
 select CONSTRAINT_NAME, CONSTRAINT_TYPE from user_constraints where TABLE_NAME='ID';

@@ -44,6 +44,69 @@ button:hover {
 background-color: #45a049;
 }
 </style>
+<!-- jQuery 라이브러리 추가 -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+// 국가 선택 시 DB 목록 가져오기
+function loadDBNames() {
+    var selectedNation=$("#nation option:selected").val();
+    $.ajax({
+       url: "../project/url.do",
+       method: "POST",
+       data: { action:"getDb", selectedNation:selectedNation, selectedDb:"",selectedSection:"",selectedName:"" },
+       success: function(data) {
+           $("#db_name").empty().append("<option value=''>DB 선택</option>");
+           $.each(data, function(index, item) {
+               $("#db_name").append("<option value='" + item + "'>" + item + "</option>");
+           });
+       }
+   });
+}
+// db 선택 시 sector 가져오기
+function loadSectors() {
+    $.ajax({
+        url: "../project/url.do",
+        method: "POST",
+        data: { action: "getSector", selectedNation:$("#nation").val(), selectedDb:$("#db_name").val(),selectedSection:"",selectedName:""},
+        success: function(data) {
+            $("#sector").empty().append("<option value=''>업종 선택</option>");
+            $.each(data, function(index, item) {
+                $("#sector").append("<option value='" + item + "'>" + item + "</option>");
+            });
+        }
+    });
+}
+// sector 선택 시 이름 가져오기
+function loadCompanies() {
+$.ajax({
+url: "../project/url.do",
+method: "POST",
+data: { action: "getName", selectedNation:$("#nation").val(), selectedDb:$("#db_name").val(),selectedSection:$("#sector").val(),selectedName:""},
+dataType: "json",
+success: function(data) {
+    $("#name").empty().append("<option value=''>기업명 선택</option>");
+    $.each(data, function(index, item) {
+        $("#name").append("<option value='" + item + "'>" + item + "</option>");
+    });
+}
+});
+}
+// 회사명 선택 시 stockCode명 가져오기
+    function loadStockCodes() {
+        $.ajax({
+            url: "../project/url.do",
+            method: "POST",
+            data:{ action: "getStockCode", sector: selectedName },
+//            dataType: "json",
+            success: function(data) {
+                $("#stock_code").empty().append("<option value=''>stock_code명</option>");
+                $.each(data, function(index, item) {
+                    $("#stock_code").append("<option value='" + item + "'>" + item + "</option>");
+                });
+            }
+        });
+        }
+            </script>
 </head>
 <body>
 <h2>데이터 선택</h2>
@@ -62,10 +125,6 @@ background-color: #45a049;
 
 </select>
 
-<!-- 종목 코드 선택 창
-<select name="stock_code" id="stock_code" onchange="loadSectors()">
-    <option value="">종목 코드 선택</option>
-</select>-->
 
 <!-- 업종 선택 창 -->
 <select name="sector" id="sector" onchange="loadCompanies()">
@@ -74,11 +133,10 @@ background-color: #45a049;
 </select>
 
 <!-- 회사명 선택 창 -->
-<select name="name" id="name">
+<select name="name" id="name" onchange="loadStockCodes()">
 <option value="">회사명 선택</option>
 <!-- 이 부분은 JavaScript를 사용하여 동적으로 채워질 것입니다. -->
 </select>
-
 
 <!-- 종목 코드 선택 창 -->
 <select name="stock_code" >
@@ -87,72 +145,5 @@ background-color: #45a049;
 
 <button type="submit">데이터 확인</button>
 </form>
-
-<!-- jQuery 라이브러리 추가 -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-// 국가 선택 시 DB 목록 가져오기
-function loadDBNames() {
-$.ajax({
-   url: "../project/url.do",
-   method: "POST",
-   data: { selectedNation:"KR", action:"getDb" },
-   dataType: "json",
-   success: function(data) {
-       $("#db_name").empty().append("<option value=''>DB 선택</option>");
-       $.each(data, function(index, item) {
-           $("#db_name").append("<option value='" + item + "'>" + item + "</option>");
-       });
-   }
-});
-}
-// db 선택 시 stock 가져오기
-function loadStockCodes() {
-    var selectedStock_code = $("#db_name").val();
-    $.ajax({
-        url: "../project/url.do",
-        method: "POST",
-        data: JSON.stringify({ action: "getStockCode", db_name: selectedStock_code }),
-        dataType: "json",
-        success: function(data) {
-            $("#stock_code").empty().append("<option value=''>종목 코드 선택</option>");
-            $.each(data, function(index, item) {
-                $("#stock_code").append("<option value='" + item + "'>" + item + "</option>");
-            });
-        }
-    });
-}
-// stock 선택 시 업종 가져오기
-function loadSectors() {
-var selectedSector = $("#stock_code").val();
-$.ajax({
-url: "../project/url.do",
-method: "POST",
-data: JSON.stringify({ action: "getSector", stock_code: selectedSector }),
-dataType: "json",
-success: function(data) {
-    $("#sector").empty().append("<option value=''>업종 선택</option>");
-    $.each(data, function(index, item) {
-        $("#sector").append("<option value='" + item + "'>" + item + "</option>");
-    });
-}
-});
-// 업종 선택 시 회사명 가져오기
-    function loadCompanies() {
-        var selectedName = $("#sector").val();
-        $.ajax({
-            url: "../project/url.do",
-            method: "POST",
-            data:JSON.stringify({ action: "getName", sector: selectedName }),
-            dataType: "json",
-            success: function(data) {
-                $("#name").empty().append("<option value=''>회사명 선택</option>");
-                $.each(data, function(index, item) {
-                    $("#name").append("<option value='" + item + "'>" + item + "</option>");
-                });
-            }
-        });
-        }
-            </script>
         </body>
         </html>
