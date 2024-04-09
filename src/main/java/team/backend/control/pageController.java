@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import team.backend.domain.AvailableData;
 import team.backend.domain.Member;
+import team.backend.service.JavaPython;
 import team.backend.service.MybatisAvailableDataService;
 import team.backend.service.MybatisMemberService;
 
@@ -27,6 +28,8 @@ public class pageController {
     private MybatisMemberService service;
     @Autowired
     private MybatisAvailableDataService availableDataService;
+    @Autowired
+    private JavaPython javaPython;
 
     @GetMapping("home.do") //메인화면
     public String home(HttpSession session, HttpServletRequest request) {
@@ -219,5 +222,6 @@ public class pageController {
 
         return responseData;
     }
+
 
 }

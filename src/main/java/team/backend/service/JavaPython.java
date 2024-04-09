@@ -5,7 +5,7 @@ import java.util.*;
 public class JavaPython implements JavaPythonInter {
     public static void main(String[] args){
         JavaPython java = new JavaPython();
-//        java.save_data();
+//      java.save_data();
         java.strParameter("add_data","1008","Index");
         System.out.println("화학 index 지수를 저장했습니다.");
         java.strParameter("add_data","IBM","SnP500");
