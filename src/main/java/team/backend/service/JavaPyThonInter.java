@@ -1,4 +1,4 @@
-/*package team.backend.service;
+package team.backend.service;
 
 public interface JavaPythonInter {
     boolean strParameter(String... args);
@@ -14,6 +14,5 @@ public interface JavaPythonInter {
       "first_stock_code","first_db_name",
       "diff_stock_code","diff_db_name",
       "second_stock_code","second_db_name",
-      "startdate","lastdate"를 인자로 호출
-
-}*/
+      "startdate","lastdate"를 인자로 호출*/
+}
