@@ -7,28 +7,28 @@
 
     <select id="getNation" resultType="String">
         select nation, count(nation) from AvailableData where stock_code not in
-        (select stock_code from ArchivedData group by stock_code) group by nation
+        (select stock_code from addition where id=#{id} group by stock_code) group by nation
     </select>
 
-    <select id="getDb" parameterType="String" resultType="String">
+    <select id="getDb" parameterType="Map" resultType="String">
         select db_name, count(db_name) from AvailableData where stock_code not in (select stock_code
-        from ArchivedData group by stock_code) and nation=#{nation} group by db_name
+        from addition where id=#{id} group by stock_code) and nation=#{nation} group by db_name
     </select>
-    <select id="getSector" parameterType="String" resultType="String">
+    <select id="getSector" parameterType="Map" resultType="String">
         select sector, count(sector) from AvailableData where stock_code not in
         (select stock_code from
-        ArchivedData group by stock_code) and db_name=#{db_name}
+        addition where id=#{id} group by stock_code) and db_name=#{db_name}
         group by sector
     </select>
 
-    <select id="getName" parameterType="String" resultType="String">
+    <select id="getName" parameterType="Map" resultType="String">
         select name, stock_code from AvailableData where stock_code not in
-        (select stock_code from ArchivedData group by stock_code) and sector=#{sector}
+        (select stock_code from addition where id=#{id} group by stock_code) and sector=#{sector}
     </select>
-    <select id="getStockCode" parameterType="String" resultType="String">
-        SELECT STOCK_CODE FROM AvailableData WHERE name = #{name} GROUP BY STOCK_CODE
+    <select id="getStockCode" parameterType="Map" resultType="String">
+        SELECT STOCK_CODE FROM addition where id=#{id} WHERE name = #{name} GROUP BY STOCK_CODE
     </select>
     <select id="getAvailableDataByFilters" parameterType="String" resultType="String">
-        SELECT name FROM AvailableData WHERE nation=#{nation} AND db_name=#{db_name} AND sector=#{sector} AND name=#{name} AND stock_code=#{stock_code}
+        SELECT name FROM addition where id=#{id} WHERE nation=#{nation} AND db_name=#{db_name} AND sector=#{sector} AND name=#{name} AND stock_code=#{stock_code}
     </select>
 </mapper>

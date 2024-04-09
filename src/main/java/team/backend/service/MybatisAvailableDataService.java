@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 import team.backend.domain.AvailableData;
 import team.backend.mapper.AvailableDataMapper;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class MybatisAvailableDataService implements AvailableDataService {
@@ -21,15 +23,18 @@ public class MybatisAvailableDataService implements AvailableDataService {
 
 
     @Override
-    public List<String> getNation() {
-        List<String> dbs = availableDataMapper.getNation();
+    public List<String> getNation(String id) {
+        List<String> dbs = availableDataMapper.getNation(id);
         //System.out.println("dbs1"+dbs);
         return dbs;
     }
 
     @Override
-    public List<String> getDb(String nation) {
-        List<String> dbs = availableDataMapper.getDb(nation);
+    public List<String> getDb(String id, String nation) {
+        Map<String, String> params = new HashMap<>();
+        params.put("id", id);
+        params.put("nation", nation);
+        List<String> dbs = availableDataMapper.getDb(params);
         logger.debug("getDBsByCountry : {}", dbs);
         //System.out.println("dbs2"+dbs);
         return dbs;
@@ -38,21 +43,30 @@ public class MybatisAvailableDataService implements AvailableDataService {
 
 
     @Override
-    public List<String> getSector( String db_name) {
+    public List<String> getSector(String id, String db_name) {
         //System.out.println("dbs4"+dbs);
-        return availableDataMapper.getSector(db_name);
+        Map<String, String> params = new HashMap<>();
+        params.put("id", id);
+        params.put("db_name", db_name);
+        return availableDataMapper.getSector(params);
     }
 
     @Override
-    public List<String> getName(String sector) {
+    public List<String> getName(String id, String sector) {
         //System.out.println("dbs5"+dbs);
-        return availableDataMapper.getName(sector);
+        Map<String, String> params = new HashMap<>();
+        params.put("id", id);
+        params.put("sector", sector);
+        return availableDataMapper.getName(params);
     }
 
     @Override
-    public List<String> getStockCode(String name) {
+    public List<String> getStockCode(String id, String name) {
         //System.out.println("dbs3"+dbs);
-        return availableDataMapper.getStockCode(name);
+        Map<String, String> params = new HashMap<>();
+        params.put("id", id);
+        params.put("name", name);
+        return availableDataMapper.getStockCode(params);
     }
     @Override
     public List<String> getAvailableDataByFilters(String nation, String db_name,String sector,String name, String stock_code) {
