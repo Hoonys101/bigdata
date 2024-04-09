@@ -25,7 +25,7 @@ public class JavaPython implements JavaPythonInter {
         }else if(args[0].equals("cal_data")&&args.length==7){
             cal_data(resultString);
             return true;
-        }else if (args[0].equals("diff_cal_data")&&args.length==9){
+        }else if (args[0].equals("diff_cal_data")&&args.length==11){
             cal_data(resultString);
             return true;
         }else{
@@ -39,7 +39,7 @@ public class JavaPython implements JavaPythonInter {
     void save_data(String data){
 
         // 파이썬 스크립트 실행
-        ProcessBuilder pb = new ProcessBuilder("python", "service\\python\\controller.py");
+        ProcessBuilder pb = new ProcessBuilder("python", "src\\main\\java\\team\\backend\\service\\python\\controller.py");
         Process pp=null;
         try{
             pp = pb.start();
@@ -56,9 +56,9 @@ public class JavaPython implements JavaPythonInter {
             System.out.println("ie: "+ie);
         }
         // 파이썬 스크립트의 출력 읽어오기
-        BufferedReader reader = new BufferedReader(new InputStreamReader(pp.getInputStream()));
         String line="";
         try{
+            BufferedReader reader = new BufferedReader(new InputStreamReader(pp.getInputStream(),"cp949"));
             while ((line = reader.readLine()) != null) {
                 System.out.println("Python output: " + line);
             }
@@ -73,7 +73,7 @@ public class JavaPython implements JavaPythonInter {
     void cal_data(String data){
         pln("cal_data 실행");
         // 파이썬 스크립트 실행
-        ProcessBuilder pb = new ProcessBuilder("python", "service\\python\\controller.py");
+        ProcessBuilder pb = new ProcessBuilder("python", "src\\main\\java\\team\\backend\\service\\python\\controller.py");
         Process pp=null;
         try{
             pp = pb.start();
@@ -90,9 +90,10 @@ public class JavaPython implements JavaPythonInter {
             ie.printStackTrace();
         }
         // 파이썬 스크립트의 출력 읽어오기
-        BufferedReader reader = new BufferedReader(new InputStreamReader(pp.getInputStream()));
         String line="";
+
         try{
+            BufferedReader reader = new BufferedReader(new InputStreamReader(pp.getInputStream(),"cp949"));
             while ((line = reader.readLine()) != null) {
                 System.out.println("Python output: " + line);
             }

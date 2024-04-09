@@ -122,7 +122,7 @@ def add_data(list=[]):
     db_name=list[2]
     print(db_name,stock_code)
 #    df=stockprice(db_name,stock_code)
-    df=stock_data(db_name,stock_code)
+    df=stock_data(stock_code,db_name)
     connect=db.connect_to_oracle()
 #    db.create_table_from_dataframe(connect,refine_df,"ArchivedData")
     db.insert_data_to_table(connect,df)
