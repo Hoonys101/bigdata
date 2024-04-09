@@ -7,11 +7,8 @@ public class JavaPython implements JavaPythonInter {
         JavaPython java = new JavaPython();
 //        java.save_data();
         java.strParameter("add_data","1008","Index");
-        System.out.println("화학 index 지수를 저장했습니다.");
         java.strParameter("add_data","IBM","SnP500");
-        System.out.println("IBM 주가를 저장했습니다.");
         java.strParameter("cal_data","1008","Index","IBM","SnP500","20130101","20140101");
-        System.out.println("화학 index 지수와 IBM 주가를 비교했습니다.");
     }
     @Override
     public boolean strParameter(String... args){
