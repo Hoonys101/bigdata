@@ -56,9 +56,9 @@ public class JavaPython implements JavaPythonInter {
             System.out.println("ie: "+ie);
         }
         // 파이썬 스크립트의 출력 읽어오기
-        BufferedReader reader = new BufferedReader(new InputStreamReader(pp.getInputStream()));
         String line="";
         try{
+            BufferedReader reader = new BufferedReader(new InputStreamReader(pp.getInputStream(),"cp949"));
             while ((line = reader.readLine()) != null) {
                 System.out.println("Python output: " + line);
             }
@@ -90,9 +90,10 @@ public class JavaPython implements JavaPythonInter {
             ie.printStackTrace();
         }
         // 파이썬 스크립트의 출력 읽어오기
-        BufferedReader reader = new BufferedReader(new InputStreamReader(pp.getInputStream()));
         String line="";
+
         try{
+            BufferedReader reader = new BufferedReader(new InputStreamReader(pp.getInputStream(),"cp949"));
             while ((line = reader.readLine()) != null) {
                 System.out.println("Python output: " + line);
             }
