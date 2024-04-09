@@ -15,4 +15,5 @@ public interface JavaPythonInter {
       "diff_stock_code","diff_db_name",
       "second_stock_code","second_db_name",
       "startdate","lastdate"를 인자로 호출*/
+
 }

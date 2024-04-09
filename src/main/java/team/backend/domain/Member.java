@@ -32,7 +32,4 @@ public class Member {
         // signup_date를 현재 날짜와 시간으로 설정
         this.signup_date = new Date(Calendar.getInstance().getTime().getTime());
     }
-
-
-
 }
