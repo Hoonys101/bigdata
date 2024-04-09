@@ -5,15 +5,16 @@ import org.springframework.stereotype.Repository;
 import team.backend.domain.AvailableData;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 @Repository
 public interface AvailableDataMapper {
 
-    List<String> getNation();
-    List<String> getDb(String nation);
-    List<String> getSector(String db_name);
-    List<String> getName(String sector);
-    List<String> getStockCode(String name);
+    List<String> getNation(String id);
+    List<String> getDb(Map params);
+    List<String> getSector(Map params);
+    List<String> getName(Map params);
+    List<String> getStockCode(Map params);
     List<String> getAvailableDataByFilters(String nation, String db_name,String sector,String name, String stock_code);
 }

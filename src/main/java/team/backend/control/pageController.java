@@ -125,45 +125,42 @@ public class pageController {
     }
 
     @GetMapping("add.do") //기업추가
-    public String add(Model model){
+    public String add(Model model, HttpSession session){
+        String id = (String)session.getAttribute("id");
         //List<AvailableData> filteredData = availableDataService.getAvailableDataByFilters(null, null, null, null,null);
         //model.addAttribute("filteredData", filteredData);
-        /*List<String> nation = availableDataService.getNation();
-        List<String> db_name = availableDataService.getDb(nation);
+        List<String> nation = availableDataService.getNation(id);
+        /*List<String> db_name = availableDataService.getDb(nation);
         List<String> stock_code = availableDataService.getStockCode(db_name);
         List<String> sector = availableDataService.getSector(stock_code);
         List<String> name = availableDataService.getName(sector);*/
-        List<String> nation = availableDataService.getNation();
         //List<String> stock_code = availableDataService.getStockCode(name);
-        List<String> db_name = new ArrayList<>();
-        List<String> sector = new ArrayList<>();
-        List<String> name = new ArrayList<>();
-        List<String> stock_code = new ArrayList<>();
-        for (String nationName : nation)     {
-            db_name.addAll(availableDataService.getDb(nationName));
-        }
-
-        for (String dbName : db_name) {
-            sector.addAll(availableDataService.getSector(dbName));
-        }
-        for (String sectorName : sector) {
-            name.addAll(availableDataService.getName(sectorName));
-        }
-        for (String code : name) {
-            stock_code.addAll(availableDataService.getStockCode(code));
-        }
+//        List<String> db_name = new ArrayList<>();
+//        List<String> sector = new ArrayList<>();
+//        List<String> name = new ArrayList<>();
+//        List<String> stock_code = new ArrayList<>();
+//        for (String nationName : nation)     {
+//            db_name.addAll(availableDataService.getDb(id, nationName));
+//        }
         model.addAttribute("nation", nation);
-        model.addAttribute("db_name", db_name);
-        model.addAttribute("sector", sector);
-        model.addAttribute("name", name);
-        model.addAttribute("stock_code", stock_code);
-
         System.out.println("Nation: " + nation);
-        System.out.println("DB Name: " + db_name);
-        System.out.println("Stock Code: " + stock_code);
-        System.out.println("Sector: " + sector);
-        System.out.println("Name: " + name);
-        return  "/project/add";
+
+//        for (String dbName : db_name) {
+//            sector.addAll(availableDataService.getSector(id, dbName));
+//        }
+//        for (String sectorName : sector) {
+//            name.addAll(availableDataService.getName(id, sectorName));
+//        }
+//        for (String code : name) {
+//            stock_code.addAll(availableDataService.getStockCode(id, code));
+//        }
+//
+//        model.addAttribute("db_name", db_name);
+//        model.addAttribute("sector", sector);
+//        model.addAttribute("name", name);
+//        model.addAttribute("stock_code", stock_code);
+
+        return  "/project/add2";
 }
 @PostMapping("add.do")
     public String add(
@@ -179,14 +176,17 @@ public class pageController {
         model.addAttribute("filteredData", filteredData);
         return "redirect:add.do";
     }
-    @PostMapping("url.do")
-        public List<String> add2(@RequestParam("getDb") String action,
-                               //@RequestParam("getStockCode")String db_name,
-                               //@RequestParam("nation") selectedDb,
-                               //@RequestParam("getSector") String stock_code,
-                               //@RequestParam("getName") String sector,
-                               @RequestParam("selectedNation") String selectedNation) {
-        System.out.println("서블릿");
+@PostMapping("url.do")
+@ResponseBody
+    public List<String> add2(@RequestParam("action") String action,
+                           @RequestParam("selectedNation")String selectedNation,
+                           @RequestParam("selectedDb") String selectedDb,
+                           @RequestParam("selectedSection") String selectedSector,
+                           @RequestParam("selectedName") String selectedName,
+                           HttpSession session) {
+
+        String id = (String)session.getAttribute("id");
+        System.out.println("action: "+action + "\nselectedNation: "+selectedNation+ "\nid: "+id);
         // 요청에 따라 데이터를 로드하고 응답할 리스트를 생성합니다.
         List<String> responseData = null;
 
@@ -194,27 +194,30 @@ public class pageController {
         switch (action) {
             case "getNation":
                 // 데이터베이스에서 나라를 가져옵니다.
-                responseData = availableDataService.getNation();
+                responseData = availableDataService.getNation(id);
+                System.out.println(responseData);
                 break;
             case "getDb":
                 // 데이터베이스에서 db명을 가져옵니다.
-                responseData = availableDataService.getDb(selectedNation);
-                break;
-            /*case "getStockCode":
-                // 데이터베이스에서 StockCodes 가져옵니다.
-                responseData = availableDataService.getStockCode(db_name);
+                responseData = availableDataService.getDb(id,selectedNation);
+                System.out.println(responseData);
                 break;
             case "getSector":
                 // 데이터베이스에서 업종명 가져옵니다.
-                responseData = availableDataService.getSector(stock_code);
+                responseData = availableDataService.getSector(id,selectedDb);
+                System.out.println(responseData);
                 break;
             case "getName":
                 // 데이터베이스에서 회사명을 가져옵니다.
-                responseData = availableDataService.getName(sector);
+                responseData = availableDataService.getName(id,selectedSector);
+                System.out.println(responseData);
                 break;
+            case "getStockCode":
+                responseData = availableDataService.getStockCode(id,selectedName);
+                System.out.println(responseData);
             default:
                 // 알 수 없는 액션인 경우, null 또는 적절한 오류 응답을 반환합니다.
-                break;*/
+                break;
         }
 
         return responseData;
