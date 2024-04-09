@@ -1,15 +1,17 @@
 package team.backend.service;
+import org.springframework.stereotype.Service;
+
 import java.io.*;
 import java.util.*;
-
+@Service
 public class JavaPython implements JavaPythonInter {
-    public static void main(String[] args){
-        JavaPython java = new JavaPython();
+    //public static void main(String[] args){
+        //JavaPython java = new JavaPython();
 //      java.save_data();
-        java.strParameter("add_data","1008","Index");
-        java.strParameter("add_data","IBM","SnP500");
-        java.strParameter("cal_data","1008","Index","IBM","SnP500","20130101","20140101");
-    }
+        //java.strParameter("add_data","1008","Index");
+        //java.strParameter("add_data","IBM","SnP500");
+        //java.strParameter("cal_data","1008","Index","IBM","SnP500","20130101","20140101");
+    //}
     @Override
     public boolean strParameter(String... args){
         String resultString=args[0];

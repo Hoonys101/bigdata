@@ -75,9 +75,11 @@
         <select name="sector" id="sector">
             <option value="">업종 선택</option>
             <c:forEach items="${sector}" var="sector">
-                <option value="${sector}">${sector}</option>
+                <option value="${sector} / ${sector}">${sector}</option>
             </c:forEach>
         </select>
+        
+        select stock_code , dbname
         <select name="name">
             <option value="">회사명 선택</option>
             <c:forEach items="${name}" var="name">

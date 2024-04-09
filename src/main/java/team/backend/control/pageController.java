@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import team.backend.domain.Addition;
 import team.backend.domain.AvailableData;
 import team.backend.domain.Member;
 import team.backend.service.JavaPython;
@@ -112,14 +113,35 @@ public class pageController {
     }
     @GetMapping("list1.do") //기업1
     public String list_1(Model model){
+
+        AvailableData availableData = new AvailableData();
+
+
+
+
+        
+        //addition.setId(/* 여기에 id 값 설정 */);
+        //addition.setStockCode(/* 여기에 stock_code 값 설정 */);
+        //model.addAttribute("addition", addition);
+        //System.out.println(data);
         return  "/project/list1";
     }
-    @PostMapping("list1.do") //기업1
-    public String list_1(@RequestParam("name") String name){
-        return  "/project/list1";
-    }
+    //@PostMapping("list1.do") //기업1
+    //public String list_1(@RequestParam("id") String id,
+      //                   @RequestParam("stock_code") String stock_code){
+
+
+        //javaPython.strParameter("add_data",stock_code,id);
+        //
+        //return  "/project/list1";
+   // }
     @GetMapping("list2.do") //기업2
-    public String list_2(){
+    public String list_2(@RequestParam("stock_code") String stock_code,
+                         @RequestParam("db_name") String db_name
+                         ){
+
+        javaPython.strParameter("add_data",stock_code,db_name);
+
         return  "/project/list2";
     }
     @GetMapping("chart.do") //결과값
