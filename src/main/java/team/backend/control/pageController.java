@@ -177,7 +177,7 @@ public class pageController {
         List<String> filteredData = availableDataService.getAvailableDataByFilters(nation, db_name, sector,name,stock_code);
         System.out.println("filteredData"+filteredData);
         model.addAttribute("filteredData", filteredData);
-        return "redirect:list1.do?name=" + name;
+        return "redirect:add.do";
     }
     @PostMapping("url.do")
         public List<String> add2(@RequestParam("getDb") String action,
