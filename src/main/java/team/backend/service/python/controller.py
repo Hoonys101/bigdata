@@ -1,7 +1,8 @@
 import sys
 import scraper as scr
 import calculate as cal
-
+print("표준 출력의 인코딩:", sys.stdout.encoding)
+print("표준 입력의 인코딩:", sys.stdin.encoding)
 input_data=[]
 try:
     for line in sys.stdin:
