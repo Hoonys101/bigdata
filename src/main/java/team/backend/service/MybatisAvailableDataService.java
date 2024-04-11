@@ -81,7 +81,11 @@ public class MybatisAvailableDataService implements AvailableDataService {
         Map<String, String> params = new HashMap<>();
         System.out.println("params"+params);
         params.put("id", id);
-        params.put("availableData", availableData);
+        params.put("nation", availableData.getNation());
+        params.put("db_name", availableData.getDb_name());
+        params.put("sector", availableData.getSector());
+        params.put("name", availableData.getName());
+        params.put("stock_code", availableData.getStock_code());
         System.out.println("params"+params);
         return availableDataMapper.getList(params);
     }

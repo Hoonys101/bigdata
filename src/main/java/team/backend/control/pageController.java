@@ -19,6 +19,7 @@ import team.backend.service.MybatisAvailableDataService;
 import team.backend.service.MybatisMemberService;
 import team.backend.service.addDataService;
 
+import java.sql.Date;
 import java.util.List;
 
 @AllArgsConstructor
@@ -264,9 +265,27 @@ public class pageController {
     return "redirect:analysis_page.do";
     }
     @GetMapping("analysis_page.do") //분석하기
-    public String analysis_page(Model model ,HttpSession session){
+    public String analysis_page(Model model ,HttpSession session,AvailableData availableData){
         String id = (String)session.getAttribute("id");
-        List<AvailableData> list = availableDataService.getList(id);
+        List<AvailableData> list = availableDataService.getList(id,availableData);
+        model.addAttribute("list" ,list);
+        System.out.println("list"+list);
+        return "/project/analysis_page";
+    }
+    @PostMapping("analysis_page.do") //분석하기
+    public String analysis_page(@RequestParam("stock_code1") String stock_code1,
+                                @RequestParam("stock_code2") String stock_code2,
+                                @RequestParam("start_date") String start_date,
+                                @RequestParam("end_date") String end_date,
+                                HttpSession session){
+        System.out.println("analysis start");
+        String id = (String)session.getAttribute("id");
+        System.out.println("id"+id);
+
+        javaPy.strParameter("cal_dat",stock_code1,stock_code2,start_date,end_date);
+        //addData.insertTo();
+        return "redirect:analysis_page.do";
+    }
         // ArchivedData  ['add_data', 'KONEX', '317240'] db name , 스톡 코드 기업추가
 
         // 검색 국가 DB 회사명 종목 dto (nation, db_name, sector, name)
@@ -290,6 +309,5 @@ public class pageController {
 
 
 
-        return "/project/analysis_page";
-    }
+
 }

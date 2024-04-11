@@ -2,6 +2,7 @@ package team.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import team.backend.domain.ServiceUsage;
 import team.backend.mapper.AdditionMapper;
 
 import java.util.HashMap;
@@ -28,5 +29,13 @@ public class addDataServiceImpl implements addDataService {
         params.put("stockCode",stockCode);
         addMapper.insertToAddition(params);
         return;
+    }
+    @Override
+    public List<ServiceUsage> getServiceUsageStockCode(ServiceUsage serviceUsage){
+        return  null;
+    }
+    @Override
+    public void insertToServiceUsage(Map params){
+
     }
 }

@@ -30,12 +30,11 @@
     <select id="getAvailableDataByFilters" parameterType="String" resultType="String">
         SELECT name FROM addition where id=#{id} WHERE nation=#{nation} AND db_name=#{db_name} AND sector=#{sector} AND name=#{name} AND stock_code=#{stock_code}
     </select>
-    <select id="getList" parameterType="Map" resultType="String">
-        SELECT nation, db_name, sector, name
-        FROM AvailableData
-        INNER JOIN addition ON AvailableData.stock_code = addition.stock_code
+    <select id="getList" parameterType="Map" resultType="team.backend.domain.AvailableData">
+        SELECT *
+        FROM AvailableData A
+        INNER JOIN addition ON A.stock_code = addition.stock_code
         WHERE addition.id = #{id}
-        GROUP BY nation, db_name, name, sector
     </select>
 
 </mapper>

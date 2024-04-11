@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class AvailableData {
-    @Id
     private String nation;
     private String db_name;
     private String sector;
