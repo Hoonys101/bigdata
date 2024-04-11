@@ -16,5 +16,5 @@ public interface AvailableDataMapper {
     List<String> getSector(Map params);
     List<String> getName(Map params);
     List<String> getStockCode(Map params);
-    List<String> getAvailableDataByFilters(String nation, String db_name,String sector,String name, String stock_code);
+
 }

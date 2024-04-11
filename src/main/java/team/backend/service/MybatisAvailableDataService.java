@@ -68,10 +68,10 @@ public class MybatisAvailableDataService implements AvailableDataService {
         params.put("name", name);
         return availableDataMapper.getStockCode(params);
     }
-    @Override
-    public List<String> getAvailableDataByFilters(String nation, String db_name,String sector,String name, String stock_code) {
-        List<String> data = availableDataMapper.getAvailableDataByFilters(nation, db_name, sector, name, stock_code);
-        System.out.println(data);
-        return data;
-    }
+//    @Override
+//    public List<String> getAvailableDataByFilters(String nation, String db_name,String sector,String name, String stock_code) {
+//        List<String> data = availableDataMapper.getAvailableDataByFilters(nation, db_name, sector, name, stock_code);
+//        System.out.println(data);
+//        return data;
+//    }
 }

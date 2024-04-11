@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import team.backend.domain.AvailableData;
 import team.backend.domain.Member;
+import team.backend.service.JavaPythonInter;
 import team.backend.service.MybatisAvailableDataService;
 import team.backend.service.MybatisMemberService;
+import team.backend.service.addDataService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,10 @@ public class pageController {
     private MybatisMemberService service;
     @Autowired
     private MybatisAvailableDataService availableDataService;
+    @Autowired
+    private addDataService addData;
+    @Autowired
+    private JavaPythonInter javaPy;
 
     @GetMapping("home.do") //메인화면
     public String home(HttpSession session, HttpServletRequest request) {
@@ -171,9 +177,9 @@ public class pageController {
                        @RequestParam("stock_code") String stock_code,
                        Model model) {
         System.out.println("post add");
-        List<String> filteredData = availableDataService.getAvailableDataByFilters(nation, db_name, sector,name,stock_code);
-        System.out.println("filteredData"+filteredData);
-        model.addAttribute("filteredData", filteredData);
+//        List<String> filteredData = availableDataService.getAvailableDataByFilters(nation, db_name, sector,name,stock_code);
+//        System.out.println("filteredData"+filteredData);
+//        model.addAttribute("filteredData", filteredData);
         return "redirect:add.do";
     }
 @PostMapping("url.do")
@@ -219,8 +225,22 @@ public class pageController {
                 // 알 수 없는 액션인 경우, null 또는 적절한 오류 응답을 반환합니다.
                 break;
         }
-
         return responseData;
     }
 
+    @PostMapping("add2.do")
+    public String excuteAdd(@RequestParam("db_name") String db_name, @RequestParam("stock_code") String stock_code, HttpSession session){
+        String id = (String)session.getAttribute("id");
+        if(addData.getArchivedDataStockCode(stock_code).isEmpty()) {
+            //stock_code가 addition에 있는지 확인(id 무관)
+            //mapper 에서 addition에서 where stock_code=#stock_code인 조건으로 쿼리.
+            //쿼리 결과가 list length가 0 인 경우 체크
+            javaPy.strParameter("add_data",db_name,stock_code);
+        }
+        addData.insertToAddition(id, stock_code);
+        //없으면, python 호출, -> addition에 추가
+            //mapper에서 insert 생성 추가.
+        //있건 없건, addition에 추가
+    return "redirect:analysis_page.do";
+    }
 }

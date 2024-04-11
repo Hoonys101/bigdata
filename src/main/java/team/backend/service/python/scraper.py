@@ -30,7 +30,7 @@ def stockprice(db_name='', code='005930', startdate='20120101', lastdate='202201
     return df
 
 # Sector, Code를 받아서 웹으로부터 20120101~20220101 데이터의 필요 컬럼을 선정하여 df로 반환
-def stock_data(stock_code='IBM', db_name='sdfklj', startdate='20120101',lastdate='20220101', default='Close'):
+def stock_data(db_name='sdfklj', stock_code='IBM', startdate='20120101',lastdate='20220101', default='Close'):
     if db_name=='Index':
         df=stock.get_index_ohlcv(startdate, lastdate, stock_code)[['시가','고가','저가','종가','거래량']]
         df.rename(columns={'시가':'Open','고가':'High','저가':'Low','종가':'Close','거래량':'Volume'},inplace=True)
@@ -98,9 +98,9 @@ def saveplot(df,df2,filename):
     return correlation
 
 # 기업명,name명 X 2개와 날짜 2개를 str으로 받고, 당기는 날짜를 int로 받아서 날짜 당기기 및 비교 5회 반복하며 plot 저장하고, corr 리턴
-def cal_corr(com1='IMO',sector1="sdfsdf",com2='CBOE',sector2="wefwef",startdate='20150101',lastdate='20220101', days=30):
-    df1=normal(com1,sector1,startdate,lastdate)
-    df2=normal(com2,sector2,startdate,lastdate)
+def cal_corr(sector1="sdfsdf", com1='IMO', sector2="wefwef", com2='CBOE',startdate='20150101',lastdate='20220101', days=30):
+    df1=normal(sector1, com1,startdate,lastdate)
+    df2=normal(sector2, com2,startdate,lastdate)
     list=[]
     for i in range(5):
         filename=com1+'_'+com2+'_'+startdate+'_'+lastdate+'_'+str(i)+'.png'
@@ -127,5 +127,3 @@ def add_data(list=[]):
 #    db.create_table_from_dataframe(connect,refine_df,"ArchivedData")
     db.insert_data_to_table(connect,df)
     db.close_connection(connect)
-
-
