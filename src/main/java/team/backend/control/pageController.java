@@ -151,10 +151,8 @@ public class pageController {
 
     @GetMapping("add.do") //기업추가
     public String add(Model model, HttpSession session){
-        String id = (String)session.getAttribute("id");
         //List<AvailableData> filteredData = availableDataService.getAvailableDataByFilters(null, null, null, null,null);
         //model.addAttribute("filteredData", filteredData);
-        List<String> nation = availableDataService.getNation(id);
         /*List<String> db_name = availableDataService.getDb(nation);
         List<String> stock_code = availableDataService.getStockCode(db_name);
         List<String> sector = availableDataService.getSector(stock_code);
@@ -167,9 +165,6 @@ public class pageController {
 //        for (String nationName : nation)     {
 //            db_name.addAll(availableDataService.getDb(id, nationName));
 //        }
-        model.addAttribute("nation", nation);
-        System.out.println("Nation: " + nation);
-
 //        for (String dbName : db_name) {
 //            sector.addAll(availableDataService.getSector(id, dbName));
 //        }
@@ -184,7 +179,10 @@ public class pageController {
 //        model.addAttribute("sector", sector);
 //        model.addAttribute("name", name);
 //        model.addAttribute("stock_code", stock_code);
-
+        String id = (String)session.getAttribute("id");
+        List<String> nation = availableDataService.getNation(id);
+        model.addAttribute("nation", nation);
+        System.out.println("Nation: " + nation);
         return  "/project/add2";
 }
 @PostMapping("add.do")
@@ -208,6 +206,7 @@ public class pageController {
                            @RequestParam("selectedDb") String selectedDb,
                            @RequestParam("selectedSection") String selectedSector,
                            @RequestParam("selectedName") String selectedName,
+
                            HttpSession session) {
 
         String id = (String)session.getAttribute("id");

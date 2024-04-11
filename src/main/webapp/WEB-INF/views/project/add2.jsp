@@ -82,7 +82,6 @@ $.ajax({
 url: "../project/url.do",
 method: "POST",
 data: { action: "getName", selectedNation:$("#nation").val(), selectedDb:$("#db_name").val(),selectedSection:$("#sector").val(),selectedName:""},
-dataType: "json",
 success: function(data) {
     $("#name").empty().append("<option value=''>기업명 선택</option>");
     $.each(data, function(index, item) {
@@ -97,9 +96,8 @@ success: function(data) {
             url: "../project/url.do",
             method: "POST",
             data:{ action: "getStockCode", sector: selectedName },
-//            dataType: "json",
             success: function(data) {
-                $("#stock_code").empty().append("<option value=''>stock_code명</option>");
+                $("#stock_code").empty().append("<option value=''>종목 코드 선택</option>");
                 $.each(data, function(index, item) {
                     $("#stock_code").append("<option value='" + item + "'>" + item + "</option>");
                 });
@@ -139,7 +137,7 @@ success: function(data) {
 </select>
 
 <!-- 종목 코드 선택 창 -->
-<select name="stock_code" >
+<select name="stock_code" id="stock_code" >
     <option value="">종목 코드 선택</option>
 </select>
 

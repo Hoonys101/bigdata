@@ -64,8 +64,10 @@ public class MybatisAvailableDataService implements AvailableDataService {
     public List<String> getStockCode(String id, String name) {
         //System.out.println("dbs3"+dbs);
         Map<String, String> params = new HashMap<>();
+        System.out.println("params"+params);
         params.put("id", id);
         params.put("name", name);
+        System.out.println("params"+params);
         return availableDataMapper.getStockCode(params);
     }
     @Override
