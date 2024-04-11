@@ -18,7 +18,7 @@ def connect_to_oracle():
 #str으로 8자리 str을 받아서 /로 구분되는 문자열 생성
 def str_to_date(str_date='20121212'): 
 #    str_date='20121212'
-    print(str_date)
+#    print(str_date)
     year=str_date[0:4]
     month=str_date[4:6]
     day=str_date[6:8]
@@ -57,13 +57,13 @@ def read_date(connection,start='20120101',last='20220101',TABLE_NAME='archivedda
         cursor.close()
         
 # connection, 날짜1,2(8자리 str), 테이블명을 받고 Read 기능을 수행하는 함수 <-- 테이블명 필요 없음, 기업명 인자 필요
-def read_code_date(connection,db_name='KRX',stock_code='005930',start='20120101',last='20220101',TABLE_NAME='archiveddata'):
+def read_code_date(connection,stock_code='005930',start='20120101',last='20220101',TABLE_NAME='archiveddata'):
     cursor = connection.cursor()
     start=str_to_date(start)
     last=str_to_date(last)
     try:
-        query = f"SELECT * FROM {TABLE_NAME} WHERE db_name=:1 AND stock_code=:2 AND data_date >= TO_DATE(:3, 'YYYY/MM/DD') AND data_date <= TO_DATE(:4,'YYYY/MM/DD')"
-        cursor.execute(query,(db_name,stock_code,start,last))
+        query = f"SELECT * FROM {TABLE_NAME} WHERE stock_code=:1 AND data_date >= TO_DATE(:2, 'YYYY/MM/DD') AND data_date <= TO_DATE(:3,'YYYY/MM/DD')"
+        cursor.execute(query,(stock_code,start,last))
         result = cursor.fetchall()
         if result:
             # 판다스 DataFrame으로 변환
@@ -89,7 +89,7 @@ def read_db_code(connection,data_base='KRX',code='005930',TABLE_NAME='archivedda
             # 판다스 DataFrame으로 변환
             columns = [desc[0] for desc in cursor.description]
             df = pd.DataFrame(result, columns=columns)
-            print(df)
+#            print(df)
             return df
         else:
             print("No data found for the given name.")

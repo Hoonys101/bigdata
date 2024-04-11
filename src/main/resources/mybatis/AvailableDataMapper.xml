@@ -6,16 +6,16 @@
 
 
     <select id="getNation" parameterType="String" resultType="String">
-        select nation, count(nation) from AvailableData where stock_code not in
+        select nation || ' ('|| count(nation) ||')' as nation_count from AvailableData where stock_code not in
         (select stock_code from addition where id=#{id} group by stock_code) group by nation
     </select>
 
     <select id="getDb" parameterType="Map" resultType="String">
-        select db_name, count(db_name) from AvailableData where stock_code not in (select stock_code
+        select db_name || ' ('|| count(db_name) ||')' as db_name_count from AvailableData where stock_code not in (select stock_code
         from addition where id=#{id} group by stock_code) and nation=#{nation} group by db_name
     </select>
     <select id="getSector" parameterType="Map" resultType="String">
-        select sector, count(sector) from AvailableData where stock_code not in
+        select sector || ' ('|| count(sector) ||')' as sector_count from AvailableData where stock_code not in
         (select stock_code from
         addition where id=#{id} group by stock_code) and db_name=#{db_name}
         group by sector
