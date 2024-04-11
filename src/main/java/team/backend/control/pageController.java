@@ -192,6 +192,9 @@ public class pageController {
                            HttpSession session) {
 
         String id = (String)session.getAttribute("id");
+        selectedNation=selectedNation.split("\\s\\(")[0];
+        selectedDb=selectedDb.split("\\s\\(")[0];
+        selectedSector=selectedSector.split("\\s\\(")[0];
         System.out.println("action: "+action + "\nselectedNation: "+selectedNation+ "\nid: "+id);
         // 요청에 따라 데이터를 로드하고 응답할 리스트를 생성합니다.
         List<String> responseData = null;
@@ -235,12 +238,13 @@ public class pageController {
             //stock_code가 addition에 있는지 확인(id 무관)
             //mapper 에서 addition에서 where stock_code=#stock_code인 조건으로 쿼리.
             //쿼리 결과가 list length가 0 인 경우 체크
+            System.out.println("python add_data 호출");
             javaPy.strParameter("add_data",db_name,stock_code);
         }
         addData.insertToAddition(id, stock_code);
         //없으면, python 호출, -> addition에 추가
             //mapper에서 insert 생성 추가.
         //있건 없건, addition에 추가
-    return "redirect:analysis_page.do";
+    return "redirect:home.do";
     }
 }

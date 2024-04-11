@@ -55,9 +55,7 @@ CREATE TABLE addition (
 );
 
 CREATE TABLE ServiceUsage (
-   db1_name VARCHAR2(255),
    stock_code1 VARCHAR2(255),
-   db2_name VARCHAR2(255),
    stock_code2 VARCHAR2(255),
    start_date DATE,
    end_date DATE,
