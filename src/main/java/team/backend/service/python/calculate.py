@@ -53,7 +53,7 @@ def delay_df(df1,df2,days):
     return df1,df2
 
 #7-1개의 파라미터를 받아서 파일 5개와 correlation 5개 반환
-def diff_cal_data(list,days=7):
+def diff_cal_data(list,days=5):
     #파라미터 설정
     first_com=list[1]
     diff1_com=list[2]
