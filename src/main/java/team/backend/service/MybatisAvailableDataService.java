@@ -70,10 +70,19 @@ public class MybatisAvailableDataService implements AvailableDataService {
         System.out.println("params"+params);
         return availableDataMapper.getStockCode(params);
     }
+//    @Override
+//    public List<String> getAvailableDataByFilters(String nation, String db_name,String sector,String name, String stock_code) {
+//        List<String> data = availableDataMapper.getAvailableDataByFilters(nation, db_name, sector, name, stock_code);
+//        System.out.println(data);
+//        return data;
+//    }
     @Override
-    public List<String> getAvailableDataByFilters(String nation, String db_name,String sector,String name, String stock_code) {
-        List<String> data = availableDataMapper.getAvailableDataByFilters(nation, db_name, sector, name, stock_code);
-        System.out.println(data);
-        return data;
+    public List<AvailableData> getList(String id,AvailableData availableData){
+        Map<String, String> params = new HashMap<>();
+        System.out.println("params"+params);
+        params.put("id", id);
+        params.put("availableData", availableData);
+        System.out.println("params"+params);
+        return availableDataMapper.getList(params);
     }
 }

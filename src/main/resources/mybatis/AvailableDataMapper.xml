@@ -5,7 +5,7 @@
 <mapper namespace="team.backend.mapper.AvailableDataMapper">
 
 
-    <select id="getNation" resultType="String">
+    <select id="getNation" parameterType="String" resultType="String">
         select nation, count(nation) from AvailableData where stock_code not in
         (select stock_code from addition where id=#{id} group by stock_code) group by nation
     </select>
@@ -26,10 +26,16 @@
         (select stock_code from addition where id=#{id} group by stock_code) and sector=#{sector}
     </select>
     <select id="getStockCode" parameterType="Map" resultType="String">
-        SELECT STOCK_CODE FROM AvailableData where stock_code not in
-        (select stock_code from addition where id=#{id} group by stock_code) and stock_code=#{stock_code}
-    </select>
+        SELECT STOCK_CODE FROM AvailableData where stock_code not in (select stock_code from addition where id=#{id} group by stock_code) and name = #{name}    </select>
     <select id="getAvailableDataByFilters" parameterType="String" resultType="String">
         SELECT name FROM addition where id=#{id} WHERE nation=#{nation} AND db_name=#{db_name} AND sector=#{sector} AND name=#{name} AND stock_code=#{stock_code}
     </select>
+    <select id="getList" parameterType="Map" resultType="String">
+        SELECT nation, db_name, sector, name
+        FROM AvailableData
+        INNER JOIN addition ON AvailableData.stock_code = addition.stock_code
+        WHERE addition.id = #{id}
+        GROUP BY nation, db_name, name, sector
+    </select>
+
 </mapper>

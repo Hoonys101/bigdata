@@ -46,7 +46,7 @@ public class JavaPython implements JavaPythonInter {
             // 파이썬 스크립트에 데이터 전달
             OutputStream outputStream = pp.getOutputStream();
             PrintWriter writer = new PrintWriter(outputStream);
-//            data = "cal_data\n1008\nIndex\nIBM\nSnP500\n20130101\n20140101";
+//            data = "cal_data\nIndex\n1008\nSnP500\nIBM\n20130101\n20140101";
             writer.println(data);
             writer.flush();
             writer.close();
@@ -79,7 +79,7 @@ public class JavaPython implements JavaPythonInter {
             // 파이썬 스크립트에 데이터 전달
             OutputStream outputStream = pp.getOutputStream();
             PrintWriter writer = new PrintWriter(outputStream);
-//            data = "cal_data\n1008\nIndex\nIBM\nSnP500\n20130101\n20140101";
+//            data = "cal_data\nIndex\n1008\nSnP500\nIBM\n20130101\n20140101";
             writer.println(data);
             writer.flush();
             writer.close();
