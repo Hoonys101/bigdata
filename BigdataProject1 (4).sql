@@ -19,7 +19,6 @@ create table ID(
    gender varchar2(20), 
    signup_date date
 ); 
-create sequence ID_SEQ increment by 1 start with 1 nocache;
 
 insert into ID values('1', '11111', '홍길동', 'human@naver.com', '1980-01-01', '남성', '2024-04-01');
 insert into ID values('2', '22222', '이순신', 'human1@naver.com', '1985-02-02', '남성', '2024-05-01');
@@ -44,6 +43,7 @@ CREATE TABLE ArchivedData (
    low NUMBER, 
    close NUMBER, 
    volume NUMBER,
+   various NUMBER,
    FOREIGN KEY (stock_code) REFERENCES AvailableData(stock_code)
    );
 
@@ -57,14 +57,12 @@ CREATE TABLE addition (
 CREATE TABLE ServiceUsage (
    stock_code1 VARCHAR2(255),
    stock_code2 VARCHAR2(255),
-   start_date DATE,
-   end_date DATE,
+   start_date VARCHAR2(30),
+   end_date VARCHAR2(30),
    ID VARCHAR2(30),
    FOREIGN KEY (ID) REFERENCES ID(ID)  -- ID를 참조하는 외래 키 제약 조건
 );
-   
-insert into addition values('1','IBM');
-insert into addition values('1','1008');
+
 commit;
 
 select CONSTRAINT_NAME, CONSTRAINT_TYPE from user_constraints where TABLE_NAME='ID';

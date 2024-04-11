@@ -28,16 +28,17 @@ def stockprice(db_name='', code='005930', startdate='20120101', lastdate='202201
         df = fdr.DataReader(code, startdate,lastdate)[['Open','High','Low','Close','Volume']]
         df.rename_axis('data_date',inplace=True)
     return df
-
 # Sector, Code를 받아서 웹으로부터 20120101~20220101 데이터의 필요 컬럼을 선정하여 df로 반환
 def stock_data(db_name='sdfklj', stock_code='IBM', startdate='20120101',lastdate='20220101', default='Close'):
     if db_name=='Index':
-        df=stock.get_index_ohlcv(startdate, lastdate, stock_code)[['시가','고가','저가','종가','거래량']]
-        df.rename(columns={'시가':'Open','고가':'High','저가':'Low','종가':'Close','거래량':'Volume'},inplace=True)
+        df=stock.get_index_ohlcv(startdate, lastdate, stock_code)[['시가','고가','저가','종가','거래량','등락률']]
+        df.rename(columns={'시가':'Open','고가':'High','저가':'Low','종가':'Close','거래량':'Volume','등락률':'various'},inplace=True)
         df.rename_axis('data_date',inplace=True)
         
     else:
-        df = fdr.DataReader(stock_code, startdate,lastdate)[['Open','High','Low','Close','Volume']]
+        print(stock_code,startdate,lastdate)
+        df = fdr.DataReader(stock_code, startdate,lastdate)[['Open','High','Low','Close','Volume','Change']]
+        df.rename(columns={'Change':'various'},inplace=True)
         df.rename_axis('data_date',inplace=True)
     data_processing(df,db_name,stock_code)
     return df
@@ -74,6 +75,7 @@ def row_price_date(startdate='20150101',enddate='20220101',subject='DCOILWTICO')
     else:
         df = fdr.DataReader(code, startdate,lastdate)
 '''
+
 def normal(df, default='Close'):
     # Close 컬럼의 최대값과 최소값 계산
     max_close = df[default].max()
@@ -118,12 +120,16 @@ def delay_df(df1,df2,days):
 
 #Sector와 Code를 입력받아서, 동일한 코드 생성
 def add_data(list=[]):
-    stock_code=list[1]
-    db_name=list[2]
+    
+    db_name=list[1]
+    stock_code=list[2]
     print(db_name,stock_code)
 #    df=stockprice(db_name,stock_code)
-    df=stock_data(stock_code,db_name)
+    df=stock_data(db_name,stock_code)
+    print(df)
     connect=db.connect_to_oracle()
 #    db.create_table_from_dataframe(connect,refine_df,"ArchivedData")
     db.insert_data_to_table(connect,df)
     db.close_connection(connect)
+    
+add_data(['','KOSPI','360070'])
