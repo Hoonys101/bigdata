@@ -6,24 +6,24 @@
 
 
     <select id="getNation" parameterType="String" resultType="String">
-        select nation, count(nation) from AvailableData where stock_code not in
-        (select stock_code from addition where id=#{id} group by stock_code) group by nation
+        select nation || ' ('|| count(nation) ||')' as nation_count from AvailableData where stock_code not in
+        (select stock_code from addition where id=#{id} group by stock_code) group by nation order by count(nation)
     </select>
 
     <select id="getDb" parameterType="Map" resultType="String">
-        select db_name, count(db_name) from AvailableData where stock_code not in (select stock_code
-        from addition where id=#{id} group by stock_code) and nation=#{nation} group by db_name
+        select db_name || ' ('|| count(db_name) ||')' as db_name_count from AvailableData where stock_code not in (select stock_code
+        from addition where id=#{id} group by stock_code) and nation=#{nation} group by db_name order by count(db_name) desc
     </select>
     <select id="getSector" parameterType="Map" resultType="String">
-        select sector, count(sector) from AvailableData where stock_code not in
+        select sector || ' ('|| count(sector) ||')' as sector_count from AvailableData where stock_code not in
         (select stock_code from
         addition where id=#{id} group by stock_code) and db_name=#{db_name}
-        group by sector
+        group by sector order by count(sector) desc
     </select>
 
     <select id="getName" parameterType="Map" resultType="String">
         select name, stock_code from AvailableData where stock_code not in
-        (select stock_code from addition where id=#{id} group by stock_code) and sector=#{sector}
+        (select stock_code from addition where id=#{id} group by stock_code) and sector=#{sector} order by name desc
     </select>
     <select id="getStockCode" parameterType="Map" resultType="String">
         SELECT STOCK_CODE FROM AvailableData where stock_code not in (select stock_code from addition where id=#{id} group by stock_code) and name = #{name}    </select>
