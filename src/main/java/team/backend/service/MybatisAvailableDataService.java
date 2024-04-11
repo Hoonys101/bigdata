@@ -64,8 +64,10 @@ public class MybatisAvailableDataService implements AvailableDataService {
     public List<String> getStockCode(String id, String name) {
         //System.out.println("dbs3"+dbs);
         Map<String, String> params = new HashMap<>();
+        System.out.println("params"+params);
         params.put("id", id);
         params.put("name", name);
+        System.out.println("params"+params);
         return availableDataMapper.getStockCode(params);
     }
 //    @Override
@@ -74,4 +76,17 @@ public class MybatisAvailableDataService implements AvailableDataService {
 //        System.out.println(data);
 //        return data;
 //    }
+    @Override
+    public List<AvailableData> getList(String id,AvailableData availableData){
+        Map<String, String> params = new HashMap<>();
+        System.out.println("params"+params);
+        params.put("id", id);
+        params.put("nation", availableData.getNation());
+        params.put("db_name", availableData.getDb_name());
+        params.put("sector", availableData.getSector());
+        params.put("name", availableData.getName());
+        params.put("stock_code", availableData.getStock_code());
+        System.out.println("params"+params);
+        return availableDataMapper.getList(params);
+    }
 }

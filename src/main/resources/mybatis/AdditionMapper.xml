@@ -3,8 +3,6 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="team.backend.mapper.AdditionMapper">
-
-
     <select id="getArchivedDataStockCode" parameterType="String" resultType="String">
         select stock_code from archivedData where stock_code=#{stockCode} group by (stock_code)
     </select>

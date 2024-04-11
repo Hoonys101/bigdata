@@ -16,5 +16,7 @@ public interface AvailableDataService {
     List<String> getStockCode(String id, String name);
 
 //    List<String> getAvailableDataByFilters(String nation, String db_name,String sector,String name, String stock_code) ;
+
+    List<AvailableData> getList(String id, AvailableData availableData);
 }
 

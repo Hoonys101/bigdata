@@ -49,18 +49,14 @@
 <body>
     <h2>첫 번째 기업 선택</h2>
     <form action="list1.do" method="post">
-        <select name="db_name">
-            <option value="">회사명 선택</option>
-            <c:forEach items="${db_name}" var="db_name">
-                <option value="${db_name}">${db_name}</option>
-            </c:forEach>
-        </select>
-        <select name="stock_code">
-                    <option value="">회사명 선택</option>
-                    <c:forEach items="${stock_code}" var="stock_code">
-                        <option value="${stock_code}">${stock_code}</option>
-                    </c:forEach>
-                </select>
+        <<select name="company">
+             <option value="">Select Company</option>
+             <c:forEach items="${companies}" var="company">
+                 <option value="${company.id},${company.stock_code}">
+                     ${company.id}, ${company.stock_code}
+                 </option>
+             </c:forEach>
+         </select>
         <button type="submit">기업 선택 완료</button>
     </form>
 </body>

@@ -5,18 +5,21 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import team.backend.domain.Addition;
 import team.backend.domain.AvailableData;
 import team.backend.domain.Member;
+
 import team.backend.service.JavaPythonInter;
 import team.backend.service.MybatisAvailableDataService;
 import team.backend.service.MybatisMemberService;
 import team.backend.service.addDataService;
 
-import java.util.ArrayList;
+import java.sql.Date;
 import java.util.List;
 
 @AllArgsConstructor
@@ -105,24 +108,42 @@ public class pageController {
         return "redirect:logout.do"; // 로그아웃 페이지로 리다이렉트 또는 다른 페이지로 이동할 수 있습니다.
     }
 
-    @GetMapping("analysis_page.do") //분석하기
-    public String analysis_page(){
-        return "/project/analysis_page";
-    }
+
     @GetMapping("history.do") //히스토리
     public String history(){
         return "/project/history";
     }
     @GetMapping("list1.do") //기업1
     public String list_1(Model model){
+
+        AvailableData availableData = new AvailableData();
+
+
+
+
+        
+        //addition.setId(/* 여기에 id 값 설정 */);
+        //addition.setStockCode(/* 여기에 stock_code 값 설정 */);
+        //model.addAttribute("addition", addition);
+        //System.out.println(data);
         return  "/project/list1";
     }
-    @PostMapping("list1.do") //기업1
-    public String list_1(@RequestParam("name") String name){
-        return  "/project/list1";
-    }
+    //@PostMapping("list1.do") //기업1
+    //public String list_1(@RequestParam("id") String id,
+      //                   @RequestParam("stock_code") String stock_code){
+
+
+        //javaPython.strParameter("add_data",stock_code,id);
+        //
+        //return  "/project/list1";
+   // }
     @GetMapping("list2.do") //기업2
-    public String list_2(){
+    public String list_2(@RequestParam("stock_code") String stock_code,
+                         @RequestParam("db_name") String db_name
+                         ){
+
+        javaPy.strParameter("add_data",stock_code,db_name);
+
         return  "/project/list2";
     }
     @GetMapping("chart.do") //결과값
@@ -130,12 +151,10 @@ public class pageController {
         return  "/project/chart";
     }
 
-    @GetMapping("add.do") //기업추가
+    @GetMapping("add2.do") //기업추가
     public String add(Model model, HttpSession session){
-        String id = (String)session.getAttribute("id");
         //List<AvailableData> filteredData = availableDataService.getAvailableDataByFilters(null, null, null, null,null);
         //model.addAttribute("filteredData", filteredData);
-        List<String> nation = availableDataService.getNation(id);
         /*List<String> db_name = availableDataService.getDb(nation);
         List<String> stock_code = availableDataService.getStockCode(db_name);
         List<String> sector = availableDataService.getSector(stock_code);
@@ -148,9 +167,6 @@ public class pageController {
 //        for (String nationName : nation)     {
 //            db_name.addAll(availableDataService.getDb(id, nationName));
 //        }
-        model.addAttribute("nation", nation);
-        System.out.println("Nation: " + nation);
-
 //        for (String dbName : db_name) {
 //            sector.addAll(availableDataService.getSector(id, dbName));
 //        }
@@ -165,7 +181,10 @@ public class pageController {
 //        model.addAttribute("sector", sector);
 //        model.addAttribute("name", name);
 //        model.addAttribute("stock_code", stock_code);
-
+        String id = (String)session.getAttribute("id");
+        List<String> nation = availableDataService.getNation(id);
+        model.addAttribute("nation", nation);
+        System.out.println("Nation: " + nation);
         return  "/project/add2";
 }
 @PostMapping("add.do")
@@ -189,6 +208,7 @@ public class pageController {
                            @RequestParam("selectedDb") String selectedDb,
                            @RequestParam("selectedSection") String selectedSector,
                            @RequestParam("selectedName") String selectedName,
+
                            HttpSession session) {
 
         String id = (String)session.getAttribute("id");
@@ -231,6 +251,7 @@ public class pageController {
         return responseData;
     }
 
+
     @PostMapping("add2.do")
     public String excuteAdd(@RequestParam("db_name") String db_name, @RequestParam("stock_code") String stock_code, HttpSession session){
         String id = (String)session.getAttribute("id");
@@ -249,4 +270,50 @@ public class pageController {
         //있건 없건, addition에 추가
     return "redirect:home.do";
     }
+    @GetMapping("analysis_page.do") //분석하기
+    public String analysis_page(Model model ,HttpSession session,AvailableData availableData){
+        String id = (String)session.getAttribute("id");
+        List<AvailableData> list = availableDataService.getList(id,availableData);
+        model.addAttribute("list" ,list);
+        System.out.println("list"+list);
+        return "/project/analysis_page";
+    }
+    @PostMapping("analysis_page.do") //분석하기
+    public String analysis_page(@RequestParam("stock_code1") String stock_code1,
+                                @RequestParam("stock_code2") String stock_code2,
+                                @RequestParam("start_date") String start_date,
+                                @RequestParam("end_date") String end_date,
+                                HttpSession session){
+        System.out.println("analysis start");
+        String id = (String)session.getAttribute("id");
+        System.out.println("id"+id);
+
+        javaPy.strParameter("cal_dat",stock_code1,stock_code2,start_date,end_date);
+        //addData.insertTo();
+        return "redirect:analysis_page.do";
+    }
+        // ArchivedData  ['add_data', 'KONEX', '317240'] db name , 스톡 코드 기업추가
+
+        // 검색 국가 DB 회사명 종목 dto (nation, db_name, sector, name)
+
+        // 파라미터 id, stockcode
+        // addition id 값조회
+        // ArchivedData  stockcode 조회
+        // ?? 조인결과 조회 후 리턴
+
+        // 추가 테이블의 id가 갖고있는 스톡코드로 나라 db 종목 회사를 쿼리한다
+
+        // 쿼리문 SELECT nation, db_name, sector, name
+        //FROM AvailableData
+        //INNER JOIN addition ON AvailableData.stock_code = addition.stock_code
+        //WHERE addition.id = '1' AND AvailableData.stock_code = '317240'
+        //GROUP BY nation, db_name, name, sector;
+        //기업선택 1 , 기업선택 2 , 시작날짜 , 종료날짜
+
+        //javaPy.strParameter("cal_dat",first_stock_code,second_stock_code,startdate,lastdate);
+        //d
+
+
+
+
 }

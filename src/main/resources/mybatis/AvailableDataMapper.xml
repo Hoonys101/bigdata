@@ -26,10 +26,15 @@
         (select stock_code from addition where id=#{id} group by stock_code) and sector=#{sector} order by name desc
     </select>
     <select id="getStockCode" parameterType="Map" resultType="String">
-        SELECT STOCK_CODE FROM AvailableData where stock_code not in (select stock_code from addition where id=#{id} group by stock_code) and name = #{name}
-    </select>
+        SELECT STOCK_CODE FROM AvailableData where stock_code not in (select stock_code from addition where id=#{id} group by stock_code) and name = #{name}    </select>
     <select id="getAvailableDataByFilters" parameterType="String" resultType="String">
         SELECT name FROM addition where id=#{id} WHERE nation=#{nation} AND db_name=#{db_name} AND sector=#{sector} AND name=#{name} AND stock_code=#{stock_code}
+    </select>
+    <select id="getList" parameterType="Map" resultType="team.backend.domain.AvailableData">
+        SELECT *
+        FROM AvailableData A
+        INNER JOIN addition ON A.stock_code = addition.stock_code
+        WHERE addition.id = #{id}
     </select>
 
 </mapper>
