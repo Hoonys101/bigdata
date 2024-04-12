@@ -62,4 +62,3 @@ var dataArray =[
   <div id="chart_div" style="width: 900px; height: 500px;"></div>
 </body>
 </html>
->>>>>>> c6776b3bcce235603d99425a56f66cfecdfe2647
