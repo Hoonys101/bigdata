@@ -3,6 +3,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 
+#차트 설정
+plt.rcParams["font.family"] = 'nanummyeongjo'
+plt.rcParams["figure.figsize"] = (14,4)
+plt.rcParams['lines.linewidth'] = 2
+plt.rcParams["axes.grid"] = True
+
 # df를 str으로 받아서, -100~100까지로 정규화된 df 반환
 def normal(df, default='CLOSE'):
     # Close 컬럼의 최대값과 최소값 계산

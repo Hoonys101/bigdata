@@ -2,7 +2,7 @@ import FinanceDataReader as fdr
 import ATO as db
 import datetime as time
 import pandas as pd
-
+from pykrx import stock
 
 strs=['KRX-DESC', 'S&P500','KRX/INDEX/list'] #for stacklisting 'KRX', 'NASDAQ', 'NYSE', 'AMEX' 제외
 kr_index=['KS11','KQ11','KS50','KS100','KRX100','KS200']#for DataReader
@@ -30,7 +30,17 @@ def db_rename_listing(strs):
     result=[]
     for str in strs:
         if str=='KRX-DESC':
+            # df_result=[]
+            # df_result.append(stock.get_market_ohlcv_by_ticker("20111229"))
+            # df_result.append(stock.get_market_ohlcv_by_ticker("20111229", market="KOSDAQ"))
+            # df_result.append(stock.get_market_ohlcv_by_ticker("20111229", market="KONEX"))
+            # df=pd.concat(df_result,ignore_index=True)
+            # df=df.reset_index()[['티커']].rename(columns={'티커':'stock_code'})
+            all =stock.get_market_ticker_list('20120101', market='ALL')
+            
             re=fdr.StockListing(str)[['Code','Market','Sector','Name']].rename(columns={'Market':'db_name','Code':'stock_code'})
+            re=re[re['stock_code'].isin(all)]
+            # re=re.merge(df,how='inner')
             re.insert(loc=1,column="Nation",value="KR")
             re.loc[re['Sector'].isnull(), 'Sector'] = '우선주'
             print(re)
@@ -46,8 +56,12 @@ def db_rename_listing(strs):
         elif str=='KRX/INDEX/list':
             index=fdr.SnapDataReader(str)[['Market','Code','Name']]
             index.rename(columns={'Market':'Sector','Code':'stock_code'},inplace=True)
+            all=stock.get_index_ticker_list('20120101')
+            print(all)
+            index=index[index['stock_code'].isin(all)]
             index.insert(loc=0,column='Nation',value='KR')
             index.insert(loc=1,column='db_name',value='Index')
+            print(index)
             result.append(index)
         else:
             rest=fdr.StockListing(str)[['Name','Industry','Symbol']]
@@ -56,6 +70,7 @@ def db_rename_listing(strs):
             rest.insert(loc=0,column='Nation',value="US")
             result.append(rest)
     result=pd.concat(result,ignore_index=True)
+    print(result)
     return result
 
 #print(fdr.DataReader('5049','2020-01-01','2024-04-02').to_string())
@@ -67,11 +82,12 @@ def db_rename_listing(strs):
 
 #strs의 db에 있는 정보를 "AvailableData"라는 이름으로 저장('문자는 모두 삭제)
 def save_data():
-    connection=db.connect_to_oracle()
+    
     df=db_rename_listing(strs)
 #    db.create_table_from_dataframe(connection,df,'AvailableData')
     df['Sector']=df['Sector'].str.replace("'","")
     df['Name']=df['Name'].str.replace("'","")
+    connection=db.connect_to_oracle()
     db.insert_data_menu_to_table(connection,df,'AvailableData')
     db.close_connection(connection)
 
@@ -164,3 +180,6 @@ print(df_amex.head())
 #db.TABLE_NAME="data_list"
 #db.read_date(connection,start='20120704',last='20220101',TABLE_NAME="data_list")
 #db.read_db_code(connection)
+
+
+

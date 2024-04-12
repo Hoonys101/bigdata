@@ -10,9 +10,9 @@ public class JavaPython implements JavaPythonInter {
     //public static void main(String[] args){
         //JavaPython java = new JavaPython();
 //      java.save_data();
-        //java.strParameter("add_data","1008","Index");
-        //java.strParameter("add_data","IBM","SnP500");
-        //java.strParameter("cal_data","1008","Index","IBM","SnP500","20130101","20140101");
+        //java.strParameter("add_data","Index","1008");
+        //java.strParameter("add_data","SnP500","IBM");
+        //java.strParameter("cal_data","1008","IBM","20130101","20140101");
     //}
     public static void main(String[] args){
         JavaPython java = new JavaPython();
@@ -28,7 +28,11 @@ public class JavaPython implements JavaPythonInter {
             resultString=resultString+"\n"+args[i];
         }
         if(args[0].equals("add_data")&&args.length==3){
-            save_data(resultString);
+            pln("add_data에 들어옴:"+resultString);
+            List<String> result=save_data(resultString);
+            for(String str : result) {
+                pln(str);
+            }
             return null;
         }else if(args[0].equals("cal_data")&&args.length==5){
             List<String> result=cal_data(resultString);

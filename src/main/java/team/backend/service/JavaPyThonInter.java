@@ -8,7 +8,6 @@ public interface JavaPythonInter {
       "add_data", "db_name", "stock_code"를 인자로 호출
       첫번째 인자가 "cal_data"인 경우
       "cal_data",
-
       "first_stock_code",
       "second_stock_code",
       "startdate",
@@ -20,5 +19,4 @@ public interface JavaPythonInter {
       "second_stock_code",
       "diff2_stock_code",
       "startdate","lastdate"를 인자로 호출*/
-
 }

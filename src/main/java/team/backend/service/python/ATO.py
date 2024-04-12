@@ -2,16 +2,15 @@ import cx_Oracle
 import pandas as pd
 import datetime as time
 
-# Oracle 연결 정보 전역 변수로 설정
-USERNAME = "bigdata"
-PASSWORD = "java"
-HOST = "localhost:1521/java"
 
 # 테이블 이름 변수화(people table이 예시)
 TABLE_NAME = "stock"
 
 # Oracle에 연결하는 함수
 def connect_to_oracle():
+    USERNAME = "bigdata"
+    PASSWORD = "java"
+    HOST = "localhost:1521/java"
     connection = cx_Oracle.connect(USERNAME, PASSWORD, HOST)
     return connection
 

@@ -31,8 +31,11 @@ def stockprice(db_name='', code='005930', startdate='20120101', lastdate='202201
 # Sector, Code를 받아서 웹으로부터 20120101~20220101 데이터의 필요 컬럼을 선정하여 df로 반환
 def stock_data(db_name='sdfklj', stock_code='IBM', startdate='20120101',lastdate='20220101', default='Close'):
     if db_name=='Index':
-        df=stock.get_index_ohlcv(startdate, lastdate, stock_code)[['시가','고가','저가','종가','거래량','등락률']]
-        df.rename(columns={'시가':'Open','고가':'High','저가':'Low','종가':'Close','거래량':'Volume','등락률':'various'},inplace=True)
+#        df=stock.get_index_ohlcv(startdate, lastdate, stock_code)[['시가','고가','저가','종가','거래량','등락률']]
+#        df.rename(columns={'시가':'Open','고가':'High','저가':'Low','종가':'Close','거래량':'Volume','등락률':'various'},inplace=True)
+        df=stock.get_index_ohlcv(startdate, lastdate, stock_code)[['시가','고가','저가','종가','거래량']]
+        df.rename(columns={'시가':'Open','고가':'High','저가':'Low','종가':'Close','거래량':'Volume'},inplace=True)
+        df['various']=0
         df.rename_axis('data_date',inplace=True)
         
     else:
@@ -125,6 +128,7 @@ def add_data(list=[]):
     stock_code=list[2]
     print(db_name,stock_code)
 #    df=stockprice(db_name,stock_code)
+    print('db_name: ',db_name,' stock_code:', stock_code)
     df=stock_data(db_name,stock_code)
     print(df)
     connect=db.connect_to_oracle()
@@ -132,4 +136,4 @@ def add_data(list=[]):
     db.insert_data_to_table(connect,df)
     db.close_connection(connect)
     
-add_data(['','KOSPI','360070'])
+#add_data(['','KOSPI','360070'])
