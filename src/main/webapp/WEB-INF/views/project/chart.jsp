@@ -20,7 +20,7 @@ margin-right:10px;
 <div>"${report}"</div>
 <div>
 <c:forEach items="${plots}" var= "plot" varStatus="loop">
-<img src="${plot}" alt="그래프" class="inline-img">
+<img src="${pageContext.request.contextPath}/../${plot}" alt="그래프" class="inline-img">
 </c:forEach>
 </div>
 <script type="text/javascript">

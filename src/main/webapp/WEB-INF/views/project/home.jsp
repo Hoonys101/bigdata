@@ -156,7 +156,7 @@ body {
                     </div>
             </c:if>
     </nav>
-<main>
+
     <main style="display: flex; justify-content: center;">
 
 </main>

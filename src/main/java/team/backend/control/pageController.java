@@ -308,11 +308,11 @@ public class pageController {
         System.out.println(result.toString());
         String report=javaPy.analysisData(result.subList(0,4));
         for(int i=5;i<10;i++){
-            result.set(i,"/img/plots/"+result.get(i));
+            result.set(i,"../img/plots/"+result.get(i));
         }
-        System.out.println(result);
+        System.out.println("1"+result);
         addData.insertToServiceUsage(serviceUsage);
-        System.out.println(report);
+        System.out.println("2"+report);
         List<String[]> dataList = new ArrayList<>();
         dataList.add(new String[]{"0주",result.get(0)});
         dataList.add(new String[]{"1주",result.get(1)});
