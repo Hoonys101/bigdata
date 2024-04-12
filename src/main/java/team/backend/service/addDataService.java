@@ -11,8 +11,7 @@ public interface addDataService {
     List<String> getArchivedDataStockCode(String stockCode);
     void insertToAddition(String id, String stockCode);
 
-    List<ServiceUsage> getServiceUsageStockCode(ServiceUsage serviceUsage);
 
-    void insertToServiceUsage(Map params);
+    void insertToServiceUsage(ServiceUsage serviceUsage);
 }
 

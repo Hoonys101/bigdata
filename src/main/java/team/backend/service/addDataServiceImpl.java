@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import team.backend.domain.ServiceUsage;
 import team.backend.mapper.AdditionMapper;
+import team.backend.mapper.ServiceUsageMapper;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,12 +14,17 @@ public class addDataServiceImpl implements addDataService {
     @Autowired
     private final AdditionMapper addMapper;
     @Autowired
-    addDataServiceImpl(AdditionMapper addMapper){
+    private final ServiceUsageMapper serviceUsageMapper;
+    @Autowired
+    addDataServiceImpl(AdditionMapper addMapper, ServiceUsageMapper serviceUsageMapper){
         this.addMapper=addMapper;
+        this.serviceUsageMapper = serviceUsageMapper;
     }
+
+
     @Override
     public List<String> getArchivedDataStockCode(String stockCode) {
-        List<String> result=addMapper.getArchivedDataStockCode(stockCode);
+        List<String> result =addMapper.getArchivedDataStockCode(stockCode);
         return result;
     }
 
@@ -30,12 +36,16 @@ public class addDataServiceImpl implements addDataService {
         addMapper.insertToAddition(params);
         return;
     }
+
     @Override
-    public List<ServiceUsage> getServiceUsageStockCode(ServiceUsage serviceUsage){
-        return  null;
-    }
-    @Override
-    public void insertToServiceUsage(Map params){
+    public void insertToServiceUsage(ServiceUsage serviceUsage){
+        Map<String, String> list =new HashMap<>();
+        list.put("stock_code1",serviceUsage.getStock_code1());
+        list.put("stock_code2",serviceUsage.getStock_code2());
+        list.put("start_date",serviceUsage.getStart_date());
+        list.put("end_date",serviceUsage.getEnd_date());
+        list.put("id",serviceUsage.getId());
+        serviceUsageMapper.insertToServiceUsage(list);
 
     }
 }

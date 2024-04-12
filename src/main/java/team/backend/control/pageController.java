@@ -14,10 +14,8 @@ import team.backend.domain.Addition;
 import team.backend.domain.AvailableData;
 import team.backend.domain.Member;
 
-import team.backend.service.JavaPythonInter;
-import team.backend.service.MybatisAvailableDataService;
-import team.backend.service.MybatisMemberService;
-import team.backend.service.addDataService;
+import team.backend.domain.ServiceUsage;
+import team.backend.service.*;
 
 import java.sql.Date;
 import java.util.List;
@@ -29,13 +27,19 @@ import java.util.List;
 //@SessionAttributes("id")
 public class pageController {
     @Autowired
-    private MybatisMemberService service;
+    private MemberService service;
     @Autowired
-    private MybatisAvailableDataService availableDataService;
+    private AvailableDataService availableDataService;
     @Autowired
     private addDataService addData;
     @Autowired
     private JavaPythonInter javaPy;
+    @Autowired
+    private ServiceUsage serviceUsage;
+    @Autowired
+    public pageController(ServiceUsage serviceUsage) {
+        this.serviceUsage = serviceUsage;
+    }
 
     @GetMapping("home.do") //메인화면
     public String home(HttpSession session, HttpServletRequest request) {
@@ -146,10 +150,7 @@ public class pageController {
 
         return  "/project/list2";
     }
-    @GetMapping("chart.do") //결과값
-    public String chart(){
-        return  "/project/chart";
-    }
+
 
     @GetMapping("add2.do") //기업추가
     public String add(Model model, HttpSession session){
@@ -287,10 +288,23 @@ public class pageController {
         System.out.println("analysis start");
         String id = (String)session.getAttribute("id");
         System.out.println("id"+id);
-
+        start_date = start_date.replace("-", "").substring(0, 8);
+        end_date = end_date.replace("-", "").substring(0, 8);
+        serviceUsage.setStock_code1(stock_code1);
+        serviceUsage.setStock_code2(stock_code2);
+        serviceUsage.setStart_date(start_date);
+        serviceUsage.setEnd_date(end_date);
+        serviceUsage.setId(id);
+        System.out.println(serviceUsage);
         javaPy.strParameter("cal_dat",stock_code1,stock_code2,start_date,end_date);
-        //addData.insertTo();
-        return "redirect:analysis_page.do";
+
+        addData.insertToServiceUsage(serviceUsage);
+
+        return "redirect:chart.do";
+    }
+    @GetMapping("chart.do") //결과값
+    public String chart(){
+        return  "/project/chart";
     }
         // ArchivedData  ['add_data', 'KONEX', '317240'] db name , 스톡 코드 기업추가
 
@@ -311,7 +325,7 @@ public class pageController {
         //기업선택 1 , 기업선택 2 , 시작날짜 , 종료날짜
 
         //javaPy.strParameter("cal_dat",first_stock_code,second_stock_code,startdate,lastdate);
-        //d
+        //
 
 
 
