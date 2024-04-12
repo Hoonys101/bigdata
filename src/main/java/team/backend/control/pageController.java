@@ -297,7 +297,9 @@ public class pageController {
         serviceUsage.setEnd_date(end_date);
         serviceUsage.setId(id);
         System.out.println(serviceUsage);
+
         List<String> result=javaPy.strParameter("cal_data",stock_code1,stock_code2,start_date,end_date);
+
         System.out.println(result.toString());
         int length=result.size();
         for(int i=0;i<10;i++){
@@ -308,9 +310,8 @@ public class pageController {
         for(int i=5;i<10;i++){
             result.set(i,"../img/plots/"+result.get(i));
         }
-        System.out.println(result.subList(5,10));
         addData.insertToServiceUsage(serviceUsage);
-        System.out.println(report);
+
         List<String[]> dataList = new ArrayList<>();
         dataList.add(new String[]{"0",result.get(0)});
         dataList.add(new String[]{"1",result.get(1)});
@@ -323,7 +324,21 @@ public class pageController {
         return  "/project/chart";
     }
     @GetMapping("chart.do") //결과값
-    public String chart(){
+    public String chart(@RequestParam("stock_code1") String stock_code1,
+                        @RequestParam("stock_code2") String stock_code2,
+                        @RequestParam("start_date") String start_date,
+                        @RequestParam("end_date") String end_date, Model model){
+        model.addAttribute("stock_code1", stock_code1);
+        model.addAttribute("stock_code2", stock_code2);
+        model.addAttribute("start_date", start_date);
+        model.addAttribute("end_date", end_date);
+        //model.addAttribute("imagePath", imagePath);
+        //  result.size() 12개 2~6 결과값 7~11 그림
+        // List<String> subList = result.subList(7, 12);
+        //<div>
+        //    <h2>Plot</h2>
+        //    <img src="img/plots/${stock_code1}_${stock_code2}_${start_date}_${end_date}.png" alt="Plot">
+        //</div>
         return  "/project/chart";
     }
         // ArchivedData  ['add_data', 'KONEX', '317240'] db name , 스톡 코드 기업추가
