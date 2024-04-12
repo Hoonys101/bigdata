@@ -16,12 +16,14 @@ try:
         print(input_data[0]+'를 성공적으로 수행하였습니다.')
     elif input_data[0]=='cal_data':#input_data는 0,1,2,3,4 값을 가질 것
 #        print('cal_data로 들어왔습니다.')
+        print(input_data)
         result=cal.cal_data(input_data)
         for str_value in result:
             print(str_value)
 #        print(input_data[0]+'를 성공적으로 수행하였습니다.')
     elif input_data[0]=='diff_cal_data':#input_data는 0,1,2,3,4,5,6 값을 가질 것
 #        print('diff_cal_data로 들어왔습니다.')
+        print(input_data)
         result=cal.diff_cal_data(input_data)
         for str_value in result:
             print(str_value)
