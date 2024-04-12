@@ -3,11 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 
-#차트 설정
-plt.rcParams["font.family"] = 'nanummyeongjo'
-plt.rcParams["figure.figsize"] = (14,4)
-plt.rcParams['lines.linewidth'] = 2
-plt.rcParams["axes.grid"] = True
+
 
 # df를 str으로 받아서, -100~100까지로 정규화된 df 반환
 def normal(df, default='CLOSE'):
@@ -107,7 +103,7 @@ def cal_data(list,days=5):
     second_com=list[2]
     startdate=list[3]
     lastdate=list[4]
-
+    print(first_com,second_com,startdate,lastdate)
     #data read
     connection=db.connect_to_oracle()
     df1=db.read_code_date(connection,first_com,startdate,lastdate)
@@ -129,4 +125,3 @@ def cal_data(list,days=5):
     result_list.extend(filename_list)
     connection.close()
     return result_list
-

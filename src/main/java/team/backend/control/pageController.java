@@ -296,7 +296,7 @@ public class pageController {
         serviceUsage.setEnd_date(end_date);
         serviceUsage.setId(id);
         System.out.println(serviceUsage);
-        javaPy.strParameter("cal_dat",stock_code1,stock_code2,start_date,end_date);
+        javaPy.strParameter("cal_data",stock_code1,stock_code2,start_date,end_date);
 
         addData.insertToServiceUsage(serviceUsage);
 
