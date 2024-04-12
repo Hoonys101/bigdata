@@ -56,7 +56,13 @@ def db_rename_listing(strs):
         elif str=='KRX/INDEX/list':
             index=fdr.SnapDataReader(str)[['Market','Code','Name']]
             index.rename(columns={'Market':'Sector','Code':'stock_code'},inplace=True)
-            all=stock.get_index_ticker_list('20120101')
+            krx_index=stock.get_index_ticker_list('20120101',market='KRX')
+            kospi_index=stock.get_index_ticker_list('20120101',market='KOSPI')
+            kosdoq_index=stock.get_index_ticker_list('20120101',market='KOSDAQ')
+            all=[]
+            all.extend(krx_index)
+            all.extend(kospi_index)
+            all.extend(kosdoq_index)
             print(all)
             index=index[index['stock_code'].isin(all)]
             index.insert(loc=0,column='Nation',value='KR')
