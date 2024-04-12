@@ -156,9 +156,7 @@ body {
                     </div>
             </c:if>
     </nav>
-<main>
-    <main style="display: flex; justify-content: center;">
-
+<main style="display: flex; justify-content: center;">
 </main>
 <footer>
     <p>&copy; &copy; 2024 빅 데이터 분석 플랫폼</p>

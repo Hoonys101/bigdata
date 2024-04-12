@@ -306,20 +306,20 @@ public class pageController {
         System.out.println(result.toString());
         String report=javaPy.analysisData(result.subList(0,4));
         for(int i=5;i<10;i++){
-            result.set(i,"/img/plots/"+result.get(i));
+            result.set(i,"../img/plots/"+result.get(i));
         }
-        System.out.println(result);
+        System.out.println(result.subList(5,10));
         addData.insertToServiceUsage(serviceUsage);
         System.out.println(report);
         List<String[]> dataList = new ArrayList<>();
-        dataList.add(new String[]{"0주",result.get(0)});
-        dataList.add(new String[]{"1주",result.get(1)});
-        dataList.add(new String[]{"2주",result.get(2)});
-        dataList.add(new String[]{"3주",result.get(3)});
-        dataList.add(new String[]{"4주",result.get(4)});
+        dataList.add(new String[]{"0",result.get(0)});
+        dataList.add(new String[]{"1",result.get(1)});
+        dataList.add(new String[]{"2",result.get(2)});
+        dataList.add(new String[]{"3",result.get(3)});
+        dataList.add(new String[]{"4",result.get(4)});
         model.addAttribute("dataList",dataList);
         model.addAttribute("report",report);
-        model.addAttribute("plots",result.subList(5,9));
+        model.addAttribute("plots",result.subList(5,10));
         return  "/project/chart";
     }
     @GetMapping("chart.do") //결과값
