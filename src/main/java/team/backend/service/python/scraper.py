@@ -125,6 +125,7 @@ def add_data(list=[]):
     stock_code=list[2]
     print(db_name,stock_code)
 #    df=stockprice(db_name,stock_code)
+    print('db_name: ',db_name,' stock_code: ',stock_code)
     df=stock_data(db_name,stock_code)
     print(df)
     connect=db.connect_to_oracle()
@@ -132,4 +133,4 @@ def add_data(list=[]):
     db.insert_data_to_table(connect,df)
     db.close_connection(connect)
     
-add_data(['','KOSPI','360070'])
+#add_data(['','KOSPI','360070'])
