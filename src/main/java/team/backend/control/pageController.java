@@ -18,6 +18,7 @@ import team.backend.domain.ServiceUsage;
 import team.backend.service.*;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -284,7 +285,7 @@ public class pageController {
                                 @RequestParam("stock_code2") String stock_code2,
                                 @RequestParam("start_date") String start_date,
                                 @RequestParam("end_date") String end_date,
-                                HttpSession session){
+                                HttpSession session,Model model){
         System.out.println("analysis start");
         String id = (String)session.getAttribute("id");
         System.out.println("id"+id);
@@ -298,21 +299,30 @@ public class pageController {
         System.out.println(serviceUsage);
 
         List<String> result=javaPy.strParameter("cal_data",stock_code1,stock_code2,start_date,end_date);
+
+        System.out.println(result.toString());
+        int length=result.size();
+        for(int i=0;i<10;i++){
+            result.set(i,result.get(length+i-10));
+        }
+        System.out.println(result.toString());
+        String report=javaPy.analysisData(result.subList(0,4));
+        for(int i=5;i<10;i++){
+            result.set(i,"/img/plots/"+result.get(i));
+        }
         System.out.println(result);
-        System.out.println(result.size());
-        for (String item : result) {
-            System.out.println("result item"+item);
-        }
-
-// 나머지 요소들은 각각 하나의 값입니다.
-        for (int i = 1; i < result.size(); i++) {
-            System.out.println("result get(i)"+result.get(i));
-        }
-
         addData.insertToServiceUsage(serviceUsage);
-
-
-        return "redirect:chart.do";
+        System.out.println(report);
+        List<String[]> dataList = new ArrayList<>();
+        dataList.add(new String[]{"0주",result.get(0)});
+        dataList.add(new String[]{"1주",result.get(1)});
+        dataList.add(new String[]{"2주",result.get(2)});
+        dataList.add(new String[]{"3주",result.get(3)});
+        dataList.add(new String[]{"4주",result.get(4)});
+        model.addAttribute("dataList",dataList);
+        model.addAttribute("report",report);
+        model.addAttribute("plots",result.subList(5,9));
+        return  "/project/chart";
     }
     @GetMapping("chart.do") //결과값
     public String chart(@RequestParam("stock_code1") String stock_code1,

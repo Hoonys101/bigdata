@@ -3,6 +3,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -122,5 +123,30 @@ public class JavaPython implements JavaPythonInter {
             System.out.println("ie: "+ie);
             return null;
         }
+    }
+    @Override
+    public String analysisData(List<String> corre){
+        String result="";
+        List<Double> data= new ArrayList<>();
+        double max=-2;
+        int maxIndex = -1;
+        for (int i =0 ;i<corre.size(); i++){
+            double current=Double.parseDouble(corre.get(i));
+            data.add(current);
+            if(current>max){
+                max=current;
+                maxIndex=i;
+            }
+        }
+        if (Collections.max(data)<0.5){
+            result="큰 관련이 없습니다.(correlationMax<0.5)\n";
+        }else if(maxIndex==0){
+            result=result+"두 데이터는 동시에 움직입니다.\n";
+        }else if(maxIndex>0&&maxIndex<3){
+            result=result+"두 데이터는 "+maxIndex+"주의 간격을 두고 전파되는 관계에 있습니다.\n";
+        }else{
+            result=result+"두 데이터는 5주 이상의 간격을 두고 전파되는 관계에 있습니다.\n";
+        }
+        return result;
     }
 }
