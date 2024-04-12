@@ -3,10 +3,10 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="team.backend.mapper.ServiceUsageMapper">
-    <select id="getServiceUsageStockCode" parameterType="String" resultType="String">
-        select stock_code from ServiceUsage where stock_code=#{stockCode} group by (stock_code)
-    </select>
-    <select id="insertToServiceUsage" parameterType="Map" resultType="ServiceUsage">
-        insert into ServiceUsage values(#{stock_code1},#{stock_code2},#{start_date},#{end_date},#{id})
-    </select>
+
+    <insert id="insertToServiceUsage" parameterType="Map">
+        insert into ServiceUsage(stock_code1, stock_code2, start_date, end_date, id)
+        values(#{stock_code1},#{stock_code2},#{start_date},#{end_date},#{id})
+    </insert>
 </mapper>
+

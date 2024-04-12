@@ -64,18 +64,19 @@
 </h1>
 <div class="container">
   <form action="analysis_page.do" method="post">
-    <select name="company1">
+    <select name="stock_code1">
         <option value="">Select Company 1</option>
         <c:forEach items="${list}" var="availableData">
-            <option value="${stock_code1}">
+            <option value="${availableData.stock_code}">
                 ${availableData.nation}, ${availableData.db_name}, ${availableData.sector}, ${availableData.name}
+                ${stock_code1}
             </option>
         </c:forEach>
     </select>
-    <select name="company2">
+    <select name="stock_code2">
             <option value="">Select Company 2</option>
             <c:forEach items="${list}" var="availableData">
-                <option value="${stock_code2}"">
+                <option value="${availableData.stock_code}"">
                     ${availableData.nation}, ${availableData.db_name}, ${availableData.sector}, ${availableData.name}
                 </option>
             </c:forEach>
