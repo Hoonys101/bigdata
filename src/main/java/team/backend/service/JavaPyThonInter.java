@@ -19,4 +19,5 @@ public interface JavaPythonInter {
       "second_stock_code",
       "diff2_stock_code",
       "startdate","lastdate"를 인자로 호출*/
+    String analysisData(List<String> correl);
 }
