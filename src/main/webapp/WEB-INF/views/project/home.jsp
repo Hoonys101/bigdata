@@ -145,7 +145,7 @@ body {
             <c:if test="${not empty sessionScope.id }">
                 <div class="welcome-message">${sessionScope.id}님 환영합니다.</div>
                 <div>
-                <a href="#">내 정보</a>|
+                <%--<a href="#">내 정보</a>|--%>
                 <a href="logout.do" id="logout-link">로그아웃</a>|
                <a href="withdraw.do?id=${sessionScope.id}" id="withdraw-link">회원탈퇴</a>
                </div>
@@ -156,7 +156,7 @@ body {
                     </div>
             </c:if>
     </nav>
-<main>
+
     <main style="display: flex; justify-content: center;">
 
 </main>
