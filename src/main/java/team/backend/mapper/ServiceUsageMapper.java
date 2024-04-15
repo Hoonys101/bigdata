@@ -11,5 +11,7 @@ import java.util.Map;
 @Mapper
 @Repository
 public interface ServiceUsageMapper {
+
+
     void insertToServiceUsage(Map list);
 }
