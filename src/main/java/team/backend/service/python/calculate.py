@@ -2,6 +2,7 @@ import ATO as db
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
+# import concurrent.futures
 
 
 
@@ -24,7 +25,6 @@ def diff(df1, df2):
     diff_df = df1.subtract(df2, fill_value=0)  # 누락된 값은 0으로 대체
 
     return diff_df
-
 
 # 2개의 df와 filename을 받아서, plot 저장하고 corr 리턴
 def saveplot(df,df2,filename):
@@ -104,7 +104,7 @@ def cal_data(list,days=5):
     second_com=list[2]
     startdate=list[3]
     lastdate=list[4]
-    print(first_com,second_com,startdate,lastdate)
+    # print(first_com,second_com,startdate,lastdate)
     #data read
     connection=db.connect_to_oracle()
     df1=db.read_code_date(connection,first_com,startdate,lastdate)
@@ -126,3 +126,46 @@ def cal_data(list,days=5):
     result_list.extend(filename_list)
     connection.close()
     return result_list
+
+
+# #5-1개 파라미터를 받아서, 파일 5개와 correlation 5개 반환
+# #멀티 쓰레드 버전
+# def cal_data(list,days=5):
+#     #파라미터 설정
+#     first_com=list[1]
+#     second_com=list[2]
+#     startdate=list[3]
+#     lastdate=list[4]
+#     # print(first_com,second_com,startdate,lastdate)
+#     #data read
+#     connection=db.connect_to_oracle()
+#     df1=db.read_code_date(connection,first_com,startdate,lastdate)
+#     df1=df1.sort_index()
+#     df2=db.read_code_date(connection,second_com,startdate,lastdate)
+#     df2=df2.sort_index()
+#     #calculate data
+#     df1=normal(df1)
+#     df2=normal(df2)
+
+#     #1주씩 늦춰가며 비교 저장
+#     result_list=[]
+#     filename_list=[]
+#     with concurrent.futures.ThreadPoolExecutor() as executor:
+        
+#         # 쓰레드 생성 및 실행
+#         future_result = []
+#         for i in range(5):
+#             filename=first_com+'_'+second_com+'_'+startdate+'_'+lastdate+'_'+str(i)+'.png'
+#             filename_list.append(filename)
+#             future = executor.submit(saveplot, df1,df2,filename)  # name 파라미터 전달
+#             future_result.append(future)
+#             df1,df2=delay_df(df1,df2,days)
+
+#         # 각 쓰레드의 결과를 취합
+#         result_list = [future.result() for future in future_result]
+#     result_list.extend(filename_list)
+#     connection.close()
+#     print(result_list)
+#     return result_list
+
+    

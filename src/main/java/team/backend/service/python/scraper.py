@@ -35,13 +35,14 @@ def stock_data(db_name='sdfklj', stock_code='IBM', startdate='20120101',lastdate
 #        df.rename(columns={'시가':'Open','고가':'High','저가':'Low','종가':'Close','거래량':'Volume','등락률':'various'},inplace=True)
         df=stock.get_index_ohlcv(startdate, lastdate, stock_code)[['시가','고가','저가','종가','거래량']]
         df.rename(columns={'시가':'Open','고가':'High','저가':'Low','종가':'Close','거래량':'Volume'},inplace=True)
-        df['various']=0
+#        df['various']=0
         df.rename_axis('data_date',inplace=True)
         
     else:
-        print(stock_code,startdate,lastdate)
-        df = fdr.DataReader(stock_code, startdate,lastdate)[['Open','High','Low','Close','Volume','Change']]
-        df.rename(columns={'Change':'various'},inplace=True)
+        # print(stock_code,startdate,lastdate)
+#        df = fdr.DataReader(stock_code, startdate,lastdate)[['Open','High','Low','Close','Volume','Change']]
+#        df.rename(columns={'Change':'various'},inplace=True)
+        df = fdr.DataReader(stock_code, startdate,lastdate)[['Open','High','Low','Close','Volume']]
         df.rename_axis('data_date',inplace=True)
     data_processing(df,db_name,stock_code)
     return df
@@ -126,11 +127,11 @@ def add_data(list=[]):
     
     db_name=list[1]
     stock_code=list[2]
-    print(db_name,stock_code)
+    # print(db_name,stock_code)
 #    df=stockprice(db_name,stock_code)
-    print('db_name: ',db_name,' stock_code:', stock_code)
+    # print('db_name: ',db_name,' stock_code:', stock_code)
     df=stock_data(db_name,stock_code)
-    print(df)
+    # print(df)
     connect=db.connect_to_oracle()
 #    db.create_table_from_dataframe(connect,refine_df,"ArchivedData")
     db.insert_data_to_table(connect,df)
