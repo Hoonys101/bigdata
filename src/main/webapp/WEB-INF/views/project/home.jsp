@@ -157,7 +157,9 @@ body {
             </c:if>
     </nav>
 
+
     <main style="display: flex; justify-content: center;">
+
 
 </main>
 <footer>

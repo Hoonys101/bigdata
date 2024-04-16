@@ -33,7 +33,8 @@ def saveplot(df,df2,filename):
     correlation=df['Close_normal'].corr(df2['Close_normal'])
     plt.title('Correlation is'+str(correlation))
     # 폴더가 없으면 생성
-    save_dir = './src/main/resources/static/img/plots'
+#    save_dir = './src/main/resources/static/img/plots'
+    save_dir = 'c:/plots/'
     if not os.path.exists(save_dir):
 #        print("폴더가 없어서 새로 만듭니다.")
         os.makedirs(save_dir)

@@ -4,6 +4,8 @@ import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import team.backend.mapper.AddressMapper;
 import team.backend.repository.SpringDataJpaOracleAddressRepository;
 import team.backend.repository.SpringDataJpaOracleBoardRepository;
@@ -15,7 +17,14 @@ import team.backend.service.SpringDataJpaBoardService;
 import javax.sql.DataSource;
 
 @Configuration
-public class SpringConfig {
+public class SpringConfig implements WebMvcConfigurer {
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/img/plots/**")
+                .addResourceLocations("file:/C:/plots/")
+                .setCachePeriod(0);
+    }
+
     @Autowired
     DataSource dataSource; //Jdbc + JdbcTemplate
     @Autowired
