@@ -19,10 +19,10 @@ def diff(df1, df2):
     # 두 DataFrame의 인덱스와 열이 일치하도록 정렬
     df1 = df1.sort_index(axis=0).sort_index(axis=1)
     df2 = df2.sort_index(axis=0).sort_index(axis=1)
-    
+
     # 차분 연산 수행
     diff_df = df1.subtract(df2, fill_value=0)  # 누락된 값은 0으로 대체
-    
+
     return diff_df
 
 
@@ -82,7 +82,7 @@ def diff_cal_data(list,days=5):
     df2=normal(df2)
     df2_1=normal(df2_1)
     df2=diff(df2,df2_1)
-    
+
     #1주씩 늦춰가며 비교 저장
     result_list=[]
     filename_list=[]
@@ -114,7 +114,7 @@ def cal_data(list,days=5):
     #calculate data
     df1=normal(df1)
     df2=normal(df2)
-    
+
     #1주씩 늦춰가며 비교 저장
     result_list=[]
     filename_list=[]

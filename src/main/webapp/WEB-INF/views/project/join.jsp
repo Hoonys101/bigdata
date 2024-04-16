@@ -23,6 +23,20 @@
         .btn-cancel:hover {
             background-color: #d32f2f; /* 호버시 배경색 변경 */
         }
+        .error-box {
+                    background-color: #ffebee; /* 배경색 */
+                    border: 1px solid #ffcdd2; /* 테두리 */
+                    border-radius: 5px; /* 테두리 둥글게 */
+                    padding: 10px 15px; /* 내부 여백 */
+                    margin-top: 10px; /* 위쪽 마진 */
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 */
+                }
+
+                .error-message {
+                    color: #f44336; /* 텍스트 색상 */
+                    margin: 0; /* 마진 초기화 */
+                    font-size: 14px; /* 폰트 크기 */
+                }
     </style>
      <script>
             function validateForm() {
@@ -65,6 +79,7 @@
 <div>
     <h1 class="join-title">회원가입</h1>
 </div>
+
 <div class="form-wrap">
     <form action="join.do" method="post" onsubmit="return validateForm();">
         <table class="join-table">
@@ -146,6 +161,11 @@
 >>>>>>> sim
 --%>
         </table>
+         <c:if test="${not empty error}">
+                     <div class="error-box">
+                         <p class="error-message">${error}</p>
+                     </div>
+                 </c:if>
         <div class="foot">
             <button type="button" class="btn-cancel" onclick="goBack()">취소</button>
             <button type="submit" class="btn-join">회원가입</button>

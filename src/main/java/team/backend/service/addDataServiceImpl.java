@@ -2,8 +2,10 @@ package team.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import team.backend.domain.History;
 import team.backend.domain.ServiceUsage;
 import team.backend.mapper.AdditionMapper;
+import team.backend.mapper.HistoryMapper;
 import team.backend.mapper.ServiceUsageMapper;
 
 import java.util.HashMap;
@@ -15,10 +17,14 @@ public class addDataServiceImpl implements addDataService {
     private final AdditionMapper addMapper;
     @Autowired
     private final ServiceUsageMapper serviceUsageMapper;
+
     @Autowired
-    addDataServiceImpl(AdditionMapper addMapper, ServiceUsageMapper serviceUsageMapper){
+    private final HistoryMapper historyMapper;
+    @Autowired
+    addDataServiceImpl(AdditionMapper addMapper, ServiceUsageMapper serviceUsageMapper,HistoryMapper historyMapper){
         this.addMapper=addMapper;
         this.serviceUsageMapper = serviceUsageMapper;
+        this.historyMapper = historyMapper;
     }
 
 
@@ -47,5 +53,14 @@ public class addDataServiceImpl implements addDataService {
         list.put("id",serviceUsage.getId());
         serviceUsageMapper.insertToServiceUsage(list);
 
+    }
+    @Override
+    public List<History> getHistory(String id){
+        List<History> historyList = historyMapper.getHistory(id);
+        System.out.println("historyList"+historyList);
+        return historyList;
+    }
+    public void deleteHistoryById(String analysis_result) {
+        historyMapper.deleteHistoryById(analysis_result);
     }
 }

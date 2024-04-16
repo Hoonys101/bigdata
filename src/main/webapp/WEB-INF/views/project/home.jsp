@@ -129,7 +129,7 @@ body {
 </style>
 </head>
 <body>
-<header class="a">
+<header>
   <h1>빅데이터 분석 플랫폼</h1>
 </header>
     <nav>
@@ -168,15 +168,19 @@ body {
 <script>
     // 로그아웃 메시지 표시
     var logoutLink = document.getElementById('logout-link');
-    logoutLink.addEventListener('click', function() {
-        alert('로그아웃이 되었습니다.');
-    });
+    if (logoutLink) {
+        logoutLink.addEventListener('click', function() {
+            alert('로그아웃이 되었습니다.');
+        });
+    }
 
     // 회원탈퇴 메시지 표시
     var withdrawLink = document.getElementById('withdraw-link');
-    withdrawLink.addEventListener('click', function() {
-        alert('회원탈퇴가 되었습니다.');
-    });
+    if (withdrawLink) {
+        withdrawLink.addEventListener('click', function() {
+            alert('회원탈퇴가 되었습니다.');
+        });
+    }
 </script>
 </body>
 </html>
