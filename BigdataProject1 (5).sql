@@ -3,12 +3,12 @@ create user bigdata identified by java;
 grant connect, resource, unlimited tablespace to bigdata;
 conn bigdata/java;
 
-drop table ServiceUsage;
-drop table ArchivedData;
-drop table addition;
-drop table AvailableData;
-drop sequence ID_SEQ;
-drop table ID;
+DROP TABLE ServiceUsage;
+DROP TABLE ArchivedData;
+DROP TABLE addition;
+DROP TABLE AvailableData;
+DROP TABLE ID;
+DROP SEQUENCE ID_SEQ;
 
 create table ID(
    ID varchar2(100) constraint PROJECT_PK primary key, 
@@ -43,6 +43,7 @@ CREATE TABLE ArchivedData (
    low NUMBER, 
    close NUMBER, 
    volume NUMBER,
+   various NUMBER,
    FOREIGN KEY (stock_code) REFERENCES AvailableData(stock_code)
    );
 
@@ -59,6 +60,7 @@ CREATE TABLE ServiceUsage (
    start_date VARCHAR2(30),
    end_date VARCHAR2(30),
    ID VARCHAR2(30),
+   report VARCHAR2(255),
    FOREIGN KEY (ID) REFERENCES ID(ID)  -- ID를 참조하는 외래 키 제약 조건
 );
 
@@ -70,4 +72,4 @@ desc id;
 desc addition;
 desc availabledata;
 desc archiveddata;
-desc ServiceUsage
+desc ServiceUsage;
