@@ -44,7 +44,6 @@ CREATE TABLE ArchivedData (
    low NUMBER, 
    close NUMBER, 
    volume NUMBER,
-   various NUMBER,
    FOREIGN KEY (stock_code) REFERENCES AvailableData(stock_code)
    );
 
