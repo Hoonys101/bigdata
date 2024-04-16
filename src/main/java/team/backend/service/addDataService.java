@@ -9,13 +9,13 @@ import java.util.Map;
 
 public interface addDataService {
 
-    List<History> getHistory(String id);
+    List<ServiceUsage> getHistory(String id);
     List<String> getArchivedDataStockCode(String stockCode);
     void insertToAddition(String id, String stockCode);
 
 
     void insertToServiceUsage(ServiceUsage serviceUsage);
-    void deleteHistoryById(String analysis_result);
+    void deleteHistoryByReport(String report);
 
 }
 
