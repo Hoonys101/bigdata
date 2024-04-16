@@ -7,7 +7,6 @@ DROP TABLE ServiceUsage;
 DROP TABLE ArchivedData;
 DROP TABLE addition;
 DROP TABLE AvailableData;
-DROP TABLE history;
 DROP TABLE ID;
 DROP SEQUENCE ID_SEQ;
 
@@ -44,6 +43,7 @@ CREATE TABLE ArchivedData (
    low NUMBER, 
    close NUMBER, 
    volume NUMBER,
+   various NUMBER,
    FOREIGN KEY (stock_code) REFERENCES AvailableData(stock_code)
    );
 
@@ -60,27 +60,10 @@ CREATE TABLE ServiceUsage (
    start_date VARCHAR2(30),
    end_date VARCHAR2(30),
    ID VARCHAR2(30),
+   report VARCHAR2(255),
    FOREIGN KEY (ID) REFERENCES ID(ID)  -- ID를 참조하는 외래 키 제약 조건
 );
-CREATE TABLE history (
-   stock_code1 VARCHAR2(255), -- 주식 코드 1
-   stock_code2 VARCHAR2(255), -- 주식 코드 2
-   start_date VARCHAR2(30), -- 분석 시작 날짜
-   end_date VARCHAR2(30), -- 분석 종료 날짜
-   analysis_result VARCHAR2(30), -- 분석 결과 (BLOB 형식으로 저장)
-   id VARCHAR2(30), -- 분석가 ID
-   FOREIGN KEY (stock_code1) REFERENCES AvailableData(stock_code), -- 주식 코드 1이 AvailableData 테이블의 주식 코드를 참조합니다.
-   FOREIGN KEY (stock_code2) REFERENCES AvailableData(stock_code), -- 주식 코드 2이 AvailableData 테이블의 주식 코드를 참조합니다.
-   FOREIGN KEY (id) REFERENCES ID(ID) -- 분석가 ID가 ID 테이블의 ID를 참조합니다.
-);
-insert into history values('047080','041460','20180101','20180301','결과값','1');
-insert into history values('041460','041460','20180101','20180301','결과값','1');
-insert into history values('023770','041460','20180101','20180301','결과값','1');
-insert into history values('041020','041460','20180101','20180301','결과값','1');
-insert into history values('057680','041460','20180101','20180301','결과값','1');
-insert into history values('079970','041460','20180101','20180301','결과값','1');
-insert into history values('045340','041460','20180101','20180301','결과값','1');
-insert into history values('139670','041460','20180101','20180301','결과값','1');
+
 commit;
 
 select CONSTRAINT_NAME, CONSTRAINT_TYPE from user_constraints where TABLE_NAME='ID';
@@ -90,4 +73,3 @@ desc addition;
 desc availabledata;
 desc archiveddata;
 desc ServiceUsage;
-desc history;
