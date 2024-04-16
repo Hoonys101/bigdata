@@ -11,6 +11,7 @@
 .inline-img{
 display: inline-block;
 margin-right:10px;
+
 }
 </style>
 //<script src="https://code.jquery.com/jquery-latest.js"></script>
@@ -19,9 +20,12 @@ margin-right:10px;
 <body>
 <div>"${report}"</div>
 <div>
+
 <c:forEach items="${plots}" var= "plot" varStatus="loop">
-<img src="${pageContext.request.contextPath}/../${plot}" alt="그래프" class="inline-img">
+<img src="${plot}" alt="그래프" class="inline-img">
 </c:forEach>
+
+
 
 </div>
 <script type="text/javascript">
@@ -55,6 +59,6 @@ var dataArray =[
 
 
   <!-- 그래프가 표시될 div 요소 -->
-  <div id="chart_div" style="width: 900px; height: 500px;"></div>
+  <div id="chart_div" style="width: 1500px; height: 500px;"></div>
 </body>
 </html>

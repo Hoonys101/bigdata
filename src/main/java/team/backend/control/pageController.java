@@ -6,6 +6,8 @@ import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,9 @@ import team.backend.domain.Member;
 import team.backend.domain.ServiceUsage;
 import team.backend.service.*;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -302,67 +307,76 @@ public class pageController {
 
         System.out.println(result.toString());
         int length=result.size();
+        System.out.println("length: "+length);
         for(int i=0;i<10;i++){
             result.set(i,result.get(length+i-10));
+            System.out.println(result.get(length+i-10));
         }
-        System.out.println(result.toString());
         String report=javaPy.analysisData(result.subList(0,4));
         for(int i=5;i<10;i++){
-            result.set(i,"../img/plots/"+result.get(i));
+            result.set(i,"img/plots/"+result.get(i));
         }
         addData.insertToServiceUsage(serviceUsage);
-
+        List<String> plotFile = new ArrayList<>();
+        for(int i=0;i<5;i++) {
+            String plot = "http://127.0.0.1:8080/img/plots/"+stock_code1 + "_" + stock_code2 + "_" + start_date + "_" + end_date + "_" + i + ".png";
+            plotFile.add(i,plot);
+        }
         List<String[]> dataList = new ArrayList<>();
         dataList.add(new String[]{"0",result.get(0)});
         dataList.add(new String[]{"1",result.get(1)});
         dataList.add(new String[]{"2",result.get(2)});
         dataList.add(new String[]{"3",result.get(3)});
         dataList.add(new String[]{"4",result.get(4)});
+
         model.addAttribute("dataList",dataList);
         model.addAttribute("report",report);
-        model.addAttribute("plots",result.subList(5,10));
+        model.addAttribute("plots",plotFile);
         return  "/project/chart";
     }
-    @GetMapping("chart.do") //결과값
-    public String chart(@RequestParam("stock_code1") String stock_code1,
-                        @RequestParam("stock_code2") String stock_code2,
-                        @RequestParam("start_date") String start_date,
-                        @RequestParam("end_date") String end_date, Model model){
-        model.addAttribute("stock_code1", stock_code1);
-        model.addAttribute("stock_code2", stock_code2);
-        model.addAttribute("start_date", start_date);
-        model.addAttribute("end_date", end_date);
-        //model.addAttribute("imagePath", imagePath);
-        //  result.size() 12개 2~6 결과값 7~11 그림
-        // List<String> subList = result.subList(7, 12);
-        //<div>
-        //    <h2>Plot</h2>
-        //    <img src="img/plots/${stock_code1}_${stock_code2}_${start_date}_${end_date}.png" alt="Plot">
-        //</div>
-        return  "/project/chart";
-    }
-        // ArchivedData  ['add_data', 'KONEX', '317240'] db name , 스톡 코드 기업추가
-
-        // 검색 국가 DB 회사명 종목 dto (nation, db_name, sector, name)
-
-        // 파라미터 id, stockcode
-        // addition id 값조회
-        // ArchivedData  stockcode 조회
-        // ?? 조인결과 조회 후 리턴
-
-        // 추가 테이블의 id가 갖고있는 스톡코드로 나라 db 종목 회사를 쿼리한다
-
-        // 쿼리문 SELECT nation, db_name, sector, name
-        //FROM AvailableData
-        //INNER JOIN addition ON AvailableData.stock_code = addition.stock_code
-        //WHERE addition.id = '1' AND AvailableData.stock_code = '317240'
-        //GROUP BY nation, db_name, name, sector;
-        //기업선택 1 , 기업선택 2 , 시작날짜 , 종료날짜
-
-        //javaPy.strParameter("cal_dat",first_stock_code,second_stock_code,startdate,lastdate);
-        //
 
 
+
+//    @GetMapping("chart.do") //결과값
+//    public String chart(@RequestParam("stock_code1") String stock_code1,
+//                        @RequestParam("stock_code2") String stock_code2,
+//                        @RequestParam("start_date") String start_date,
+//                        @RequestParam("end_date") String end_date, Model model){
+//        model.addAttribute("stock_code1", stock_code1);
+//        model.addAttribute("stock_code2", stock_code2);
+//        model.addAttribute("start_date", start_date);
+//        model.addAttribute("end_date", end_date);
+//        //model.addAttribute("imagePath", imagePath);
+//        //  result.size() 12개 2~6 결과값 7~11 그림
+//        // List<String> subList = result.subList(7, 12);
+//        //<div>
+//        //    <h2>Plot</h2>
+//        //    <img src="img/plots/${stock_code1}_${stock_code2}_${start_date}_${end_date}.png" alt="Plot">
+//        //</div>
+//        return  "/project/chart";
+//    }
+//        // ArchivedData  ['add_data', 'KONEX', '317240'] db name , 스톡 코드 기업추가
+//
+//        // 검색 국가 DB 회사명 종목 dto (nation, db_name, sector, name)
+//
+//        // 파라미터 id, stockcode
+//        // addition id 값조회
+//        // ArchivedData  stockcode 조회
+//        // ?? 조인결과 조회 후 리턴
+//
+//        // 추가 테이블의 id가 갖고있는 스톡코드로 나라 db 종목 회사를 쿼리한다
+//
+//        // 쿼리문 SELECT nation, db_name, sector, name
+//        //FROM AvailableData
+//        //INNER JOIN addition ON AvailableData.stock_code = addition.stock_code
+//        //WHERE addition.id = '1' AND AvailableData.stock_code = '317240'
+//        //GROUP BY nation, db_name, name, sector;
+//        //기업선택 1 , 기업선택 2 , 시작날짜 , 종료날짜
+//
+//        //javaPy.strParameter("cal_dat",first_stock_code,second_stock_code,startdate,lastdate);
+//        //
+//
+//
 
 
 }
