@@ -51,16 +51,19 @@ public class addDataServiceImpl implements addDataService {
         list.put("start_date",serviceUsage.getStart_date());
         list.put("end_date",serviceUsage.getEnd_date());
         list.put("id",serviceUsage.getId());
+        list.put("report",serviceUsage.getReport());
+        //list.put("reportUrl",serviceUsage.getReportUrl());
+
         serviceUsageMapper.insertToServiceUsage(list);
 
     }
     @Override
-    public List<History> getHistory(String id){
-        List<History> historyList = historyMapper.getHistory(id);
+    public List<ServiceUsage> getHistory(String id){
+        List<ServiceUsage> historyList = serviceUsageMapper.getHistory(id);
         System.out.println("historyList"+historyList);
         return historyList;
     }
-    public void deleteHistoryById(String analysis_result) {
-        historyMapper.deleteHistoryById(analysis_result);
+    public void deleteHistoryByReport(String report) {
+        serviceUsageMapper.deleteHistoryByReport(report);
     }
 }

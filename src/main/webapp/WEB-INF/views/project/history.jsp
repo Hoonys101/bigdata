@@ -44,28 +44,40 @@
         <table>
             <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Stock Code 1</th>
                     <th>Stock Code 2</th>
                     <th>Start Date</th>
                     <th>End Date</th>
-                    <th>Analysis Result</th>
-                    <th>ID</th>
+                    <th>Report</th>
                     <th>Action</th>
+                    <th>삭제</th>
                 </tr>
             </thead>
             <tbody>
                 <!-- Iterate over the history list -->
-                <c:forEach items="${history}" var="history">
+                <c:forEach items="${serviceUsages}" var="serviceUsage">
                     <tr>
-                        <td>${history.stock_code1}</td>
-                        <td>${history.stock_code2}</td>
-                        <td>${history.start_date}</td>
-                        <td>${history.end_date}</td>
-                        <td><a href='#'>${history.analysis_result}</a></td>
-                        <td>${history.id}</td>
+                        <form action="analysis_page.do" method="post">
+                            <input type="hidden" name="id" value="${serviceUsage.id}">
+                            <input type="hidden" name="stock_code1" value="${serviceUsage.stock_code1}">
+                            <input type="hidden" name="stock_code2" value="${serviceUsage.stock_code2}">
+                            <input type="hidden" name="start_date" value="${serviceUsage.start_date}">
+                            <input type="hidden" name="end_date" value="${serviceUsage.end_date}">
+                            <input type="hidden" name="report" value="${serviceUsage.report}">
+                            <td>${serviceUsage.id}</td>
+                            <td>${serviceUsage.stock_code1}</td>
+                            <td>${serviceUsage.stock_code2}</td>
+                            <td>${serviceUsage.start_date}</td>
+                            <td>${serviceUsage.end_date}</td>
+                            <td>${serviceUsage.report}</td>
+                            <td>
+                                <input type="submit" value="분석 페이지로">
+                            </td>
+                        </form>
                         <td>
                             <form action="history.do" method="post">
-                                <input type="hidden" name="analysis_result" value="${history.analysis_result}">
+                                <input type="hidden" name="report" value="${serviceUsage.report}">
                                 <input type="submit" value="삭제">
                             </form>
                         </td>

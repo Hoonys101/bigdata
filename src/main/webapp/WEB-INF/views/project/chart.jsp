@@ -14,19 +14,15 @@ margin-right:10px;
 
 }
 </style>
-//<script src="https://code.jquery.com/jquery-latest.js"></script>
+<script src="https://code.jquery.com/jquery-latest.js"></script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
 <body>
-<div>"${report}"</div>
+${availableData.name}<div style="font-size: 18px; font-weight: bold; color: #333;">"${report}"</div>
 <div>
-
-<c:forEach items="${plots}" var= "plot" varStatus="loop">
-<img src="${plot}" alt="그래프" class="inline-img">
+<c:forEach items="${plots}" var="plot" varStatus="loop">
+    <img src="${plot}" alt="그래프" class="inline-img" style="max-width: 250px; height: 350px">
 </c:forEach>
-
-
-
 </div>
 <script type="text/javascript">
 var dataArray =[
@@ -59,6 +55,6 @@ var dataArray =[
 
 
   <!-- 그래프가 표시될 div 요소 -->
-  <div id="chart_div" style="width: 1500px; height: 500px;"></div>
+  <div id="chart_div" style="width: 100%; height: 500px;"></div>
 </body>
 </html>

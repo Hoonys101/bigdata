@@ -1,5 +1,6 @@
 package team.backend.domain;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,8 @@ public class ServiceUsage {
     private String start_date;
     private String end_date;
     private String id;
+    private String report;
+    //private String reportUrl;
 
 
 }
