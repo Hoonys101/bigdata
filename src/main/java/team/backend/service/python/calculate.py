@@ -168,8 +168,8 @@ def cal_data(list,days=5):
 
 def delay_save(df1:pd.DataFrame,df2:pd.DataFrame,name,days:int=5):
     result_list=[]
-    startdate=df1.index[0]
-    lastdate=df1.index[-1]
+    startdate=df1.index[0].date()
+    lastdate=df1.index[-1].date()
     for i in range(5):
         result_list.append(df1.corr(df2))
         df1,df2=delay_df(df1,df2,days)
@@ -184,7 +184,7 @@ def delay_save(df1:pd.DataFrame,df2:pd.DataFrame,name,days:int=5):
 #        print(startdate.date(),"와 " ,lastdate.date(),"사이의 기간은 4주 이상의 간격으로 연동됩니다.\n max_corr: ",max_val)
     else:
 #        print(startdate.date(),"와 " ,lastdate.date(),'사이의 기간은 '+str(max_inde)+'주 간격으로 연동됩니다.\n max_corr: ',max_val)
-        print(df1.index[startdate].date()+','+df1.index[lastdate].date()+','+str(max_inde))
+        print(str(startdate)+','+str(lastdate)+','+str(max_inde))
     
 def find_max_and_index(lst:list=[1,2,3,2,1])->tuple[int,int]:
     if not lst:  # 리스트가 비어있는 경우
@@ -279,7 +279,6 @@ def total_analy(lst:list)->list:
     stock_code1=lst[1]
     stock_code2=lst[2]
     return total_anal(stock_code1,stock_code2)
-
 # 10 년 전체를 년별 분석
 def total_anal(stock_code1:str='1008',stock_code2:str='IBM',default:str='CLOSE'):
     df1=make_df(stock_code1)[default]
@@ -311,3 +310,5 @@ def total_anal(stock_code1:str='1008',stock_code2:str='IBM',default:str='CLOSE')
 #     correlation = df1.loc['2012-01-01':'2013-02-02','Diff'].corr(df2.loc['2012-01-01':'2013-02-02','Diff'])
 #     print(correlation)
 #     df1,df2=delay_df(df1,df2)
+# lst=['find_period','023440','1153']
+# total_analy(lst)
