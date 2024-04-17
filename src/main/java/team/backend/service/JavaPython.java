@@ -52,12 +52,11 @@ public class JavaPython implements JavaPythonInter {
     public static void main(String[] args){
 
         JavaPython java = new JavaPython();
-        System.out.println("1008 입력");
-        java.strParameter("add_data","Index","1008");
-        System.out.println("\n\nIBM 입력");
-        java.strParameter("add_data","SnP500","IBM");
-        System.out.println("\n\n1008,IBM계산");
-        java.strParameter("cal_data", "1008", "IBM", "20130101", "20140101");
+        System.out.println("find_period");
+        List<String> results=java.strParameter("find_period","023440","1153");
+        for(String result:results){
+            System.out.println(result);
+        }
     }
     @Override
     public synchronized List<String> strParameter(String... args){
