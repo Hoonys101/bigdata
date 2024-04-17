@@ -10,10 +10,12 @@ public interface MemberService {
 
     boolean login(String id, String pwd, RedirectAttributes redirectAttributes);
 
-    public boolean join(Member member, RedirectAttributes redirectAttributes);
+    boolean join(Member member, RedirectAttributes redirectAttributes);
 
 
     void withdraw(String id);
+
+    String find_id(Member member);
 
 
 }

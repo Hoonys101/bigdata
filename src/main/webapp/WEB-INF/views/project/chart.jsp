@@ -8,6 +8,10 @@
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <title>분석 결과 리포트</title>
 <style>
+body {
+      <%--background-image: url("/img/data-analsis-tool-img-3-1030x644.png")--%>
+       background-color: white;
+    }
 .inline-img{
 display: inline-block;
 margin-right:10px;
@@ -18,7 +22,7 @@ margin-right:10px;
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
 <body>
-${availableData.name}<div style="font-size: 18px; font-weight: bold; color: #333;">"${report}"</div>
+<div style="font-size: 18px; font-weight: bold; color: #333; text-align: center;">결과값 : "${report}"</div>
 <div>
 <c:forEach items="${plots}" var="plot" varStatus="loop">
     <img src="${plot}" alt="그래프" class="inline-img" style="max-width: 250px; height: 350px">

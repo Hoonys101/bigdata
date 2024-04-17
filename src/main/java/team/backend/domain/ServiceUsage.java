@@ -13,13 +13,14 @@ import java.util.List;
 @Data
 @Repository
 public class ServiceUsage {
+    private int serviceusage_seq;
     private String stock_code1;
     private String stock_code2;
     private String start_date;
     private String end_date;
     private String id;
     private String report;
-    //private String reportUrl;
+
 
 
 }

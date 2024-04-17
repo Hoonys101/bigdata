@@ -5,16 +5,16 @@
 <mapper namespace="team.backend.mapper.ServiceUsageMapper">
 
     <insert id="insertToServiceUsage" parameterType="Map">
-        insert into ServiceUsage(stock_code1, stock_code2, start_date, end_date, id,report)
-        values(#{stock_code1},#{stock_code2},#{start_date},#{end_date},#{id},#{report})
+        insert into ServiceUsage(serviceusage_seq,stock_code1, stock_code2, start_date, end_date, id,report)
+        values(serviceusage_seq.nextval,#{stock_code1},#{stock_code2},#{start_date},#{end_date},#{id},#{report})
     </insert>
     <select id="getHistory" parameterType="String" resultType="team.backend.domain.ServiceUsage">
         SELECT *
         FROM ServiceUsage
         WHERE id = #{id}
     </select>
-    <delete id="deleteHistoryByReport" parameterType="String">
-        DELETE FROM ServiceUsage WHERE report = #{report}
+    <delete id="deleteHistoryBySeq" parameterType="int">
+        DELETE FROM ServiceUsage WHERE serviceusage_seq = #{serviceusage_seq}
     </delete>
 </mapper>
 

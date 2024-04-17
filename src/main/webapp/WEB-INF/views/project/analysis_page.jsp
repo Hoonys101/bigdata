@@ -17,17 +17,16 @@
       margin: 0;
       text-align: center; /* 수정된 부분: body의 텍스트를 가운데 정렬 */
     }
-
     /* 추가된 스타일 */
     .container {
       margin: 0 auto;
+      margin-top: 50px;
       max-width: 600px;
       padding: 20px;
       background-color: #ffffff;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
-
     select {
       width: 100%;
       padding: 10px;
@@ -49,19 +48,37 @@
       cursor: pointer;
     }
 
-    button:hover {
-      background-color: #0056b3;
-    }
 
     .button-container {
       margin-top: 20px;
     }
+    .header {
+         text-align: center;
+         padding: 20px 0;
+         top: 0;
+
+         position: fixed;
+     }
+    .home-button {
+     background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+}
+
+
+    .home-button:hover {
+        background-color: #0056b3; /* hover 시 색 변화 */
+    }
 </style>
 </head>
 <body>
-<h1 style="position: absolute; top: 0; left: 50%; transform: translateX(-50%);">
-   <a href="home.do" style="text-decoration: none;">홈</a>
-</h1>
+<div class="header">
+        <button class="home-button" onclick="location.href='home.do'">Home</button>
+</div>
 <div class="container">
   <form action="analysis_page.do" method="post">
     <select name="stock_code1">

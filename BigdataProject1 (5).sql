@@ -8,7 +8,7 @@ DROP TABLE ArchivedData;
 DROP TABLE addition;
 DROP TABLE AvailableData;
 DROP TABLE ID;
-DROP SEQUENCE ID_SEQ;
+DROP SEQUENCE  serviceusage_seq;
 
 create table ID(
    ID varchar2(100) constraint PROJECT_PK primary key, 
@@ -52,8 +52,9 @@ CREATE TABLE addition (
    FOREIGN KEY (ID) REFERENCES ID(ID),
    FOREIGN KEY (stock_code) REFERENCES AvailableData(stock_code)
 );
-
+CREATE SEQUENCE serviceusage_seq START WITH 1 INCREMENT BY 1;
 CREATE TABLE ServiceUsage (
+   serviceusage_seq NUMBER PRIMARY KEY,
    stock_code1 VARCHAR2(255),
    stock_code2 VARCHAR2(255),
    start_date VARCHAR2(30),

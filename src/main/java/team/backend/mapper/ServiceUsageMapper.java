@@ -15,6 +15,6 @@ public interface ServiceUsageMapper {
 
     List<ServiceUsage> getHistory(String id);
 
-    void deleteHistoryByReport(String report);
+    void deleteHistoryBySeq(int serviceusage_seq);
     void insertToServiceUsage(Map list);
 }

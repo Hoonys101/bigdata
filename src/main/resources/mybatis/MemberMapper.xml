@@ -19,5 +19,11 @@
     <delete id="deleteUser" parameterType="String">
         DELETE FROM ID WHERE ID = #{id}
     </delete>
+    <select id="findUserByUsernameDobAndEmail" resultType="team.backend.domain.Member">
+        SELECT id FROM ID
+        WHERE user_name = #{user_name}
+        AND birth_date = #{birth_date}
+        AND email = #{email}
+    </select>
 
 </mapper>
