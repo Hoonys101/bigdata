@@ -7,6 +7,7 @@
 <title>데이터 선택</title>
 <style>
 body {
+    background-image: url("/img/data-analsis-tool-img-3-1030x644.png");
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     margin: 0;
@@ -45,9 +46,9 @@ button {
     padding: 10px 20px;
     border-radius: 5px;
 }
-button:hover {
-    background-color: #45a049;
-}
+.button:hover {
+            background-color: #0056b3; /* hover 시 색 변화 */
+        }
 .home-button {
     background-color: #007bff;
     color: #fff;
@@ -55,9 +56,15 @@ button:hover {
     border-radius: 5px;
     padding: 10px 20px;
     cursor: pointer;
-    margin: 0 auto; /* 수정된 부분: 가운데 정렬 */
-    display: block; /* 수정된 부분 */
+    margin: 30px auto 10px; /* 가운데 정렬 */
+    display: block; /* 블록 요소로 설정하여 가운데 정렬 */
+    transition: background-color 0.3s ease; /* hover 시 색 변화를 위한 transition 추가 */
 }
+
+.home-button:hover {
+    background-color: #0056b3; /* hover 시 색 변화 */
+}
+
 .centered {
     text-align: center;
     margin-bottom: 20px;
@@ -136,7 +143,7 @@ function loadStockCodes() {
 </head>
 <body>
 <div class="centered">
-<button class="home-button" onclick="location.href='home.do'">홈으로 가기</button>
+<button class="home-button" onclick="location.href='home.do'">Home</button>
 </div>
 <h2>데이터 선택</h2>
 <form action="add2.do" method="post">

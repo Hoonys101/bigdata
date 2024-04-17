@@ -34,6 +34,9 @@ dependencies { //의존성 관리도구 (외부 라이브러리)
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'//마바티스할때 추가
 
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'//JDA
+
+	implementation 'javax.mail:javax.mail-api:1.6.2' //이메일발송
+	implementation 'com.sun.mail:javax.mail:1.6.2'
 }
 
 tasks.named('test') {

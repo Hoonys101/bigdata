@@ -15,7 +15,7 @@ public interface addDataService {
 
 
     void insertToServiceUsage(ServiceUsage serviceUsage);
-    void deleteHistoryByReport(String report);
+    void deleteHistoryBySeq(int serviceusage_seq);
 
 }
 

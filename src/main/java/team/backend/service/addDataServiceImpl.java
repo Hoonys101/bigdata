@@ -46,6 +46,7 @@ public class addDataServiceImpl implements addDataService {
     @Override
     public void insertToServiceUsage(ServiceUsage serviceUsage){
         Map<String, String> list =new HashMap<>();
+        list.put("serviceusage_seq", String.valueOf(serviceUsage.getServiceusage_seq()));
         list.put("stock_code1",serviceUsage.getStock_code1());
         list.put("stock_code2",serviceUsage.getStock_code2());
         list.put("start_date",serviceUsage.getStart_date());
@@ -63,7 +64,7 @@ public class addDataServiceImpl implements addDataService {
         System.out.println("historyList"+historyList);
         return historyList;
     }
-    public void deleteHistoryByReport(String report) {
-        serviceUsageMapper.deleteHistoryByReport(report);
+    public void deleteHistoryBySeq(int serviceusage_seq) {
+        serviceUsageMapper.deleteHistoryBySeq(serviceusage_seq);
     }
 }

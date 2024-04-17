@@ -138,7 +138,7 @@ body {
                 <div>
                     <a href="login.do">로그인</a>|
                     <a href="join.do">회원가입</a>|
-                    <a href="#">아이디찾기</a>|
+                    <a href="find_id.do">아이디찾기</a>|
                     <a href="#">비밀번호찾기</a>
                 </div>
             </c:if>
@@ -150,9 +150,13 @@ body {
                <a href="withdraw.do?id=${sessionScope.id}" id="withdraw-link">회원탈퇴</a>
                </div>
                 <div class="analyze-buttons">
-                        <a href="analysis_page.do" class="analyze-button">분석하기</a>|
+
                         <a href="history.do" class="analyze-button">히스토리</a>|
                         <a href="add2.do" class="analyze-button">기업추가</a>
+                    </div>
+                <div class="analyze-buttons">
+                        <a href="analysis_page.do" class="analyze-button">기간분석</a>|
+                        <a href="analysis_page2.do" class="analyze-button">분기분석</a>
                     </div>
             </c:if>
     </nav>

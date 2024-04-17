@@ -41,7 +41,14 @@ public class MybatisMemberService implements MemberService {
         mapper.deleteUser(id);
     }
 
-
+    public String find_id(Member member) {
+        Member find_id = mapper.findUserByUsernameDobAndEmail(member);
+        if (find_id != null) {
+            return find_id.getId();
+        } else {
+            return null;
+        }
+    }
 
 }
 
