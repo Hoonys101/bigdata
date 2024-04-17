@@ -1,9 +1,47 @@
 import ATO as db
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 import os
 # import concurrent.futures
 
+
+#df 전체에 대해 1차 변화율과 2차 변화율을 추가
+def differ(df:pd.DataFrame,default='CLOSE')->pd.DataFrame:
+    #Close 값을 기준으로 변화율 계산 및 새로운 열 추가
+    default_index=df.columns.get_loc(default)
+    diff_values=[]
+    for i in range(0,df.shape[0]-1):
+        diff=(df.iloc[i+1,default_index]-df.iloc[i,default_index])/df.iloc[i,default_index]*100
+        diff_values.append(diff)
+#        print(diff)
+    diff_values.append(float('NaN'))
+    df['Diff']=diff_values
+    return df
+def diff_diff(df:pd.DataFrame,default='Diff')->pd.DataFrame:
+    #Close 값을 기준으로 변화율 계산 및 새로운 열 추가
+    default_index=df.columns.get_loc(default)
+    diff_values=[]
+    for i in range(0,df.shape[0]-1):
+        diff=(df.iloc[i+1,default_index]-df.iloc[i,default_index])/df.iloc[i,default_index]*100
+        diff_values.append(diff)
+#        print(diff)
+    diff_values.append(float('NaN'))
+    df['Diff_diff']=diff_values
+    return df
+
+# DB의 Stock_code를 입력받아서, 1,2차 도함수를 생성하여 반환
+def make_diff(stock_code:str='005810')->pd.DataFrame:
+    df=make_df(stock_code)
+    return diff_diff(differ(df))
+
+#make_df stock_code를 입력받아서 df 반환
+def make_df(stock_code:str='005810')->pd.DataFrame:
+    connection=db.connect_to_oracle()
+    df=db.read_code_date(connection,stock_code)
+    df=df.sort_index()
+    connection.close()
+    return df
 
 
 # df를 str으로 받아서, -100~100까지로 정규화된 df 반환
@@ -27,10 +65,10 @@ def diff(df1, df2):
     return diff_df
 
 # 2개의 df와 filename을 받아서, plot 저장하고 corr 리턴
-def saveplot(df,df2,filename):
-    plt.plot(df.index, df['Close_normal'])
-    plt.plot(df2.index, df2['Close_normal'])
-    correlation=df['Close_normal'].corr(df2['Close_normal'])
+def saveplot(df,df2,filename,column:str='Close_normal'):
+    plt.plot(df.index, df[column])
+    plt.plot(df2.index, df2[column])
+    correlation=df[column].corr(df2[column])
     plt.title('Correlation is'+str(correlation))
     # 폴더가 없으면 생성
 #    save_dir = './src/main/resources/static/img/plots'
@@ -45,7 +83,7 @@ def saveplot(df,df2,filename):
     return correlation
 
 #df2개와 int를 받아서 int만큼 뒤로 당긴 df로 변환하고, 두 df의 격차 제거한 df 반환하는 함수
-def delay_df(df1,df2,days):
+def delay_df(df1,df2,days=5):
 
     df1=df1.dropna()
     df2=df2.shift(-days)
@@ -128,6 +166,33 @@ def cal_data(list,days=5):
     return result_list
 
 
+def delay_save(df1:pd.DataFrame,df2:pd.DataFrame,name,days:int=5):
+    result_list=[]
+    startdate=df1.index[0]
+    lastdate=df1.index[-1]
+    for i in range(5):
+        result_list.append(df1.corr(df2))
+        df1,df2=delay_df(df1,df2,days)
+    max_val,max_inde=find_max_and_index(result_list)
+    if max_val<0.7:
+#        print("관련이 없습니다.")
+        pass
+#    elif max_inde==0:
+#        print(startdate.date(),"와 " ,lastdate.date(),"사이의 기간은 동시에 연동됩니다.\n max_corr: ",max_val)
+#        print(df1.index[startdate].date()+','+df1.index[lastdate].date()+','+str(max_inde))
+#    elif max_inde==4:
+#        print(startdate.date(),"와 " ,lastdate.date(),"사이의 기간은 4주 이상의 간격으로 연동됩니다.\n max_corr: ",max_val)
+    else:
+#        print(startdate.date(),"와 " ,lastdate.date(),'사이의 기간은 '+str(max_inde)+'주 간격으로 연동됩니다.\n max_corr: ',max_val)
+        print(df1.index[startdate].date()+','+df1.index[lastdate].date()+','+str(max_inde))
+    
+def find_max_and_index(lst:list=[1,2,3,2,1])->tuple[int,int]:
+    if not lst:  # 리스트가 비어있는 경우
+        return None, None
+    max_value = max(lst)
+    max_index = lst.index(max_value)
+    return max_value, max_index
+
 # #5-1개 파라미터를 받아서, 파일 5개와 correlation 5개 반환
 # #멀티 쓰레드 버전
 # def cal_data(list,days=5):
@@ -168,4 +233,81 @@ def cal_data(list,days=5):
 #     print(result_list)
 #     return result_list
 
+# # df1=make_diff('1008').loc['2012-01-01':'2013-02-02','Diff']
+# # df2=make_diff('IBM').loc['2012-01-01':'2013-02-02','Diff']
+# df1=make_df('1008').loc['2012-01-01':'2013-02-02','CLOSE']
+# df2=make_df('IBM').loc['2012-01-01':'2013-02-02','CLOSE']
+# df1=make_df('1008')['CLOSE']
+# df2=make_df('IBM')['CLOSE']
+# # df1=make_diff('1008')
+# # df2=make_diff('IBM')
+# # print(df1)
+# # print(df2)
+# for i in range(10):
+#     correlation = df1.corr(df2)
+#     print(correlation)
+#     df1,df2=delay_df(df1,df2)
+
+
+def common_date(df1:pd.DataFrame,df2:pd.DataFrame)->tuple[pd.DataFrame,pd.DataFrame]:
+    common_dates=df1.index.intersection(df2.index)
+    df1=df1.loc[common_dates]
+    df2=df2.loc[common_dates]
+    return df1,df2
     
+# 1년을 4개월씩 분석
+def yearly(df1:pd.DataFrame,df2:pd.DataFrame,div:int=3,critic:float=0.7):
+    for i in range(div):
+        startdate=int(df1.shape[0]/div*i)
+        lastdate=int(df1.shape[0]/div*(i+1))
+        correlation = df1[startdate:lastdate].corr(df2[startdate:lastdate])
+        if correlation>critic:
+#            print(df1.index[startdate].date(),"와 " ,df1.index[lastdate-1].date(), " 사이의 분기에 양의 상관관계")
+#            print("correlation: ",correlation)            
+            delay_save(df1[startdate:lastdate],df2[startdate:lastdate],str(startdate)+'_'+str(lastdate))
+#        elif correlation<-critic:
+#            print(df1.index[startdate].date(),"와 ",df1.index[lastdate-1].date()," 사이의 분기에 음의 상관관계")
+#            print("correlation: ",correlation)
+#            delay_save(df1[startdate:lastdate],df2[startdate:lastdate],str(startdate)+'_'+str(lastdate))
+#        else:
+#            print(df1.index[startdate].date(),"와 ",df1.index[lastdate-1].date()," 사이의 기간에 관계없음")
+#            print("correlation: ",correlation)
+#            delay_save(df1[startdate:lastdate],df2[startdate:lastdate],str(startdate)+'_'+str(lastdate))
+
+#list 0,1,2를 받아서 total_anal 실행
+def total_analy(lst:list)->list:
+    stock_code1=lst[1]
+    stock_code2=lst[2]
+    return total_anal(stock_code1,stock_code2)
+
+# 10 년 전체를 년별 분석
+def total_anal(stock_code1:str='1008',stock_code2:str='IBM',default:str='CLOSE'):
+    df1=make_df(stock_code1)[default]
+    df2=make_df(stock_code2)[default]
+    df1,df2=common_date(df1,df2)
+    for i in range(10):
+        startdate=int(df1.shape[0]/10*i)
+        lastdate=int(df1.shape[0]/10*(i+1))
+        correlation = df1[startdate:lastdate].corr(df2[startdate:lastdate])
+        if correlation>0.5:
+#            print(df1.index[startdate].date(),"와 " ,df1.index[lastdate].date(), " 사이의 기간에 연간 양의 상관관계가 있습니다.")
+#            print("correlation: ",correlation)            
+            yearly(df1[startdate:lastdate],df2[startdate:lastdate],4)
+            
+        elif correlation<-0.5:
+#            print(df1.index[startdate].date(),"와 ",df1.index[lastdate].date()," 사이의 기간에 연간 음의 상관관계가 있습니다.")
+#            print("correlation: ",correlation)
+            yearly(df1[startdate:lastdate],df2[startdate:lastdate],4)
+        else:
+#            print(df1.index[startdate-1].date(),"와 ",df1.index[lastdate-1].date()," 사이의 기간에 상관관계가 적습니다.")
+#            print("correlation: ",correlation)
+            yearly(df1[startdate:lastdate],df2[startdate:lastdate],4)
+
+    # df1,df2=delay_df(df1,df2)
+
+# df1=make_diff('1008')
+# df2=make_diff('IBM')
+# for i in range(5):
+#     correlation = df1.loc['2012-01-01':'2013-02-02','Diff'].corr(df2.loc['2012-01-01':'2013-02-02','Diff'])
+#     print(correlation)
+#     df1,df2=delay_df(df1,df2)
