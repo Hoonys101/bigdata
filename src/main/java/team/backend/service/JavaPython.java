@@ -82,7 +82,50 @@ public class JavaPython implements JavaPythonInter {
             return result;
         }else if (args[0].equals("diff_cal_data")&&args.length==9){
             return cal_data(resultString);
+        }else if (args[0].equals("find_period")&&args.length==3){
+            return find_period(resultString);
         }else{
+            return null;
+        }
+    }
+    List<String> find_period(String data){
+
+        // 파이썬 스크립트 실행
+
+//            pp = pb.start();
+        pln("find_period 실행");
+        // 파이썬 스크립트에 데이터 전달
+//        OutputStream outputStream = getOs();
+        PrintWriter writer = getPw();
+//            data = "cal_data\n1008\nIBM\n20130101\n20140101";
+        writer.println(data);
+        writer.flush();
+//        writer.close();
+        pln("입력완료");
+
+        // 파이썬 스크립트의 출력 읽어오기
+        List<String> result= new ArrayList<>();
+        String line;
+        try{
+//            InputStream is = getIs();
+            BufferedReader reader = getBr();
+            pln("br획득");
+            while ((line = reader.readLine()) != null) {
+                pln("python add 출력: "+line);
+                if (line.equals("EOF")){
+                    pln("연결을 끊습니다.");
+                    pln("명령어는 "+data);
+                    break;
+                }
+
+                result.add(line);
+            }
+
+            // 프로세스 종료
+            pln("연결을 마칩니다.");
+            return result;
+        }catch(IOException ie){
+            System.out.println("ie: "+ie);
             return null;
         }
     }

@@ -36,5 +36,10 @@ while True:
                 print(str_value,flush=True)
             # print(input_data[0]+'를 성공적으로 수행하였습니다.',flush=True)
             print("EOF",flush=True)
+        elif input_data[0]=='find_period':#input_data는 0,1,2 값을 가질 것
+            result=cal.total_analy(input_data)
+            for str_value in result:
+                print(str_value,flush=True)
+            print("EOF",flush=True)
     except Exception as e:
         print("예외가 발생했습니다:",e,flush=True)

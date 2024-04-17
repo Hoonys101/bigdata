@@ -137,4 +137,6 @@ def add_data(list=[]):
     db.insert_data_to_table(connect,df)
     db.close_connection(connect)
     
-#add_data(['','KOSPI','360070'])
+# add_data(['','Index','1008'])
+# add_data(['','SnP500','IBM'])
+
