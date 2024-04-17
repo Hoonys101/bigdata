@@ -266,9 +266,8 @@ public class pageController {
     @GetMapping("analysis_page2.do") //분석하기
     public String analysis_page2(Model model, HttpSession session, AvailableData availableData) {
         String id = (String) session.getAttribute("id");
-//        List<AvailableData> list = availableDataService.getList(id, availableData);
-//        model.addAttribute("list", list);
-//        System.out.println("list" + list);
+        List<AvailableData> list = availableDataService.getList(id,availableData);
+        model.addAttribute("list", list);
         return "/project/analysis_page2";
     }
 
