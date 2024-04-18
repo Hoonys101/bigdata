@@ -69,6 +69,7 @@ def saveplot(df,df2,filename,column:str='Close_normal'):
     plt.plot(df.index, df[column])
     plt.plot(df2.index, df2[column])
     correlation=df[column].corr(df2[column])
+    correlation=f"{correlation:.4f}"
     plt.title('Correlation is'+str(correlation))
     # 폴더가 없으면 생성
 #    save_dir = './src/main/resources/static/img/plots'
@@ -256,7 +257,7 @@ def common_date(df1:pd.DataFrame,df2:pd.DataFrame)->tuple[pd.DataFrame,pd.DataFr
     return df1,df2
     
 # 1년을 4개월씩 분석
-def yearly(df1:pd.DataFrame,df2:pd.DataFrame,div:int=3,critic:float=0.7):
+def yearly(df1:pd.DataFrame,df2:pd.DataFrame,div:int=4,critic:float=0.7):
     for i in range(div):
         startdate=int(df1.shape[0]/div*i)
         lastdate=int(df1.shape[0]/div*(i+1))
@@ -291,16 +292,16 @@ def total_anal(stock_code1:str='1008',stock_code2:str='IBM',default:str='CLOSE')
         if correlation>0.5:
 #            print(df1.index[startdate].date(),"와 " ,df1.index[lastdate].date(), " 사이의 기간에 연간 양의 상관관계가 있습니다.")
 #            print("correlation: ",correlation)            
-            yearly(df1[startdate:lastdate],df2[startdate:lastdate],4)
+            yearly(df1[startdate:lastdate],df2[startdate:lastdate])
             
         elif correlation<-0.5:
 #            print(df1.index[startdate].date(),"와 ",df1.index[lastdate].date()," 사이의 기간에 연간 음의 상관관계가 있습니다.")
 #            print("correlation: ",correlation)
-            yearly(df1[startdate:lastdate],df2[startdate:lastdate],4)
+            yearly(df1[startdate:lastdate],df2[startdate:lastdate])
         else:
 #            print(df1.index[startdate-1].date(),"와 ",df1.index[lastdate-1].date()," 사이의 기간에 상관관계가 적습니다.")
 #            print("correlation: ",correlation)
-            yearly(df1[startdate:lastdate],df2[startdate:lastdate],4)
+            yearly(df1[startdate:lastdate],df2[startdate:lastdate])
 
     # df1,df2=delay_df(df1,df2)
 
