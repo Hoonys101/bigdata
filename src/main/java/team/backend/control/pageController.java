@@ -268,8 +268,27 @@ public class pageController {
         String id = (String) session.getAttribute("id");
         List<AvailableData> list = availableDataService.getList(id,availableData);
         model.addAttribute("list", list);
+
         return "/project/analysis_page2";
     }
+    @PostMapping("analysis_page2.do")
+    public String analysis_page2(@RequestParam("stock_code1") String stock_code1,
+                                 @RequestParam("stock_code2") String stock_code2,
+                                 //@RequestParam("start_date") String start_date,
+                                 //@RequestParam("end_date") String end_date,
+                                 HttpSession session, Model model){
+        String id = (String) session.getAttribute("id");
+        serviceUsage.setStock_code1(stock_code1);
+        serviceUsage.setStock_code2(stock_code2);
+        //serviceUsage.setStart_date(start_date);
+        //serviceUsage.setEnd_date(end_date);
+        serviceUsage.setId(id);
+        List<String> result = javaPy.strParameter("find_period",stock_code1,stock_code2);
+        String report = javaPy.analysisData(result.subList(0, 2));
+        model.addAttribute("report", report);
+            return "/project/result";
+        }
+
 
 
     @PostMapping("analysis_page.do") //분석하기
