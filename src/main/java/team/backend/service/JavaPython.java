@@ -53,7 +53,9 @@ public class JavaPython implements JavaPythonInter {
 
         JavaPython java = new JavaPython();
         System.out.println("find_period");
-        List<String> results=java.strParameter("find_period","054920","030520");
+
+        List<String> results=java.strParameter("find_period","023440","1153");
+        System.out.println("result printing");
         for(String result:results){
             System.out.println(result);
         }
