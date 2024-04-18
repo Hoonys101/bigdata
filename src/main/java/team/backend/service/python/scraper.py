@@ -6,6 +6,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 from pykrx import stock
+import threading
 #from pykrx import bond
 
 # DB를 list로 받아서, 각 DB의 column명을 list의 list로 반환 depressed
@@ -45,7 +46,9 @@ def stock_data(db_name='sdfklj', stock_code='IBM', startdate='20120101',lastdate
         df = fdr.DataReader(stock_code, startdate,lastdate)[['Open','High','Low','Close','Volume']]
         df.rename_axis('data_date',inplace=True)
     data_processing(df,db_name,stock_code)
-    return df
+    connect=db.connect_to_oracle()
+    db.insert_data_to_table(connect,df)
+    db.close_connection(connect)
 
 # dataFrame, str DB명, stock_code를 받아서, dataFrame에 stock_code,db_name가 추가된 df로  stock_data의 딸림
 def data_processing(df,db_name,stock_code):
@@ -130,13 +133,25 @@ def add_data(list=[]):
     # print(db_name,stock_code)
 #    df=stockprice(db_name,stock_code)
     # print('db_name: ',db_name,' stock_code:', stock_code)
-    df=stock_data(db_name,stock_code)
+    df=stock_data_all(db_name,stock_code)
     # print(df)
-    connect=db.connect_to_oracle()
-#    db.create_table_from_dataframe(connect,refine_df,"ArchivedData")
-    db.insert_data_to_table(connect,df)
-    db.close_connection(connect)
     
-# add_data(['','Index','1008'])
+#    db.create_table_from_dataframe(connect,refine_df,"ArchivedData")
+
+def stock_data_all(db_name='sdfklj',stock_code='IBM'):
+    lst=[]
+    #쓰레드 생성
+    for i in range(12,22):
+        startdate='20'+str(i)+'0101'
+        lastdate='20'+str(i+1)+'0101'
+        lst.append(threading.Thread(target=stock_data,args=(db_name,stock_code,startdate,lastdate)))
+    #쓰레드 실행
+    for i in lst:
+        i.start()
+    #메인 쓰레드에서 대기
+    for i in lst:
+        i.join()
+        
+add_data(['','Index','1008'])
 # add_data(['','SnP500','IBM'])
 

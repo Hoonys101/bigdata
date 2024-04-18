@@ -54,6 +54,7 @@ public class JavaPython implements JavaPythonInter {
         JavaPython java = new JavaPython();
         System.out.println("find_period");
         List<String> results=java.strParameter("find_period","023440","1153");
+        System.out.println("result printing");
         for(String result:results){
             System.out.println(result);
         }
@@ -238,10 +239,10 @@ public class JavaPython implements JavaPythonInter {
             result="큰 관련이 없습니다.(correlationMax<0.5)\n";
         }else if(maxIndex==0){
             result=result+"두 데이터는 동시에 움직입니다.\n";
-        }else if(maxIndex>0&&maxIndex<3){
+        }else if(maxIndex>0&&maxIndex<4){
             result=result+"두 데이터는 "+maxIndex+"주의 간격을 두고 전파되는 관계에 있습니다.\n";
         }else{
-            result=result+"두 데이터는 5주 이상의 간격을 두고 전파되는 관계에 있습니다.\n";
+            result=result+"두 데이터는 4주 이상의 간격을 두고 전파되는 관계에 있습니다.\n";
         }
         return result;
     }
