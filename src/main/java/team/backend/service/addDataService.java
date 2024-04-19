@@ -1,11 +1,8 @@
 package team.backend.service;
 
-import org.springframework.stereotype.Service;
-import team.backend.domain.History;
 import team.backend.domain.ServiceUsage;
 
 import java.util.List;
-import java.util.Map;
 
 public interface addDataService {
 
@@ -15,7 +12,9 @@ public interface addDataService {
 
 
     void insertToServiceUsage(ServiceUsage serviceUsage);
-    void deleteHistoryBySeq(int serviceusage_seq);
+    boolean deleteHistoryBySeq(int serviceusage_seq);
+
+    public List<ServiceUsage> getResult(String id);
 
 }
 

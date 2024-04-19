@@ -139,7 +139,7 @@ body {
                     <a href="login.do">로그인</a>|
                     <a href="join.do">회원가입</a>|
                     <a href="find_id.do">아이디찾기</a>|
-                    <a href="#">비밀번호찾기</a>
+                    <a href="find_pwd.do">비밀번호찾기</a>
                 </div>
             </c:if>
             <c:if test="${not empty sessionScope.id }">
@@ -155,6 +155,7 @@ body {
                         <a href="add2.do" class="analyze-button">기업추가</a>
                     </div>
                 <div class="analyze-buttons">
+                        <a href="analysis_page2.do" class="analyze-button">코스피제외분석</a>
                         <a href="analysis_page.do" class="analyze-button">기간분석</a>|
                         <a href="analysis_page2.do" class="analyze-button">분기분석</a>
                     </div>

@@ -28,6 +28,7 @@ public class MybatisMemberService implements MemberService {
     }
     public boolean join(Member member, RedirectAttributes redirectAttributes) {
         Member existingMember = mapper.findById(member.getId());
+        System.out.println(existingMember);
         if (existingMember != null) {
             redirectAttributes.addFlashAttribute("error", "이미 존재하는 아이디입니다.");
             return false;
@@ -45,6 +46,14 @@ public class MybatisMemberService implements MemberService {
         Member find_id = mapper.findUserByUsernameDobAndEmail(member);
         if (find_id != null) {
             return find_id.getId();
+        } else {
+            return null;
+        }
+    }
+    public String find_pwd(Member member) {
+        Member find_pwd = mapper.findUserByPwd(member);
+        if (find_pwd != null) {
+            return find_pwd.getPwd();
         } else {
             return null;
         }

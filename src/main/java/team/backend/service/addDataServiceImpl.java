@@ -2,7 +2,6 @@ package team.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import team.backend.domain.History;
 import team.backend.domain.ServiceUsage;
 import team.backend.mapper.AdditionMapper;
 import team.backend.mapper.HistoryMapper;
@@ -53,7 +52,7 @@ public class addDataServiceImpl implements addDataService {
         list.put("end_date",serviceUsage.getEnd_date());
         list.put("id",serviceUsage.getId());
         list.put("report",serviceUsage.getReport());
-        //list.put("reportUrl",serviceUsage.getReportUrl());
+
 
         serviceUsageMapper.insertToServiceUsage(list);
 
@@ -64,7 +63,12 @@ public class addDataServiceImpl implements addDataService {
         System.out.println("historyList"+historyList);
         return historyList;
     }
-    public void deleteHistoryBySeq(int serviceusage_seq) {
+    public List<ServiceUsage> getResult(String id){
+        List<ServiceUsage> resultyList = serviceUsageMapper.getResult(id);
+        return resultyList;
+    }
+    public boolean deleteHistoryBySeq(int serviceusage_seq) {
         serviceUsageMapper.deleteHistoryBySeq(serviceusage_seq);
+        return false;
     }
 }

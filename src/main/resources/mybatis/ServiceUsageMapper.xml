@@ -16,5 +16,11 @@
     <delete id="deleteHistoryBySeq" parameterType="int">
         DELETE FROM ServiceUsage WHERE serviceusage_seq = #{serviceusage_seq}
     </delete>
+
+    <select id="getResult" parameterType="String" resultType="team.backend.domain.ServiceUsage">
+        SELECT *
+        FROM ServiceUsage
+        WHERE id = #{id}
+    </select>
 </mapper>
 

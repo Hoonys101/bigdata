@@ -17,5 +17,7 @@ public interface MemberService {
 
     String find_id(Member member);
 
+    String find_pwd(Member member);
+
 
 }

@@ -89,4 +89,5 @@ public class MybatisAvailableDataService implements AvailableDataService {
         System.out.println("params"+params);
         return availableDataMapper.getList(params);
     }
+
 }

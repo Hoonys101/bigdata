@@ -152,6 +152,7 @@ def stock_data_all(db_name='sdfklj',stock_code='IBM'):
     for i in lst:
         i.join()
         
+
 # add_data(['','Index','1008'])
 # add_data(['','SnP500','IBM'])
 
