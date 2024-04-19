@@ -3,8 +3,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import os
+import ai
 # import concurrent.futures
-
 
 #df 전체에 대해 1차 변화율과 2차 변화율을 추가
 def differ(df:pd.DataFrame,default='CLOSE')->pd.DataFrame:
@@ -64,6 +64,7 @@ def diff(df1, df2):
 
     return diff_df
 
+
 # 2개의 df와 filename을 받아서, plot 저장하고 corr 리턴
 def saveplot(df,df2,filename,column:str='Close_normal'):
     plt.plot(df.index, df[column])
@@ -93,6 +94,13 @@ def delay_df(df1,df2,days=5):
     df1=df1.loc[common_dates]
     df2=df2.loc[common_dates]
     return df1,df2
+
+# 3-1개의 파라미터를 받아서 2개의 str 반환
+def ai_anal(list):
+    #파라미터 설정
+    first_com=list[1]
+    second_com=list[2]
+    ai.training(first_com,second_com)
 
 #7-1개의 파라미터를 받아서 파일 5개와 correlation 5개 반환
 def diff_cal_data(list,days=5):
@@ -281,7 +289,7 @@ def total_analy(lst:list)->list:
     stock_code2=lst[2]
     return total_anal(stock_code1,stock_code2)
 # 10 년 전체를 년별 분석
-def total_anal(stock_code1:str='1008',stock_code2:str='IBM',default:str='CLOSE'):
+def total_anal(stock_code1:str='1008',stock_code2:str='IBM',yearly=yearly,default:str='CLOSE'):
     df1=make_df(stock_code1)[default]
     df2=make_df(stock_code2)[default]
     df1,df2=common_date(df1,df2)
@@ -313,3 +321,41 @@ def total_anal(stock_code1:str='1008',stock_code2:str='IBM',default:str='CLOSE')
 #     df1,df2=delay_df(df1,df2)
 # lst=['find_period','023440','1153']
 # total_analy(lst)
+
+def normalNlabel(stock_code1:str='IBM',stock_code2:str='1008',default='CLOSE')->pd.DataFrame:
+    df1=make_df(stock_code1)[[default]]
+    df2=make_df(stock_code2)[[default]]
+    # print("df1: \n",df1)
+    # print("df2: \n",df2)
+    df1,df2=common_date(df1,df2)
+    df1=normal(df1)
+    df2=normal(df2)
+    # print("df1: \n",df1)
+    # print("df2: \n",df2)
+
+    result=pd.merge(df1,df2,left_index=True,right_index=True,suffixes=('_df1','_df2'))
+    result['linkage']=-1
+    for i in range(40):
+        startdate=int(df1.shape[0]/40*i)
+        lastdate=int(df1.shape[0]/40*(i+1))
+        result_list=[]
+        df1_delay=df1[startdate:lastdate]
+        df2_delay=df2[startdate:lastdate]
+        # print("df1_delay: \n",df1_delay)
+        # print("df2_delay: \n",df2_delay)
+        for i in range(5):
+            corr=df1_delay['Close_normal'].corr(df2_delay['Close_normal'])
+            result_list.append(corr)
+            df1_delay,df2_delay=delay_df(df1_delay,df2_delay,5)
+        max_val,max_inde=find_max_and_index(result_list)
+        if max_val<0.7:
+            pass
+        else:
+            if max_inde>0:
+                # print(result)
+                result.iloc[startdate:lastdate,2]=max_inde
+    return result
+
+ai.training(normalNlabel())
+
+# ai.deep(normalNlabel())

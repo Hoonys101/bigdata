@@ -41,6 +41,10 @@ while True:
 #            print(input_data,flush=True)
             cal.total_analy(input_data)
             print("EOF",flush=True)
+        elif input_data[0]=='tree_data':
+            cal.ai_anal(input_data)
+            print("EOF",flush=True)
+            
     except Exception as e:
         print("예외가 발생했습니다:",e,flush=True)
         print("EOF",flush=True)

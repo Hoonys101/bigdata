@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <title>분석 결과 리포트</title>
+    <style>
+      body {
+        background-color: white;
+        text-align: right;
+      }
+      .inline-img {
+        display: inline-block;
+        margin-right: -10px;
+      }
+    </style>
+    <script src="https://code.jquery.com/jquery-latest.js"></script>
+    <script
+      type="text/javascript"
+      src="https://www.gstatic.com/charts/loader.js"
+    ></script>
+  </head>
+  <body>
+    <div
+      style="
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+        text-align: center;
+      "
+    >
+      결과값 : "두 데이터는 1주의 간격을 두고 전파되는 관계에 있습니다. "
+    </div>
+    <div style="width: 5%" class="inline-img"></div>
+    <div>
+      <img
+        src="http://127.0.0.1:8080/img/plots/023440_1153_20210929_20211228_0.png"
+        alt="그래프"
+        class="inline-img"
+        style="max-width: 20%; height: 350px"
+      />
+
+      <img
+        src="http://127.0.0.1:8080/img/plots/023440_1153_20210929_20211228_1.png"
+        alt="그래프"
+        class="inline-img"
+        style="max-width: 20%; height: 350px"
+      />
+
+      <img
+        src="http://127.0.0.1:8080/img/plots/023440_1153_20210929_20211228_2.png"
+        alt="그래프"
+        class="inline-img"
+        style="max-width: 20%; height: 350px"
+      />
+
+      <img
+        src="http://127.0.0.1:8080/img/plots/023440_1153_20210929_20211228_3.png"
+        alt="그래프"
+        class="inline-img"
+        style="max-width: 20%; height: 350px"
+      />
+
+      <img
+        src="http://127.0.0.1:8080/img/plots/023440_1153_20210929_20211228_4.png"
+        alt="그래프"
+        class="inline-img"
+        style="max-width: 20%; height: 350px"
+      />
+    </div>
+    <script type="text/javascript">
+      var dataArray = [
+        ['weeks', 'correlation'],
+
+        ['0', 0.7139],
+
+        ['1', 0.8119],
+
+        ['2', 0.7891],
+
+        ['3', 0.587],
+
+        ['4', 0.2438],
+      ];
+      // Google Charts API 초기화
+      google.charts.load('current', { packages: ['corechart'] });
+      google.charts.setOnLoadCallback(drawChart);
+
+      // 차트를 그리는 함수
+      function drawChart() {
+        // 데이터 생성
+        var data = google.visualization.arrayToDataTable(dataArray);
+
+        // 옵션 설정
+        var options = {
+          title: '분석결과',
+          curveType: 'function',
+          legend: { position: 'bottom' },
+        };
+
+        // 차트 생성 및 그리기
+        var chart = new google.visualization.LineChart(
+          document.getElementById('chart_div')
+        );
+        chart.draw(data, options);
+      }
+    </script>
+
+    <!-- 그래프가 표시될 div 요소 -->
+    <div
+      id="chart_div"
+      style="width: 125%; height: 400px; position: relative; left: -9%"
+    ></div>
+  </body>
+</html>
