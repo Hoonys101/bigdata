@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=utf-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+
 <html>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -138,7 +140,7 @@
             <tr class="join-tr">
                 <th class="join-th"><label for="signup_date">가입일자</label></th>
 
-                <td><input type="text" id="signup_date" name="signup_date" readonly></td>
+                <td><input type="text" id="signup_date" name="signup_date" readonly style="border: none;"></td>
             <script>
                 // 현재 날짜를 가져오는 함수
                 function getCurrentDate() {

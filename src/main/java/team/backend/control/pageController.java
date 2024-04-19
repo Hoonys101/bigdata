@@ -1,11 +1,17 @@
 package team.backend.control;
+import java.io.File;
 
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,10 +22,14 @@ import team.backend.domain.*;
 
 import team.backend.service.*;
 
+import java.io.IOException;
+import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.net.Authenticator;
 
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
@@ -49,6 +59,8 @@ public class pageController {
     private JavaPythonInter javaPy;
     @Autowired
     private ServiceUsage serviceUsage;
+
+    private static final String PLOTS_DIRECTORY = "C:/plots";
 
     @Autowired
     public pageController(ServiceUsage serviceUsage) {
@@ -135,34 +147,7 @@ public class pageController {
 
     @GetMapping("add2.do") //기업추가
     public String add(Model model, HttpSession session) {
-        //List<AvailableData> filteredData = availableDataService.getAvailableDataByFilters(null, null, null, null,null);
-        //model.addAttribute("filteredData", filteredData);
-        /*List<String> db_name = availableDataService.getDb(nation);
-        List<String> stock_code = availableDataService.getStockCode(db_name);
-        List<String> sector = availableDataService.getSector(stock_code);
-        List<String> name = availableDataService.getName(sector);*/
-        //List<String> stock_code = availableDataService.getStockCode(name);
-//        List<String> db_name = new ArrayList<>();
-//        List<String> sector = new ArrayList<>();
-//        List<String> name = new ArrayList<>();
-//        List<String> stock_code = new ArrayList<>();
-//        for (String nationName : nation)     {
-//            db_name.addAll(availableDataService.getDb(id, nationName));
-//        }
-//        for (String dbName : db_name) {
-//            sector.addAll(availableDataService.getSector(id, dbName));
-//        }
-//        for (String sectorName : sector) {
-//            name.addAll(availableDataService.getName(id, sectorName));
-//        }
-//        for (String code : name) {
-//            stock_code.addAll(availableDataService.getStockCode(id, code));
-//        }
-//
-//        model.addAttribute("db_name", db_name);
-//        model.addAttribute("sector", sector);
-//        model.addAttribute("name", name);
-//        model.addAttribute("stock_code", stock_code);
+
         String id = (String) session.getAttribute("id");
         List<String> nation = availableDataService.getNation(id);
         model.addAttribute("nation", nation);
@@ -271,32 +256,109 @@ public class pageController {
 
         return "/project/analysis_page2";
     }
+    @GetMapping("analysis_page3.do") //분석하기
+    public String analysis_page3(Model model, HttpSession session, AvailableData availableData) {
+        String id = (String) session.getAttribute("id");
+        List<AvailableData> list = availableDataService.getList(id,availableData);
+        model.addAttribute("list", list);
+
+        return "/project/analysis_page3";
+    }
+
     @PostMapping("analysis_page2.do")
     public String analysis_page2(@RequestParam("stock_code1") String stock_code1,
                                  @RequestParam("stock_code2") String stock_code2,
-                                 //@RequestParam("start_date") String start_date,
-                                 //@RequestParam("end_date") String end_date,
-                                 HttpSession session, Model model){
+                                 HttpSession session, Model model) {
+        FileDeletionUtil.deleteFiles(PLOTS_DIRECTORY);
         String id = (String) session.getAttribute("id");
-        serviceUsage.setStock_code1(stock_code1);
-        serviceUsage.setStock_code2(stock_code2);
-        //serviceUsage.setStart_date(start_date);
-        //serviceUsage.setEnd_date(end_date);
-        serviceUsage.setId(id);
-        List<String> result = javaPy.strParameter("find_period",stock_code1,stock_code2);
-        String report = javaPy.analysisData(result.subList(0, 2));
-        model.addAttribute("report", report);
-            return "/project/result";
+        List<String> result1 = javaPy.strParameter("find_period", stock_code1, stock_code2);
+        List<String> result2 = javaPy.strParameter("find_period", stock_code2, stock_code1);
+        List<String> resultList = new ArrayList<>();
+        resultList.add(result1.toString());
+        resultList.add(result2.toString());
+
+        List<ServiceUsage> serviceUsages = new ArrayList<>(); // 새로운 ServiceUsage 객체를 생성할 리스트
+
+
+            for (String item : result1) {
+                String[] resultArray = item.split(",\\s*");
+                if (resultArray.length >= 3) {
+                    ServiceUsage serviceUsage = new ServiceUsage(); // 각 요소에 대해 새로운 ServiceUsage 객체를 생성
+                    serviceUsage.setStock_code1(stock_code1);
+                    serviceUsage.setStock_code2(stock_code2);
+                    serviceUsage.setId(id);
+                    serviceUsage.setStart_date(resultArray[0]);
+                    serviceUsage.setEnd_date(resultArray[1]);
+                    serviceUsage.setReport(resultArray[2]); // 값을 설정
+
+                    String result = generateResult(Double.parseDouble(serviceUsage.getReport()));
+                    serviceUsage.setReport(result);
+
+                    addData.insertToServiceUsage(serviceUsage); // 생성된 객체를 데이터베이스에 추가
+                    serviceUsages.add(serviceUsage); // 생성된 객체를 리스트에 추가
+                }
+            }
+
+        for (String item : result2) {
+            String[] resultArray = item.split(",\\s*");
+            if (resultArray.length >= 3) {
+                ServiceUsage serviceUsage = new ServiceUsage(); // 각 요소에 대해 새로운 ServiceUsage 객체를 생성
+                serviceUsage.setStock_code1(stock_code2);
+                serviceUsage.setStock_code2(stock_code1);
+                serviceUsage.setId(id);
+                serviceUsage.setStart_date(resultArray[0]);
+                serviceUsage.setEnd_date(resultArray[1]);
+                serviceUsage.setReport(resultArray[2]);
+                String result = generateResult(Double.parseDouble(serviceUsage.getReport()));
+                serviceUsage.setReport(result);
+                addData.insertToServiceUsage(serviceUsage); // 생성된 객체를 데이터베이스에 추가
+                serviceUsages.add(serviceUsage); // 생성된 객체를 리스트에 추가
+            }
         }
 
 
+        System.out.println("serviceUsages: " + serviceUsages);
+        System.out.println("resultList: " + resultList);
+
+        model.addAttribute("serviceUsages", serviceUsages); // 모델에 serviceUsages 추가
+
+        return "/project/result";
+    }
+    private String generateResult(double reportValue) {
+        String result = "";
+         if (reportValue == 0) {
+            result = "두 데이터는 동시에 움직입니다.\n";
+        } else if (reportValue > 0 && reportValue < 4) {
+            result = "두 데이터는 " + reportValue + "주의 간격을 두고 전파되는 관계에 있습니다.\n";
+        } else {
+            result = "두 데이터는 4주 이상의 간격을 두고 전파되는 관계에 있습니다.\n";
+        }
+        return result;
+    }
+    @PostMapping("analysis_page3.do") //분석하기
+    public String analysis_page3(@RequestParam("stock_code1") String stock_code1,
+                                @RequestParam("stock_code2") String stock_code2,
+                                @RequestParam("start_date") String start_date,
+                                @RequestParam("end_date") String end_date,
+                                HttpSession session, Model model,
+                                ServletRequest request,
+                                ServletResponse response
+    ) throws UnsupportedEncodingException {
+        List<String> result = javaPy.strParameter("diff_cal_data", stock_code1, stock_code2, start_date, end_date);
+        System.out.println(result+"result");
+        return null;
+    }
 
     @PostMapping("analysis_page.do") //분석하기
     public String analysis_page(@RequestParam("stock_code1") String stock_code1,
                                 @RequestParam("stock_code2") String stock_code2,
                                 @RequestParam("start_date") String start_date,
                                 @RequestParam("end_date") String end_date,
-                                HttpSession session, Model model) throws UnsupportedEncodingException {
+                                HttpSession session, Model model,
+                                ServletRequest request,
+                                ServletResponse response
+    ) throws UnsupportedEncodingException {
+        FileDeletionUtil.deleteFiles(PLOTS_DIRECTORY);
         System.out.println("analysis start");
         String id = (String) session.getAttribute("id");
         System.out.println("id" + id);
@@ -318,7 +380,7 @@ public class pageController {
         System.out.println("length: " + length);
         for (int i = 0; i < 10; i++) {
             result.set(i, result.get(length + i - 10));
-            System.out.println(result.get(length + i - 10));
+            System.out.println("result.get(length): "+result.get(length + i - 10));
         }
         String report = javaPy.analysisData(result.subList(0, 4));
         serviceUsage.setReport(report);
@@ -345,12 +407,13 @@ public class pageController {
         model.addAttribute("dataList", dataList);
         model.addAttribute("report", report);
         model.addAttribute("plots", plotFile);
-        //model.addAttribute("reportUrl", reportUrl);
+
         return "/project/chart";
     }
 
     @GetMapping("history.do") //히스토리
     public String history(HttpSession session, Model model) {
+        //
         String id = (String) session.getAttribute("id");
         List<ServiceUsage> serviceUsages = addData.getHistory(id);
         model.addAttribute("serviceUsages", serviceUsages);
@@ -360,8 +423,20 @@ public class pageController {
 
     @GetMapping("historyDel.do")
     public String deleteHistory(@RequestParam("serviceusage_seq") int serviceusage_seq) {
+
         addData.deleteHistoryBySeq(serviceusage_seq);
         return "redirect:history.do"; // 삭제 후 다시 히스토리 페이지로 리다이렉트
+    }
+    @PostMapping("resultDel.do")
+    public String deleteRusult(@RequestParam("serviceusage_seq") String serviceusage_seq) {
+        try {
+            int serviceUsageId = Integer.parseInt(serviceusage_seq);
+            addData.deleteHistoryBySeq(serviceUsageId);
+            System.out.println(addData.deleteHistoryBySeq(serviceUsageId));
+        }catch(NumberFormatException e){
+            System.out.println(e);
+        }
+        return "redirect:analysis_page2.do"; // 삭제 후 다시 히스토리 페이지로 리다이렉트
     }
 
     @GetMapping("find_id.do")
@@ -394,7 +469,39 @@ public class pageController {
 
         }
         // 리다이렉트합니다.
-        return "redirect:find_id.do";
+        return "redirect:home.do";
+    }
+    @GetMapping("find_pwd.do")
+    public String find_pwd() {
+        return "/project/find_pwd";
+    }
+    @PostMapping("find_pwd.do")
+    public String find_pwd(Member member, HttpSession session) {
+        String userpwd = service.find_pwd(member);
+        if (userpwd != null) {
+            // 아이디가 데이터베이스에서 찾아졌을 때,
+            // 이메일 전송 로직을 수행합니다.
+            boolean emailSent = sendEmail(member.getEmail(), "Your Pwd is: " + userpwd);
+
+            if (emailSent) {
+                // 이메일이 성공적으로 전송되었을 때,
+                // 세션에 성공 메시지를 저장합니다.
+                session.setAttribute("message", "Email successfully sent.");
+
+            } else {
+                // 이메일 전송에 실패했을 때,
+                // 세션에 실패 메시지를 저장합니다.
+                session.setAttribute("message", "Failed to send email.");
+
+            }
+        } else {
+            // 아이디가 데이터베이스에서 찾지 못했을 때,
+            // 세션에 아이디를 찾을 수 없다는 메시지를 저장합니다.
+            session.setAttribute("message", "Username not found.");
+
+        }
+        // 리다이렉트합니다.
+        return "redirect:home.do";
     }
 
     private boolean sendEmail(String recipient, String messageBody) {
@@ -425,7 +532,7 @@ public class pageController {
             // 수신자 설정
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
             // 이메일 제목 설정
-            message.setSubject("빅데이터 분석 플랫폼 아이디 찾기");
+            message.setSubject("빅데이터 분석 플랫폼");
             // 이메일 내용 설정
             message.setText(messageBody);
 
@@ -438,3 +545,5 @@ public class pageController {
         }
     }
 }
+
+

@@ -79,7 +79,7 @@
         <button class="home-button" onclick="location.href='home.do'">Home</button>
 </div>
 <div class="container">
-  <form action="analysis_page.do" method="post">
+  <form action="analysis_page3.do" method="post">
     <select name="stock_code1">
         <option value="">Select Company 1</option>
         <c:forEach items="${list}" var="availableData">

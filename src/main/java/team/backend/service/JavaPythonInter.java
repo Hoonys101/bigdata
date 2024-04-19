@@ -15,9 +15,7 @@ public interface JavaPythonInter {
       첫번째 인자가 "diff_call_data"인 경우
       "diff_call_data",
       "first_stock_code",
-      "diff_stock_code",
       "second_stock_code",
-      "diff2_stock_code",
       "startdate","lastdate"를 인자로 호출*/
     String analysisData(List<String> correl);
 }

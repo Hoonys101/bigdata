@@ -25,5 +25,10 @@
         AND birth_date = #{birth_date}
         AND email = #{email}
     </select>
+    <select id="findUserByPwd" resultType="team.backend.domain.Member">
+        SELECT pwd FROM ID
+        WHERE user_name = #{user_name}
+        AND email = #{email}
+    </select>
 
 </mapper>
