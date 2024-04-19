@@ -1,4 +1,5 @@
 package team.backend.service;
+import lombok.Getter;
 import org.springframework.stereotype.Service;
 import java.io.*;
 import java.util.ArrayList;
@@ -6,47 +7,20 @@ import java.util.Collections;
 import java.util.List;
 @Service
 public class JavaPython implements JavaPythonInter {
-    private static Process pythonProcess;
+
+    @Getter
     private static BufferedReader br;
+
+    @Getter
     private static PrintWriter pw;
     private JavaPython(){
-    }
-//    public static Process getPythonProcess(){
-//        if(pythonProcess==null){
-//            try{
-//                pythonProcess=new ProcessBuilder("python", "src\\main\\java\\team\\backend\\service\\python\\controller.py").start();
-//                br = new BufferedReader(new InputStreamReader(pythonProcess.getInputStream(),"cp949"));
-//                pw= new PrintWriter(pythonProcess.getOutputStream());
-//            }catch(IOException ie){
-//                System.out.println("생성중 에러 발생 ie: "+ie);
-//            }
-//        }
-//        return pythonProcess;
-//    }
-    public static BufferedReader getBr(){
-        if(pythonProcess==null){
-            try{
-                pythonProcess=new ProcessBuilder("python", "src\\main\\java\\team\\backend\\service\\python\\controller.py").start();
-                br = new BufferedReader(new InputStreamReader(pythonProcess.getInputStream(),"cp949"));
-                pw= new PrintWriter(pythonProcess.getOutputStream());
-            }catch(IOException ie){
-                System.out.println("생성중 에러 발생 ie: "+ie);
-            }
+        try{
+            Process pythonProcess = new ProcessBuilder("python", "src\\main\\java\\team\\backend\\service\\python\\controller.py").start();
+            br = new BufferedReader(new InputStreamReader(pythonProcess.getInputStream(),"cp949"));
+            pw= new PrintWriter(pythonProcess.getOutputStream());
+        }catch(IOException ie){
+            System.out.println("생성중 에러 발생 ie: "+ie);
         }
-        return br;
-    }
-    public static PrintWriter getPw(){
-        if(pythonProcess==null){
-            try{
-                pythonProcess=new ProcessBuilder("python","src\\main\\java\\team\\backend\\service\\python\\controller.py").start();
-                br = new BufferedReader(new InputStreamReader(pythonProcess.getInputStream(),"cp949"));
-                pw= new PrintWriter(pythonProcess.getOutputStream());
-
-            }catch(IOException ie){
-                System.out.println("생성중 에러 발생 ie: "+ie);
-            }
-        }
-        return pw;
     }
 
     public static void main(String[] args){
@@ -54,7 +28,12 @@ public class JavaPython implements JavaPythonInter {
         JavaPython java = new JavaPython();
         System.out.println("find_period");
 
-        List<String> results=java.strParameter("find_period","054920","030520");
+
+        //List<String> results=java.strParameter("find_period","054920","030520");
+
+//        List<String> results=java.strParameter("find_period","023440","1153");
+        List<String> results=java.strParameter("diff_cal_data","023440","1153","20130101","20130501");
+
         System.out.println("result printing");
         for(String result:results){
             System.out.println(result);
@@ -62,6 +41,13 @@ public class JavaPython implements JavaPythonInter {
     }
     @Override
     public synchronized List<String> strParameter(String... args){
+        if (args[0].equals("diff_cal_data")&&(args.length==5)){
+            String resultString=args[0];
+            pln("strParam 첫번째 인자\n"+args[0]);
+            resultString=resultString+"\n"+args[1]+"\n"+"1001"+"\n"+args[2]+"\n"+"1001"+"\n"+args[3]+"\n"+args[4];
+            resultString=resultString+"\nEOF";
+            return cal_data(resultString);
+        }
         String resultString=args[0];
         pln("strParam 첫번째 인자\n"+args[0]);
         for(int i=1;i<args.length;i++){
@@ -75,19 +61,18 @@ public class JavaPython implements JavaPythonInter {
             //     pln(str);
             // }
             return result;
-        }else if(args[0].equals("cal_data")&&args.length==5){
+        }
+        if(args[0].equals("cal_data")&&args.length==5){
             List<String> result=cal_data(resultString);
             // for(String str : result) {
             //     pln(str);
             // }
             return result;
-        }else if (args[0].equals("diff_cal_data")&&args.length==9){
-            return cal_data(resultString);
-        }else if (args[0].equals("find_period")&&args.length==3){
-            return find_period(resultString);
-        }else{
-            return null;
         }
+        if (args[0].equals("find_period")&&args.length==3){
+            return find_period(resultString);
+        }
+        return null;
     }
     List<String> find_period(String data){
 
