@@ -6,16 +6,18 @@
 <meta charset="UTF-8">
 <title>데이터 선택</title>
 <style>
-body {
+  body {
     background-image: url("/img/data-analsis-tool-img-3-1030x644.png");
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
     margin: 0;
-    padding: 0;
-}
+    text-align: center; /* 수정된 부분: body의 텍스트를 가운데 정렬 */
+  }
 h2 {
     text-align: center;
-    margin-top: 100px;
+    margin-top: 50px;
 }
 form {
     max-width: 600px;
@@ -25,50 +27,51 @@ form {
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-select, button {
-    display: block;
-    width: calc(100% - 22px);
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
+select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
 }
 
 button {
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    cursor: pointer;
-    width: 200px;
-    margin: 0 auto; /* 수정된 부분: 가운데 정렬 */
-    display: block;
-    padding: 10px 20px;
-    border-radius: 5px;
-}
+  display: block;
+  width: 100%;
+  padding: 15px 30px;
+  margin-top: 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+} border-radius: 5px;
 .button:hover {
-            background-color: #0056b3; /* hover 시 색 변화 */
+  background-color: #0056b3; /* hover 시 색 변화 */
         }
-.home-button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    cursor: pointer;
-    margin: 30px auto 10px; /* 가운데 정렬 */
-    display: block; /* 블록 요소로 설정하여 가운데 정렬 */
-    transition: background-color 0.3s ease; /* hover 시 색 변화를 위한 transition 추가 */
-}
 
-.home-button:hover {
-    background-color: #0056b3; /* hover 시 색 변화 */
-}
+        .header {
+          text-align: center;
+          padding: 20px 0;
+          top: 0;
 
-.centered {
-    text-align: center;
-    margin-bottom: 20px;
-}
+          position: fixed;
+      }
+     .home-button {
+         background-color: #007bff;
+         color: #fff;
+         border: none;
+         border-radius: 5px;
+         padding: 10px 20px;
+         cursor: pointer;
+         transition: background-color 0.3s ease; /* hover 효과를 위한 transition */
+     }
+
+     .home-button:hover {
+         background-color: #0056b3; /* hover 시 색 변화 */
+     }
+
 </style>
 <!-- jQuery 라이브러리 추가 -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -142,10 +145,11 @@ function loadStockCodes() {
 </script>
 </head>
 <body>
-<div class="centered">
-<button class="home-button" onclick="location.href='home.do'">Home</button>
+<div class="header">
+        <button class="home-button" onclick="location.href='home.do'">Home</button>
+        <h2>기업추가</h2>
 </div>
-<h2>데이터 선택</h2>
+
 <form action="add2.do" method="post">
 <!-- 국가 선택 창 -->
 <select name="nation" id="nation" onchange="loadDBNames()">

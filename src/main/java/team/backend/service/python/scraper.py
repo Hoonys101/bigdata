@@ -151,7 +151,7 @@ def stock_data_all(db_name='sdfklj',stock_code='IBM'):
     #메인 쓰레드에서 대기
     for i in lst:
         i.join()
-        
+
 
 # add_data(['','Index','1008'])
 # add_data(['','SnP500','IBM'])

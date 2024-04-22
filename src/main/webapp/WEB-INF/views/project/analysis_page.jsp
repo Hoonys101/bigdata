@@ -65,7 +65,7 @@
       border-radius: 5px;
       padding: 10px 20px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+
 }
 
 
@@ -77,6 +77,7 @@
 <body>
 <div class="header">
         <button class="home-button" onclick="location.href='home.do'">Home</button>
+        <h2>기간분석</h2>
 </div>
 <div class="container">
   <form action="analysis_page.do" method="post">
