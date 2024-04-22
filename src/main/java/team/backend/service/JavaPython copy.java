@@ -10,7 +10,14 @@ public class JavaPython implements JavaPythonInter {
 
     @Getter
     private static BufferedReader br;
-
+    private static int currentIndex=0;
+    private static List<List<String>> results=null;
+    public static synchronized int assignIndex(){
+        if (currentIndex==10000){
+            currentIndex=0;
+        }
+        return currentIndex++;
+    }
     @Getter
     private static PrintWriter pw;
     private JavaPython(){
@@ -21,16 +28,15 @@ public class JavaPython implements JavaPythonInter {
         }catch(IOException ie){
             System.out.println("생성중 에러 발생 ie: "+ie);
         }
+        
+
     }
 
     public static void main(String[] args){
 
         JavaPython java = new JavaPython();
-        System.out.println("find_period");
-
-
+        // System.out.println("find_period");
         //List<String> results=java.strParameter("find_period","054920","030520");
-
 //        List<String> results=java.strParameter("find_period","023440","1153");
         List<String> results=java.strParameter("diff_cal_data","1152","1153","20130101","20130501");
 
@@ -39,6 +45,12 @@ public class JavaPython implements JavaPythonInter {
             System.out.println(result);
         }
     }
+
+    // 인자를 이름과 함께 파이썬으로 넘기는 메소드
+    // 이름과 함께 리스너에 등록하는 메소드
+    // 리스너의 전파에따라 결과값에서 자신의 결과를 찾고, 결과값에서 자신의 결과를 삭제하는 메소드
+    // 무한루프로, 파이썬의 결과값을 결과값에 저장하는 옵저버 객체 -> 결과값을 저장할 때마다, 등록된 리스너에 전파
+
     @Override
     public synchronized List<String> strParameter(String... args){
         if (args[0].equals("diff_cal_data")&&(args.length==5)){
@@ -231,5 +243,35 @@ public class JavaPython implements JavaPythonInter {
             result=result+"두 데이터는 4주 이상의 간격을 두고 전파되는 관계에 있습니다.\n";
         }
         return result;
+    }
+    class listener extends Thread{
+        public void run(){
+            // 파이썬 스크립트의 출력 읽어오기
+            List<String> result= new ArrayList<>();
+            while(ture){
+                String line;
+                try{
+        //            InputStream is = getIs();
+                    BufferedReader reader = getBr();
+                    pln("br획득");
+                    while ((line = reader.readLine()) != null) {
+                        pln("python add 출력: "+line);
+                        if (line.equals("EOF")){
+                            pln("연결을 끊습니다.");
+                            pln("명령어는 "+data);
+                            break;
+                        }
+        
+                        result.add(line);
+                    }
+        
+                    // 프로세스 종료
+                    pln("연결을 마칩니다.");
+                    results.add(result);
+                }catch(IOException ie){
+                    System.out.println("ie: "+ie);
+                }
+            }
+        }
     }
 }

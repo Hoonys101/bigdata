@@ -1,11 +1,10 @@
-import ATO as db
+import DAO as db
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import os
 import ai
 # import concurrent.futures
-
 #df 전체에 대해 1차 변화율과 2차 변화율을 추가
 def differ(df:pd.DataFrame,default='CLOSE')->pd.DataFrame:
     #Close 값을 기준으로 변화율 계산 및 새로운 열 추가
@@ -175,7 +174,7 @@ def cal_data(list,days=5):
     return result_list
 
 
-def delay_save(df1:pd.DataFrame,df2:pd.DataFrame,name,days:int=5):
+def delay_save(df1:pd.DataFrame,df2:pd.DataFrame,name,days:int=5)->str:
     result_list=[]
     startdate=df1.index[0].date()
     lastdate=df1.index[-1].date()
@@ -193,7 +192,9 @@ def delay_save(df1:pd.DataFrame,df2:pd.DataFrame,name,days:int=5):
 #        print(startdate.date(),"와 " ,lastdate.date(),"사이의 기간은 4주 이상의 간격으로 연동됩니다.\n max_corr: ",max_val)
     else:
 #        print(startdate.date(),"와 " ,lastdate.date(),'사이의 기간은 '+str(max_inde)+'주 간격으로 연동됩니다.\n max_corr: ',max_val)
-        print(str(startdate)+','+str(lastdate)+','+str(max_inde))
+# 결과에 출력
+#        print(str(startdate)+','+str(lastdate)+','+str(max_inde))
+        return str(startdate)+','+str(lastdate)+','+str(max_inde)
     
 def find_max_and_index(lst:list=[1,2,3,2,1])->tuple[int,int]:
     if not lst:  # 리스트가 비어있는 경우
@@ -265,7 +266,8 @@ def common_date(df1:pd.DataFrame,df2:pd.DataFrame)->tuple[pd.DataFrame,pd.DataFr
     return df1,df2
     
 # 1년을 4개월씩 분석
-def yearly(df1:pd.DataFrame,df2:pd.DataFrame,div:int=4,critic:float=0.7):
+def yearly(df1:pd.DataFrame,df2:pd.DataFrame,div:int=4,critic:float=0.7)->list:
+    result=[]
     for i in range(div):
         startdate=int(df1.shape[0]/div*i)
         lastdate=int(df1.shape[0]/div*(i+1))
@@ -273,7 +275,7 @@ def yearly(df1:pd.DataFrame,df2:pd.DataFrame,div:int=4,critic:float=0.7):
         if correlation>critic:
 #            print(df1.index[startdate].date(),"와 " ,df1.index[lastdate-1].date(), " 사이의 분기에 양의 상관관계")
 #            print("correlation: ",correlation)            
-            delay_save(df1[startdate:lastdate],df2[startdate:lastdate],str(startdate)+'_'+str(lastdate))
+            result.append(delay_save(df1[startdate:lastdate],df2[startdate:lastdate],str(startdate)+'_'+str(lastdate)))
 #        elif correlation<-critic:
 #            print(df1.index[startdate].date(),"와 ",df1.index[lastdate-1].date()," 사이의 분기에 음의 상관관계")
 #            print("correlation: ",correlation)
@@ -289,7 +291,8 @@ def total_analy(lst:list)->list:
     stock_code2=lst[2]
     return total_anal(stock_code1,stock_code2)
 # 10 년 전체를 년별 분석
-def total_anal(stock_code1:str='1008',stock_code2:str='IBM',yearly=yearly,default:str='CLOSE'):
+def total_anal(stock_code1:str='1008',stock_code2:str='IBM',yearly=yearly,default:str='CLOSE')->list:
+    result=[]
     df1=make_df(stock_code1)[default]
     df2=make_df(stock_code2)[default]
     df1,df2=common_date(df1,df2)
@@ -300,18 +303,19 @@ def total_anal(stock_code1:str='1008',stock_code2:str='IBM',yearly=yearly,defaul
         if correlation>0.5:
 #            print(df1.index[startdate].date(),"와 " ,df1.index[lastdate].date(), " 사이의 기간에 연간 양의 상관관계가 있습니다.")
 #            print("correlation: ",correlation)            
-            yearly(df1[startdate:lastdate],df2[startdate:lastdate])
+            result.append(yearly(df1[startdate:lastdate],df2[startdate:lastdate]))
             
         elif correlation<-0.5:
 #            print(df1.index[startdate].date(),"와 ",df1.index[lastdate].date()," 사이의 기간에 연간 음의 상관관계가 있습니다.")
 #            print("correlation: ",correlation)
-            yearly(df1[startdate:lastdate],df2[startdate:lastdate])
+            result.append(yearly(df1[startdate:lastdate],df2[startdate:lastdate]))
         else:
 #            print(df1.index[startdate-1].date(),"와 ",df1.index[lastdate-1].date()," 사이의 기간에 상관관계가 적습니다.")
 #            print("correlation: ",correlation)
-            yearly(df1[startdate:lastdate],df2[startdate:lastdate])
+            result.append(yearly(df1[startdate:lastdate],df2[startdate:lastdate]))
 
     # df1,df2=delay_df(df1,df2)
+    return result
 
 # df1=make_diff('1008')
 # df2=make_diff('IBM')
@@ -356,6 +360,6 @@ def normalNlabel(stock_code1:str='IBM',stock_code2:str='1008',default='CLOSE')->
                 result.iloc[startdate:lastdate,2]=max_inde
     return result
 
-ai.training(normalNlabel())
+# ai.training(normalNlabel())
 
 # ai.deep(normalNlabel())

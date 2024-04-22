@@ -227,8 +227,8 @@ public class pageController {
         db_name = db_name.split("\\s\\(")[0];
         addData.insertToAddition(id, stock_code);
         if (addData.getArchivedDataStockCode(stock_code).isEmpty()) {
-            //stock_code가 addition에 있는지 확인(id 무관)
-            //mapper 에서 addition에서 where stock_code=#stock_code인 조건으로 쿼리.
+            //stock_code가 archiveddata에 있는지 확인(id 무관)
+            //mapper 에서 archiveddata에서 where stock_code=#stock_code인 조건으로 쿼리.
             //쿼리 결과가 list length가 0 인 경우 체크
             System.out.println("python add_data 호출, db_name: " + db_name + ", stock_code: " + stock_code);
 
