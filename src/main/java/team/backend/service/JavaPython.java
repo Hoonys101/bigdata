@@ -32,22 +32,26 @@ public class JavaPython implements JavaPythonInter {
         //List<String> results=java.strParameter("find_period","054920","030520");
 
 //        List<String> results=java.strParameter("find_period","023440","1153");
-        List<String> results=java.strParameter("diff_cal_data","1152","1153","20130101","20130501");
+
+        List<String> results=java.strParameter("diff_cal_data","045340","1001","041020","1001","20130101","20130501");
 
         System.out.println("result printing");
         for(String result:results){
-            System.out.println(result);
+            System.out.println("results"+result);
         }
     }
+
     @Override
     public synchronized List<String> strParameter(String... args){
-        if (args[0].equals("diff_cal_data")&&(args.length==5)){
+        if (args[0].equals("diff_cal_data")&&(args.length==7)){
             String resultString=args[0];
             pln("strParam 첫번째 인자\n"+args[0]);
-            resultString=resultString+"\n"+args[1]+"\n"+"1001"+"\n"+args[2]+"\n"+"1001"+"\n"+args[3]+"\n"+args[4];
+            resultString=resultString+"\n"+args[1]+"\n"+args[3]+"\n"+args[2]+"\n"+args[3]+"\n"+args[5]+"\n"+args[6];
             resultString=resultString+"\nEOF";
+
             return cal_data(resultString);
         }
+
         String resultString=args[0];
         pln("strParam 첫번째 인자\n"+args[0]);
         for(int i=1;i<args.length;i++){
