@@ -134,7 +134,7 @@ def diff_cal_data(list,days=5):
     result_list=[]
     filename_list=[]
     for i in range(5):
-        filename=first_com+'_'+second_com+'_'+startdate+'_'+lastdate+'_'+str(i)+'.png'
+        filename=first_com+'_'+diff1_com+'_'+startdate+'_'+lastdate+'_'+str(i)+'.png'
         result_list.append(saveplot(df1,df2,filename)) # save 및 파일명 저장
         df1,df2=delay_df(df1,df2,days)
         filename_list.append(filename)
@@ -356,6 +356,6 @@ def normalNlabel(stock_code1:str='IBM',stock_code2:str='1008',default='CLOSE')->
                 result.iloc[startdate:lastdate,2]=max_inde
     return result
 
-ai.training(normalNlabel())
+#ai.training(normalNlabel())
 
 # ai.deep(normalNlabel())
