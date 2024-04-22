@@ -78,7 +78,7 @@
 <div class="header">
         <button class="home-button" onclick="location.href='home.do'">Home</button>
 
-        <h2>분기분석</h2>
+        <h2>제외분석</h2>
 </div>
 <div class="container">
   <form action="analysis_page3.do" method="post">
