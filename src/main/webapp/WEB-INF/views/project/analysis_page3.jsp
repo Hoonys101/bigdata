@@ -77,6 +77,8 @@
 <body>
 <div class="header">
         <button class="home-button" onclick="location.href='home.do'">Home</button>
+
+        <h2>분기분석</h2>
 </div>
 <div class="container">
   <form action="analysis_page3.do" method="post">
@@ -97,6 +99,14 @@
                 </option>
             </c:forEach>
         </select>
+        <select name="stock_code3">
+                    <option value="">Excluded companies</option>
+                    <c:forEach items="${list}" var="availableData">
+                        <option value="${availableData.stock_code}"">
+                            ${availableData.nation}, ${availableData.db_name}, ${availableData.sector}, ${availableData.name}
+                        </option>
+                    </c:forEach>
+                </select>
 
   <section style="text-align: center; color: black;">
     <h2>날짜 선택</h2>

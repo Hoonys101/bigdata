@@ -59,7 +59,7 @@
         <button class="home-button" onclick="location.href='home.do'">Home</button>
         </div>
         <div class="container">
-                <h2 style="text-align: center;">History</h2>
+                <h2 style="text-align: center;">히스토리</h2>
          </div>
 
         <table>

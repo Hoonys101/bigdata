@@ -1,114 +1,154 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
-    <title>분석 결과 리포트</title>
-    <style>
-      body {
-        background-color: white;
-        text-align: right;
-      }
-      .inline-img {
-        display: inline-block;
-        margin-right: -10px;
-      }
+
+
+
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>기업 및 시각화</title>
+</head>
+<style>
+  body {
+    background-image: url("/img/data-analsis-tool-img-3-1030x644.png");
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    text-align: center; /* 수정된 부분: body의 텍스트를 가운데 정렬 */
+    
+  }
+  /* 추가된 스타일 */
+  .container {
+    margin: 0 auto;
+    margin-top: 50px;
+    max-width: 600px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  select {
+    width: 50%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+
+  button {
+    display: block;
+    width: 50%; /* 버튼의 너비를 50%로 설정합니다 */
+    padding: 15px 30px;
+    margin: 20px auto 0; /* 위쪽 여백을 20px로 설정하고 수평 중앙 정렬합니다 */
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+  .button-container {
+    margin-top: 20px;
+  }
+  .header {
+       text-align: center;
+       padding: 20px 0;
+       top: 0;
+
+       position: fixed;
+   }
+  .home-button {
+   background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100px;
+}
+
+
+  .home-button:hover {
+      background-color: #0056b3; /* hover 시 색 변화 */
+  }
     </style>
-    <script src="https://code.jquery.com/jquery-latest.js"></script>
-    <script
-      type="text/javascript"
-      src="https://www.gstatic.com/charts/loader.js"
-    ></script>
-  </head>
-  <body>
-    <div
-      style="
-        font-size: 18px;
-        font-weight: bold;
-        color: #333;
-        text-align: center;
-      "
-    >
-      결과값 : "두 데이터는 1주의 간격을 두고 전파되는 관계에 있습니다. "
-    </div>
-    <div style="width: 5%" class="inline-img"></div>
-    <div>
-      <img
-        src="http://127.0.0.1:8080/img/plots/023440_1153_20210929_20211228_0.png"
-        alt="그래프"
-        class="inline-img"
-        style="max-width: 20%; height: 350px"
-      />
+<body>
+<div class="header">
+        <button class="home-button" onclick="location.href='home.do'">Home</button>
+        <h2>제외 분석</h2>
+</div>
 
-      <img
-        src="http://127.0.0.1:8080/img/plots/023440_1153_20210929_20211228_1.png"
-        alt="그래프"
-        class="inline-img"
-        style="max-width: 20%; height: 350px"
-      />
+<form action="analysis_page2.do" method="post">
+    <select name="stock_code1">
+        <option value="">Select Company 1</option>
+        
+            <option value="054920">
+                KR, KOSDAQ, 소프트웨어 개발 및 공급업, 한컴위드
+                
+            </option>
+        
+            <option value="030520">
+                KR, KOSDAQ, 소프트웨어 개발 및 공급업, 한글과컴퓨터
+                
+            </option>
+        
+            <option value="1001">
+                KR, Index, KOSPI, 코스피
+                
+            </option>
+        
+            <option value="041020">
+                KR, KOSDAQ, 소프트웨어 개발 및 공급업, 폴라리스오피스
+                
+            </option>
+        
+            <option value="025750">
+                KR, KOSPI, 제재 및 목재 가공업, 한솔홈데코
+                
+            </option>
+        
+            <option value="006380">
+                KR, KOSPI, 기초 화학물질 제조업, 카프로
+                
+            </option>
+        
+    </select>
+    <select name="stock_code2">
+            <option value="">Select Company 2</option>
+            
+                <option value="054920"">
+                    KR, KOSDAQ, 소프트웨어 개발 및 공급업, 한컴위드
+                </option>
+            
+                <option value="030520"">
+                    KR, KOSDAQ, 소프트웨어 개발 및 공급업, 한글과컴퓨터
+                </option>
+            
+                <option value="1001"">
+                    KR, Index, KOSPI, 코스피
+                </option>
+            
+                <option value="041020"">
+                    KR, KOSDAQ, 소프트웨어 개발 및 공급업, 폴라리스오피스
+                </option>
+            
+                <option value="025750"">
+                    KR, KOSPI, 제재 및 목재 가공업, 한솔홈데코
+                </option>
+            
+                <option value="006380"">
+                    KR, KOSPI, 기초 화학물질 제조업, 카프로
+                </option>
+            
+        </select>
+        <div class="#">
+            <button onclick="window.location.href='chart.do'">적용</button>
+          </div>
+        </div>
+        </form>
 
-      <img
-        src="http://127.0.0.1:8080/img/plots/023440_1153_20210929_20211228_2.png"
-        alt="그래프"
-        class="inline-img"
-        style="max-width: 20%; height: 350px"
-      />
-
-      <img
-        src="http://127.0.0.1:8080/img/plots/023440_1153_20210929_20211228_3.png"
-        alt="그래프"
-        class="inline-img"
-        style="max-width: 20%; height: 350px"
-      />
-
-      <img
-        src="http://127.0.0.1:8080/img/plots/023440_1153_20210929_20211228_4.png"
-        alt="그래프"
-        class="inline-img"
-        style="max-width: 20%; height: 350px"
-      />
-    </div>
-    <script type="text/javascript">
-      var dataArray = [
-        ['weeks', 'correlation'],
-
-        ['0', 0.7139],
-
-        ['1', 0.8119],
-
-        ['2', 0.7891],
-
-        ['3', 0.587],
-
-        ['4', 0.2438],
-      ];
-      // Google Charts API 초기화
-      google.charts.load('current', { packages: ['corechart'] });
-      google.charts.setOnLoadCallback(drawChart);
-
-      // 차트를 그리는 함수
-      function drawChart() {
-        // 데이터 생성
-        var data = google.visualization.arrayToDataTable(dataArray);
-
-        // 옵션 설정
-        var options = {
-          title: '분석결과',
-          curveType: 'function',
-          legend: { position: 'bottom' },
-        };
-
-        // 차트 생성 및 그리기
-        var chart = new google.visualization.LineChart(
-          document.getElementById('chart_div')
-        );
-        chart.draw(data, options);
-      }
-    </script>
-
-    <!-- 그래프가 표시될 div 요소 -->
-    <div
-      id="chart_div"
-      style="width: 125%; height: 400px; position: relative; left: -9%"
-    ></div>
-  </body>
+</body>
 </html>
