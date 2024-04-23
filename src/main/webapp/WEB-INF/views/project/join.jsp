@@ -41,41 +41,72 @@
                 }
     </style>
      <script>
-            function validateForm() {
-                var id = document.getElementById("id").value;
-                var pwd = document.getElementById("pwd").value;
-                var userName = document.getElementById("user_name").value;
-                var email = document.getElementById("email").value;
-                var birthDate = document.getElementById("birth_date").value;
-                var gender = document.querySelector('input[name="gender"]:checked');
+        function validateForm() {
+            var id = document.getElementById("id").value;
+            var pwd = document.getElementById("pwd").value;
+            var userName = document.getElementById("user_name").value;
+            var email = document.getElementById("email").value;
+            var birthDate = document.getElementById("birth_date").value;
+            var gender = document.querySelector('input[name="gender"]:checked');
 
-                if (id === "") {
-                    alert("아이디를 입력하세요.");
-                    return false;
-                }
-                if (pwd === "") {
-                    alert("비밀번호를 입력하세요.");
-                    return false;
-                }
-                if (userName === "") {
-                    alert("이름을 입력하세요.");
-                    return false;
-                }
-                if (email === "") {
-                    alert("이메일을 입력하세요.");
-                    return false;
-                }
-                if (birthDate === "") {
-                    alert("생년월일을 입력하세요.");
-                    return false;
-                }
-                if (!gender) {
-                    alert("성별을 입력하세요.");
-                    return false;
-                }
-                return true;
+            if (id === "") {
+                alert("아이디를 입력하세요.");
+                return false;
             }
-        </script>
+            if (pwd === "") {
+                alert("비밀번호를 입력하세요.");
+                return false;
+            }
+            if (userName === "") {
+                alert("이름을 입력하세요.");
+                return false;
+            }
+            if (email === "") {
+                alert("이메일을 입력하세요.");
+                return false;
+            }
+            if (birthDate === "") {
+                alert("생년월일을 입력하세요.");
+                return false;
+            }
+            if (!gender) {
+                alert("성별을 입력하세요.");
+                return false;
+            }
+            return true;
+        }
+
+        // 회원가입 성공 시 메시지 창을 띄우는 함수
+        function showSuccessMessage() {
+            alert("회원가입이 성공적으로 완료되었습니다!");
+                    window.location.href = "home.do";
+        }
+
+        // 폼 서브밋 이벤트를 감지하여 처리
+        document.querySelector("form").addEventListener("submit", function(event) {
+                // 폼이 실제로 제출되지 않도록 기본 이벤트를 중지
+                event.preventDefault();
+
+                // 여기서 서버로 폼 데이터를 전송하고, 응답을 처리한다고 가정
+                var formData = new FormData(document.querySelector("form"));
+                fetch("join.do", {
+                    method: "POST",
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("회원가입이 성공적으로 완료되었습니다!");
+                        window.location.href = "home.do"; // 회원가입 성공 시 home.do로 리다이렉트
+                    } else {
+                        alert(data.message); // 서버에서 받은 실패 메시지 표시
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+
+    </script>
 </head>
 <body>
 <div>
@@ -101,29 +132,6 @@
                 <th class="join-th"><label for="email">Email</label></th>
                 <td><input type="text" id="email" name="email"></td>
             </tr>
-            <%--<tr class="join-tr">
-                <th class="join-th"><label for="birth_date">생년월일</label></th>
-                <td>
-                    <select id="birth_year" name="birthYear">
-                        <!-- 생년월일 연도 옵션 추가 -->
-                        <% for (int year = 1925; year <= 2025; year++) { %>
-                            <option value="<%= year %>"><%= year %></option>
-                        <% } %>
-                    </select> 년
-                    <select id="birth_month" name="birthMonth">
-                        <!-- 생년월일 월 옵션 추가 -->
-                        <% for (int month = 1; month <= 12; month++) { %>
-                            <option value="<%= String.format("%02d", month) %>"><%= String.format("%02d", month) %></option>
-                        <% } %>
-                    </select> 월
-                    <select id="birth_date" name="birthDate">
-                        <!-- 생년월일 일 옵션 추가 -->
-                        <% for (int date = 1; date <= 31; date++) { %>
-                            <option value="<%= String.format("%02d", date) %>"><%= String.format("%02d", date) %></option>
-                        <% } %>
-                    </select> 일
-                </td>
-            </tr>--%>
             <tr class="join-tr">
                 <th class="join-th"><label for="birth_date">생년월일</label></th>
                 <td><input type="date" id="birth_date" name="birth_date"></td>
@@ -137,47 +145,22 @@
                     <label for="female">여성</label>
                 </td>
             </tr>
-            <tr class="join-tr">
-                <th class="join-th"><label for="signup_date">가입일자</label></th>
-
-                <td><input type="text" id="signup_date" name="signup_date" readonly style="border: none;"></td>
-            <script>
-                // 현재 날짜를 가져오는 함수
-                function getCurrentDate() {
-                    var now = new Date();
-                    var year = now.getFullYear();
-                    var month = String(now.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1 필요
-                    var day = String(now.getDate()).padStart(2, '0');
-                    return year + '-' + month + '-' + day;
-                }
-
-                // 페이지가 로드될 때 실행되는 함수
-                window.onload = function() {
-                    // 현재 날짜를 가져와서 입력 필드에 설정
-                    document.getElementById('signup_date').value = getCurrentDate();
-                };
-            </script>
-<%--
-                <td><input type="date" id="signup_date" name="signup_date" value="<%= dto.getSignup_date() %>"></td>
-            </tr>
->>>>>>> sim
---%>
         </table>
          <c:if test="${not empty error}">
-                     <div class="error-box">
-                         <p class="error-message">${error}</p>
-                     </div>
-                 </c:if>
+             <div class="error-box">
+                 <p class="error-message">${error}</p>
+             </div>
+         </c:if>
         <div class="foot">
             <button type="button" class="btn-cancel" onclick="goBack()">취소</button>
-            <button type="submit" class="btn-join">회원가입</button>
+            <button type="submit" onclick="showSuccessMessage()" class="btn-join">회원가입</button>
         </div>
     </form>
 </div>
 <script>
-        function goBack() {
-            window.history.back();
-        }
-    </script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
 </body>
 </html>

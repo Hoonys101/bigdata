@@ -32,7 +32,7 @@ public class JavaPython implements JavaPythonInter {
         //List<String> results=java.strParameter("find_period","054920","030520");
 
 //        List<String> results=java.strParameter("find_period","023440","1153");
-        List<String> results=java.strParameter("diff_cal_data","045340","1001","041020","1001","20130101","20130501");
+        List<String> results=java.strParameter("diff_cal_data","041020","1001","025750","1001","20130101","20130501");
 
         System.out.println("result printing");
         for(String result:results){
@@ -45,7 +45,7 @@ public class JavaPython implements JavaPythonInter {
         if (args[0].equals("diff_cal_data")&&(args.length==7)){
             String resultString=args[0];
             pln("strParam 첫번째 인자\n"+args[0]);
-            resultString=resultString+"\n"+args[1]+"\n"+args[3]+"\n"+args[2]+"\n"+args[3]+"\n"+args[5]+"\n"+args[6];
+            resultString=resultString+"\n"+args[1]+"\n"+args[2]+"\n"+args[3]+"\n"+args[4]+"\n"+args[5]+"\n"+args[6];
             resultString=resultString+"\nEOF";
             System.out.println("resultString"+resultString);
             System.out.println("2"+args[1]+"\n"+args[3]+"\n"+args[2]+"\n"+args[3]+"\n"+args[4]+"\n"+args[5]);
@@ -77,8 +77,11 @@ public class JavaPython implements JavaPythonInter {
         if (args[0].equals("find_period")&&args.length==3){
             return find_period(resultString);
         }
+
         return null;
     }
+
+
     List<String> find_period(String data){
 
         // 파이썬 스크립트 실행
