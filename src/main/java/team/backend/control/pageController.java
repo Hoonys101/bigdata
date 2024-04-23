@@ -370,7 +370,7 @@ public class pageController {
         dataList2.add(new String[]{"0", result2.get(0)});
         dataList2.add(new String[]{"1", result2.get(1)});
         dataList2.add(new String[]{"2", result2.get(2)});
-        dataList2.add(new String[]{"3", result2.get(3)});
+       dataList2.add(new String[]{"3", result2.get(3)});
         dataList2.add(new String[]{"4", result2.get(4)});
         model.addAttribute("company1", company1);
         model.addAttribute("company2", company2);
@@ -409,6 +409,12 @@ public class pageController {
         String id = (String) session.getAttribute("id");
         List<String> result1 = javaPy.strParameter("find_period", stock_code1, stock_code2);
         List<String> result2 = javaPy.strParameter("find_period", stock_code2, stock_code1);
+        List<String> ai_1 = javaPy.strParameter("tree_data",stock_code1,stock_code2);
+        List<String> ai_2 = javaPy.strParameter("tree_data",stock_code2,stock_code1);
+        System.out.println("result1"+ result1);
+        System.out.println("result2"+ result2);
+        System.out.println("ai_1"+ ai_1);
+        System.out.println("ai_2"+ ai_2);
         System.out.println("result1"+result1);
 
         List<ServiceUsage> serviceUsages1 = new ArrayList<>();
@@ -426,7 +432,7 @@ public class pageController {
                 serviceUsage.setEnd_date(resultArray[1]);
                 serviceUsage.setReport(resultArray[2]);
 
-                double reportValue = Double.parseDouble(resultArray[2]);
+                int reportValue = Integer.parseInt(resultArray[2]);
                 if (reportValue >= 1 && reportValue <= 5) {
                     // 1~4 사이의 값이라면 그대로 사용
                     serviceUsage.setReport(String.valueOf(reportValue));
@@ -466,6 +472,10 @@ public class pageController {
 
         System.out.println("result1: " + result1);
         System.out.println("result2: " + result2);
+        model.addAttribute("ai_1", ai_1);
+        model.addAttribute("ai_2", ai_2);
+        model.addAttribute("company1", company1);
+        model.addAttribute("company1", company1);
         model.addAttribute("company1", company1);
         model.addAttribute("company2", company2);
         model.addAttribute("serviceUsages1", serviceUsages1);
@@ -554,7 +564,11 @@ public class pageController {
         dataList2.add(new String[]{"2", result2.get(2)});
         dataList2.add(new String[]{"3", result2.get(3)});
         dataList2.add(new String[]{"4", result2.get(4)});
+        String company1 = addData.getCompany1(stock_code1);
+        String company2 = addData.getCompany1(stock_code2);
 
+        model.addAttribute("company1", company1);
+        model.addAttribute("company2", company2);
         model.addAttribute("dataList", dataList);
         model.addAttribute("dataList2", dataList2);
         model.addAttribute("report", report);

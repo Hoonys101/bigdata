@@ -36,17 +36,21 @@
       font-size: 16px;
     }
 
-    button {
-      display: block;
-      width: 100%;
-      padding: 15px 30px;
-      margin-top: 20px;
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
+    .button-apply {
+          display: block;
+          width: 100%;
+          padding: 15px 30px;
+          margin: 20px auto 0;
+          background-color: #007bff;
+          color: #fff;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+      }
+
+      .button-apply:hover {
+          background-color: #0056b3;
+      }
 
     .button-container {
       margin-top: 20px;
@@ -80,7 +84,7 @@
         <h2>기간분석</h2>
 </div>
 <div class="container">
-  <form action="analysis_page.do" method="post">
+  <form action="analysis_page.do" method="post" onsubmit="return validateAndSubmit();">
     <select name="stock_code1">
         <option value="">Select Company 1</option>
         <c:forEach items="${list}" var="availableData">
@@ -110,9 +114,9 @@
       <input type="date" id="end_date" name="end_date" min="2012-01-01" max="2022-01-01">
     </div>
   </section>
-  <div class="button-container">
-    <button onclick="window.location.href='chart.do'">적용</button>
-  </div>
+   <div class="button-container">
+                <input type="submit" class="button-apply" value="적용">
+    </div>
 </div>
 </form>
 <script>
@@ -138,6 +142,21 @@ function setEndDateMin() {
   // 종료 날짜의 최소값 설정
   endDateInput.min = endDateMin;
 }
+function validateAndSubmit() {
+                var stockCode1 = document.getElementsByName("stock_code1")[0].value;
+                var stockCode2 = document.getElementsByName("stock_code2")[0].value;
+                var startDate = document.getElementById("start_date").value;
+                var endDate = document.getElementById("end_date").value;
+
+                // 기업 또는 날짜 중 하나라도 입력되지 않았을 경우 경고 메시지를 표시합니다.
+                if (stockCode1 === "" || stockCode2 === "" ||  startDate === "" || endDate === "") {
+                    alert("기업 또는 날짜를 입력해주세요.");
+                    return false; // 폼을 제출하지 않도록 false를 반환합니다.
+                } else {
+                    // 폼을 제출합니다.
+                    return true;
+                }
+            }
 </script>
 
 </body>
