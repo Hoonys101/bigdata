@@ -14,7 +14,7 @@ public class JavaPython implements JavaPythonInter {
     private static BufferedReader br;
     private static Process pythonProcess;
     private int currentIndex=0;
-    private List<List<String>> results=new ArrayList<>();
+    private List<List<String>> results=new ArrayList<List<String>>();
 //    private static ThreadLocal<List<String>> threadResult= new ThreadLocal<>();
     private ThreadLocal<Object> lock=new ThreadLocal<>();
     public synchronized int assignIndex(){
@@ -30,6 +30,9 @@ public class JavaPython implements JavaPythonInter {
             pythonProcess = new ProcessBuilder("python", "src\\main\\java\\team\\backend\\service\\python\\controller.py").start();
             br = new BufferedReader(new InputStreamReader(pythonProcess.getInputStream(),"cp949"));
             pw= new PrintWriter(pythonProcess.getOutputStream());
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                JavaPython.pythonProcess.destroy();
+            }));
         }catch(IOException ie){
             System.out.println("생성중 에러 발생 ie: "+ie);
         }
@@ -41,15 +44,18 @@ public class JavaPython implements JavaPythonInter {
     public static void main(String[] args){
 
         JavaPython java = new JavaPython();
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            JavaPython.pythonProcess.destroy();
-        }));
         // System.out.println("find_period");
 //        List<String> results=java.strParameter("add_data","Index","1001");
 //        List<String> results=java.strParameter("find_period","1152","1153");
 //        List<String> results=java.strParameter("diff_cal_data","1152","1008","1153","1008","20130101","20130501");
-//        List<String> results=java.strParameter("cal_data","1152","1153","20130101","20130501");
-        List<String> results=java.strParameter("tree_data","1152","1153");
+        List<String> results=java.strParameter("cal_data","1152","1153","20130101","20130501");
+//        List<String> results=java.strParameter("tree_data","1152","1153");
+        System.out.println("result printing");
+        for(String result:results){
+            System.out.println(result);
+        }
+        results=java.strParameter("cal_data","1153","1152","20130101","20130501");
+//        List<String> results=java.strParameter("tree_data","1152","1153");
         System.out.println("result printing");
         for(String result:results){
             System.out.println(result);
@@ -62,7 +68,7 @@ public class JavaPython implements JavaPythonInter {
     // 무한루프로, 파이썬의 결과값을 결과값에 저장하는 옵저버 객체 -> 결과값을 저장할 때마다, 등록된 리스너에 전파
 
     //results 중 자신의 답을 찾고, 프로세스 재개하는 리스너
-    private void findResult(String threadName,Consumer<String> listener,Object lock){
+    private void findResult(String threadName, Consumer<String> listener, Object lock){
         for(List<String> result:results){
             pln("결과값들에서 맞는 결과값을 찾습니다.찾는 thread이름은 "+threadName);
             pln("결과 중 이번 결과의 thread이름은 "+ result.get(0) );
@@ -81,12 +87,14 @@ public class JavaPython implements JavaPythonInter {
     //옵저버
     class Listen implements Consumer<String> {
         private final Object lock;
-        Listen(Object lock){
+        private final String threadName;
+        Listen(Object lock,String threadName){
             this.lock=lock;
+            this.threadName=threadName;
         }
         @Override
-        public void accept(String threadName) {
-            findResult(threadName, this,lock);
+        public void accept(String resultFirst) {
+            findResult(this.threadName, this,lock);
         }
     }
     private synchronized void toPython(String data){
@@ -116,7 +124,7 @@ public class JavaPython implements JavaPythonInter {
         else{
             pln("인자의 수 또는 종류가 다릅니다.");
         }
-        Listener.addListener(new Listen(lock.get()));
+        Listener.addListener(new Listen(lock.get(),threadName));
         pln("리스너 등록");
         synchronized (lock.get()){
 
@@ -124,10 +132,10 @@ public class JavaPython implements JavaPythonInter {
                 pln("기다리기시작");
                 lock.get().wait();
                 pln("찾기");
-                for(List<String> result:results){
-                    if(result.get(0).equals(threadName)){
-                        finalresult=result;
-                        results.remove(result);
+                for(int i=0;i<results.size();i++){
+                    if(results.get(i).get(0).equals(threadName)){
+                        finalresult=results.get(i);
+                        results.remove(i);
                         break;
                     }
                 }
@@ -183,14 +191,16 @@ public class JavaPython implements JavaPythonInter {
         public void run(){
             pln("파이썬 데이터 출력 준비");
             // 파이썬 스크립트의 출력 읽어오기
-            List<String> result= new ArrayList<>();
+
             while(true){
+                List<String> result= new ArrayList<>();
                 String line;
                 try{
         //            InputStream is = getIs();
                     BufferedReader reader = getBr();
                     pln("br획득");
                     while ((line = reader.readLine()) != null) {
+
 //                        pln("python 출력: "+line);
                         if (line.equals("EOF")){
                             pln("연결을 끊습니다.");
@@ -203,8 +213,14 @@ public class JavaPython implements JavaPythonInter {
                     // 프로세스 종료
                     pln("연결을 마칩니다.");
                     results.add(result);
-                    pln("전체 출력값은 :");
-                    result.forEach(System.out::println);
+                    pln("전체 출력값은 :(results사이즈)");
+                    for(List<String> resultEach:results){
+                        pln("결과 출력");
+                        for(String resultline:resultEach){
+                            pln(resultline);
+                        }
+                        pln("result사이즈: "+results.size());
+                    }
                 }catch(IOException ie){
                     System.out.println("ie: "+ie);
                 }
