@@ -3,6 +3,7 @@ import ATO as db
 import datetime as time
 import pandas as pd
 from pykrx import stock
+import scraper as scr
 
 strs=['KRX-DESC', 'S&P500','KRX/INDEX/list'] #for stacklisting 'KRX', 'NASDAQ', 'NYSE', 'AMEX' 제외
 kr_index=['KS11','KQ11','KS50','KS100','KRX100','KS200']#for DataReader
@@ -98,6 +99,8 @@ def save_data():
     db.close_connection(connection)
 
 save_data()
+scr.add_data(['','Index','1001'])
+
 # 시작 날짜, 끝 날짜를 8자리 str으로 받고, 검색 대상을 str으로 받아서(한국주식은 6자리 코드) df로 반환
 
 # 8자리 날짜 str을 datetime으로 반환

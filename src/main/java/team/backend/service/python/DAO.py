@@ -130,12 +130,12 @@ def create_table_from_dataframe(connection, df, table_name):
                 create_table_query += f"\"{column}\" VARCHAR2(255), "  # 기본적으로 VARCHAR2(255)로 생성
 
         create_table_query = create_table_query[:-2] + ")"  # 마지막 쉼표 제거
-        print("쿼리문은 "+create_table_query)
+        #print("쿼리문은 "+create_table_query)
         cursor.execute(create_table_query)
 
         # 변경사항 커밋
         connection.commit()
-        print(f"{table_name} 테이블 생성 완료")
+        #print(f"{table_name} 테이블 생성 완료")
 
         # DataFrame의 인덱스를 다시 설정
         if 'Date' in df.columns:
@@ -167,11 +167,13 @@ def insert_data_to_table(connection,df, table_name='ArchivedData'):
 
         # 변경사항 커밋
         connection.commit()
-        print(f"{len(df)}건의 데이터를 {table_name} 테이블에 입력 완료")
-
+        #print(f"{len(df)}건의 데이터를 {table_name} 테이블에 입력 완료")
+        
         # DataFrame의 인덱스를 다시 설정
         if 'data_date' in df.columns:
             df.set_index('data_date', inplace=True)
+            
+        return f"{len(df)}건의 데이터를 {table_name} 테이블에 입력 완료"
 
     except Exception as e:
         print(f"데이터 입력 중 오류 발생: {e}")
@@ -193,12 +195,12 @@ def insert_data_menu_to_table(connection,df, table_name):
         insert_query = f"INSERT INTO {table_name} VALUES ("
         for _, row in df.iterrows():
             values = ", ".join([format_value(value) for value in row])
-            print(insert_query + values + ")")
+            #print(insert_query + values + ")")
             cursor.execute(insert_query + values + ")")
 
         # 변경사항 커밋
         connection.commit()
-        print(f"{len(df)}건의 데이터를 {table_name} 테이블에 입력 완료")
+        #print(f"{len(df)}건의 데이터를 {table_name} 테이블에 입력 완료")
 
         # DataFrame의 인덱스를 다시 설정
         if 'Date' in df.columns:
