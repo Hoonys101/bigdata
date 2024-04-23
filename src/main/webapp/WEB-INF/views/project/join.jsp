@@ -7,23 +7,93 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Homework1</title>
-    <link rel="stylesheet" type="text/css" href="/css/app.css">
+
     <style>
+        .form-wrap {
+            width: 400px;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 제목 스타일 */
         .join-title {
             text-align: center;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
         }
+
+        /* 테이블 스타일 */
+        .join-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .join-th, .join-td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        /* 입력 필드 스타일 */
+        .join-table input[type="text"],
+        .join-table input[type="password"],
+        .join-table input[type="date"] {
+            width: calc(100% - 20px);
+            padding: 8px;
+            margin: 6px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        /* 성별 입력 스타일 */
+        .join-table input[type="radio"] {
+            margin-right: 5px;
+        }
+
+        /* 오류 메시지 스타일 */
+        .error-box {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .error-message {
+            margin: 0;
+        }
+
+        /* 버튼 스타일 */
+        .btn-cancel,
+        .btn-join {
+            color: #fff;
+            text-align: center;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
         .btn-cancel {
-            background-color: #f44336; /* 배경색 */
-            color: white; /* 텍스트 색상 */
-            padding: 10px 20px; /* 내부 여백 */
-            border: none; /* 테두리 없음 */
-            border-radius: 5px; /* 테두리 둥글게 */
-            cursor: pointer; /* 커서 모양 */
-            transition: background-color 0.3s; /* 배경색 변경 시 부드러운 애니메이션 적용 */
+            background-color: #6c757d;
+        }
+
+        .btn-join {
+            background-color: #007bff;
         }
 
         .btn-cancel:hover {
-            background-color: #d32f2f; /* 호버시 배경색 변경 */
+            background-color: #5a6268;
+        }
+
+        .btn-join:hover {
+            background-color: #0056b3;
         }
         .error-box {
                     background-color: #ffebee; /* 배경색 */
@@ -39,6 +109,30 @@
                     margin: 0; /* 마진 초기화 */
                     font-size: 14px; /* 폰트 크기 */
                 }
+                .foot {
+                    text-align: center; /* 가운데 정렬 */
+                }
+                .header {
+                         text-align: center;
+                         padding: 20px 0;
+                         top: 0;
+
+                         
+                     }
+                    .home-button {
+                     background-color: #007bff;
+                      color: #fff;
+                      border: none;
+                      border-radius: 5px;
+                      padding: 10px 20px;
+                      cursor: pointer;
+
+                }
+
+
+                    .home-button:hover {
+                        background-color: #0056b3; /* hover 시 색 변화 */
+                    }
     </style>
      <script>
         function validateForm() {
@@ -109,6 +203,10 @@
     </script>
 </head>
 <body>
+<div class="header">
+        <button class="home-button" onclick="location.href='home.do'">Home</button>
+
+</div>
 <div>
     <h1 class="join-title">회원가입</h1>
 </div>

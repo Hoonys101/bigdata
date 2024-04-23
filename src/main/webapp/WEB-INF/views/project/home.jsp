@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-Vydh3tL5HYuJyxCCPpflS68BikTc0sQwtLsXG0zwR2KbdqPJTlFz8nIG4ZMbZIzZtFZ6MqCWcY7WpK6dckfz9w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>홈페이지</title>
@@ -26,17 +27,24 @@
     background-image: url("/img/1602.png"); /* 배경 이미지 설정 */
     background-size: cover; /* 배경 이미지를 컨테이너에 맞게 조정 */
     background-position: center; /* 배경 이미지를 가운데 정렬 */
+
   }
 
 
   footer {
-    background-color: #333;
-    color: #fff;
-    padding: 10px;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    text-align: center;
+      background-color: #555;
+      color: #fff;
+      padding: 15px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      text-align: center;
+      font-family: Arial, sans-serif;
+      font-size: 18px;
+      font-weight: bold;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+     background-color: rgba(0, 0, 0, 0.5); /* 투명 배경 추가 */
+        padding: 5px 10px; /* 배경에 여백 추가 */
   }
    /* 이미지 스타일링을 위한 CSS */
 
@@ -232,8 +240,11 @@
 
 
 
+
 <footer>
-    <p>&copy; &copy; 2024 빅 데이터 분석 플랫폼</p>
+    <p><img src="/img/platform_logo.png" alt="Platform Logo" height="40px"> &copy; 2024 빅 데이터 분석 플랫폼 - 데이터로 더 나은 미래를 만듭니다.
+
+    </p>
 </footer>
 <script>
     // 로그아웃 메시지 표시

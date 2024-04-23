@@ -312,7 +312,8 @@ public class pageController {
 
         List<String> result = javaPy.strParameter("cal_data", stock_code1, stock_code2, start_date, end_date);
         List<String> result2 = javaPy.strParameter("cal_data", stock_code2, stock_code1, start_date, end_date);
-
+        System.out.println("result"+result);
+        System.out.println("result2"+result2);
         int length = result.size();
         System.out.println("length: " + length);
         for (int i = 0; i < 10; i++) {
@@ -320,7 +321,7 @@ public class pageController {
             System.out.println("result.get(length): "+result.get(length + i - 10));
         }
         for (int i = 0; i < 10; i++) {
-            result2.set(i, result.get(length + i - 10));
+            result2.set(i, result2.get(length + i - 10));
             System.out.println("result2.get(length): "+result2.get(length + i - 10));
         }
         String report = javaPy.analysisData(result.subList(0, 4));
@@ -332,7 +333,7 @@ public class pageController {
             result.set(i, "img/plots/" + result.get(i));
         }
         for (int i = 5; i < 10; i++) {
-            result2.set(i, "img/plots/" + result.get(i));
+            result2.set(i, "img/plots/" + result2.get(i));
         }
         String company1 = addData.getCompany1(stock_code1);
         String company2 = addData.getCompany1(stock_code2);
@@ -363,7 +364,7 @@ public class pageController {
         dataList2.add(new String[]{"0", result2.get(0)});
         dataList2.add(new String[]{"1", result2.get(1)});
         dataList2.add(new String[]{"2", result2.get(2)});
-        dataList2.add(new String[]{"3", result2.get(3)});
+       dataList2.add(new String[]{"3", result2.get(3)});
         dataList2.add(new String[]{"4", result2.get(4)});
         model.addAttribute("company1", company1);
         model.addAttribute("company2", company2);
@@ -402,19 +403,20 @@ public class pageController {
                 serviceUsage.setId(id);
                 serviceUsage.setStart_date(resultArray[0]);
                 serviceUsage.setEnd_date(resultArray[1]);
+                serviceUsage.setReport(resultArray[2]);
 
-                double reportValue = Double.parseDouble(resultArray[2]);
-                if (reportValue >= 1 && reportValue <= 5) {
-                    // 1~4 사이의 값이라면 그대로 사용
-                    serviceUsage.setReport(String.valueOf(reportValue));
-                } else {
-                    // 1~4 사이의 값이 아니라면 1로 설정
-                    serviceUsage.setReport("0");
-                }
-                // 값을 설정
-                System.out.println("reportValue"+reportValue);
-                String result = generateResult(Double.parseDouble(serviceUsage.getReport()));
-                serviceUsage.setReport(result);
+//                double reportValue = Double.parseDouble(resultArray[2]);
+//                if (reportValue >= 1 && reportValue <= 5) {
+//                    // 1~4 사이의 값이라면 그대로 사용
+//                    serviceUsage.setReport(String.valueOf(reportValue));
+//                } else {
+//                    // 1~4 사이의 값이 아니라면 1로 설정
+//                    serviceUsage.setReport("0");
+//                }
+//                // 값을 설정
+//                System.out.println("reportValue"+reportValue);
+//                String result = generateResult(Double.parseDouble(serviceUsage.getReport()));
+//                serviceUsage.setReport(result);
 
                 addData.insertToServiceUsage(serviceUsage); // 생성된 객체를 데이터베이스에 추가
                 serviceUsages1.add(serviceUsage); // 생성된 객체를 리스트에 추가
@@ -431,8 +433,8 @@ public class pageController {
                 serviceUsage.setStart_date(resultArray[0]);
                 serviceUsage.setEnd_date(resultArray[1]);
                 serviceUsage.setReport(resultArray[2]);
-                String result = generateResult(Double.parseDouble(serviceUsage.getReport()));
-                serviceUsage.setReport(result);
+//              String result = generateResult(Double.parseDouble(serviceUsage.getReport()));
+//              serviceUsage.setReport(result);
                 addData.insertToServiceUsage(serviceUsage); // 생성된 객체를 데이터베이스에 추가
                 serviceUsages2.add(serviceUsage); // 생성된 객체를 리스트에 추가
             }
@@ -481,6 +483,7 @@ public class pageController {
         List<String> result = javaPy.strParameter("diff_cal_data", stock_code1,stock_code3, stock_code2,stock_code3, start_date, end_date);
         List<String> result2 = javaPy.strParameter("diff_cal_data", stock_code2,stock_code3, stock_code1,stock_code3, start_date, end_date);
         System.out.println("result" + result);
+        System.out.println("result2" + result2);
         System.out.println(result.toString());
         int length = result.size();
         System.out.println("length: " + length);
@@ -489,7 +492,7 @@ public class pageController {
             System.out.println("result.get(length): "+result.get(length + i - 10));
         }
         for (int i = 0; i < 10; i++) {
-            result2.set(i, result.get(length + i - 10));
+            result2.set(i, result2.get(length + i - 10));
             System.out.println("result2.get(length): "+result2.get(length + i - 10));
         }
         String report = javaPy.analysisData(result.subList(0, 4));
@@ -501,7 +504,7 @@ public class pageController {
             result.set(i, "img/plots/" + result.get(i));
         }
         for (int i = 5; i < 10; i++) {
-            result2.set(i, "img/plots/" + result.get(i));
+            result2.set(i, "img/plots/" + result2.get(i));
         }
 
 
@@ -618,7 +621,7 @@ public class pageController {
 
         }
         // 리다이렉트합니다.
-        return "redirect:home.do";
+        return "redirect:find_id.do";
     }
     @GetMapping("find_pwd.do")
     public String find_pwd() {
@@ -650,7 +653,7 @@ public class pageController {
 
         }
         // 리다이렉트합니다.
-        return "redirect:home.do";
+        return "redirect:find_pwd.do";
     }
 
     private boolean sendEmail(String recipient, String messageBody) {

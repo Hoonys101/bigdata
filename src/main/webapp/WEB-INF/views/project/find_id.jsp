@@ -8,6 +8,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>아이디 찾기</title>
     <style>
+    .header {
+             text-align: center;
+             padding: 20px 0;
+             top: 0;
+
+
+         }
+        .home-button {
+         background-color: #007bff;
+          color: #fff;
+          border: none;
+          border-radius: 5px;
+          padding: 10px 20px;
+          cursor: pointer;
+
+    }
+
+
+        .home-button:hover {
+            background-color: #0056b3; /* hover 시 색 변화 */
+        }
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -54,9 +75,16 @@
         button[type="submit"]:hover {
             background-color: #0056b3;
         }
+        .center {
+            text-align: center;
+          }
     </style>
 </head>
 <body>
+<div class="header">
+        <button class="home-button" onclick="location.href='home.do'">Home</button>
+
+</div>
     <div class="container">
         <h1>아이디 찾기</h1>
         <% if (session.getAttribute("message") != null) { %>
@@ -72,10 +100,17 @@
             <label for="user_name">이름:</label><br>
             <input type="text" id="user_name" name="user_name" required><br>
             <label for="birth_date">생년월일:</label><br>
-            <input type="date" id="birth_date" name="birth_date" onchange="convertDateFormat()" required><br>
+            <div class="input-group">
+                <input type="date" id="birth_date" name="birth_date" onchange="convertDateFormat()" required>
+                <span class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                </span>
+            </div><br>
             <label for="email">이메일:</label><br>
             <input type="email" id="email" name="email" required><br><br>
-            <button type="submit">아이디 찾기</button>
+            <div class="center">
+                <button type="submit">아이디 찾기</button>
+              </div>
         </form>
     </div>
 
@@ -142,6 +177,7 @@
                 const formattedDate = `${year}-${month}-${day}`;
                 document.getElementById("birth_date").value = formattedDate;
             });
+
         </script>
 </body>
 </html>

@@ -143,8 +143,10 @@ public class JavaPython implements JavaPythonInter {
             pln("재개");
         }
         pln("finalresult: ");
-        finalresult.remove(0);
-        return finalresult;
+         finalresult.remove(0);
+          return finalresult;
+
+
     }
     void pln(String str){
         System.out.println(str);
