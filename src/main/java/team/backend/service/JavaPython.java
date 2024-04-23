@@ -1,12 +1,18 @@
 package team.backend.service;
 import lombok.Getter;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import team.backend.control.FileDeletionUtil;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
+
+import static team.backend.control.pageController.PLOTS_DIRECTORY;
+
 @Service
 public class JavaPython implements JavaPythonInter {
 
@@ -152,6 +158,9 @@ public class JavaPython implements JavaPythonInter {
             pln("재개");
         }
         pln("finalresult: ");
+
+        //threadName 지우기
+
          finalresult.remove(0);
           return finalresult;
 
@@ -159,6 +168,12 @@ public class JavaPython implements JavaPythonInter {
     }
     void pln(String str){
         System.out.println(str);
+    }
+    @Scheduled(cron="0 0 24 ? * MON")
+//    @Scheduled(fixedRate = 60000) // 매분마다 실행
+    public void deleteFiles(){
+        FileDeletionUtil.deleteFiles(PLOTS_DIRECTORY);
+        System.out.println("파일을 지웁니다.");
     }
 
     @Override

@@ -60,7 +60,7 @@ public class pageController {
     @Autowired
     private ServiceUsage serviceUsage;
 
-    private static final String PLOTS_DIRECTORY = "C:/plots";
+    public static final String PLOTS_DIRECTORY = "C:/plots";
 
     @Autowired
     public pageController(ServiceUsage serviceUsage) {
@@ -295,7 +295,7 @@ public class pageController {
                                 ServletRequest request,
                                 ServletResponse response
     ) throws UnsupportedEncodingException {
-        FileDeletionUtil.deleteFiles(PLOTS_DIRECTORY);
+//        FileDeletionUtil.deleteFiles(PLOTS_DIRECTORY);
         System.out.println("analysis start");
         String id = (String) session.getAttribute("id");
         System.out.println("id" + id);
@@ -343,14 +343,20 @@ public class pageController {
 
         addData.insertToServiceUsage(serviceUsage);
         List<String> plotFile = new ArrayList<>();
+//        List<String> plotFileUrl = new ArrayList<>();
         List<String> plotFile2 = new ArrayList<>();
+//        List<String> plotFile2Url = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             String plot = "http://127.0.0.1:8080/img/plots/" + stock_code1 + "_" + stock_code2 + "_" + start_date + "_" + end_date + "_" + i + ".png";
+//            String plotUrl = PLOTS_DIRECTORY + "/"+ stock_code1 + "_" + stock_code2 + "_" + start_date + "_" + end_date + "_" + i + ".png";
             plotFile.add(i, plot);
+//            plotFileUrl.add(i,plotUrl);
         }
         for (int i = 0; i < 5; i++) {
             String plot2 = "http://127.0.0.1:8080/img/plots/" + stock_code2 + "_" + stock_code1 + "_" + start_date + "_" + end_date + "_" + i + ".png";
+//            String plotUrl2 = PLOTS_DIRECTORY + "/"+stock_code2 + "_" + stock_code1 + "_" + start_date + "_" + end_date + "_" + i + ".png";
             plotFile2.add(i, plot2);
+//            plotFile2Url.add(i,plotUrl2);
         }
 
         List<String[]> dataList = new ArrayList<>();
@@ -375,6 +381,21 @@ public class pageController {
         model.addAttribute("plots", plotFile);
         model.addAttribute("plots2", plotFile2);
         model.addAttribute("serviceUsage", serviceUsage);
+//        for (String attributeName : model.asMap().keySet()) {
+//            Object attributeValue = model.getAttribute(attributeName);
+//            request.setAttribute(attributeName, attributeValue);
+//        }
+//        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/project/chart.jsp");
+//        try{
+//            dispatcher.forward(request, response);
+//        }catch(IOException | ServletException ie){
+//            System.out.println("오류는 "+ie);
+//        }
+//        try{
+//            Thread.sleep(2000);
+//        }catch(InterruptedException ie){}
+//        FileDeletionUtil.deleteSelectedFile(plotFileUrl);
+//        FileDeletionUtil.deleteSelectedFile(plotFile2Url);
 
         return "/project/chart";
     }
