@@ -35,17 +35,21 @@
     font-size: 16px;
   }
 
-  button {
-    display: block;
-    width: 100%; /* 버튼의 너비를 50%로 설정합니다 */
-    padding: 15px 30px;
-    margin: 20px auto 0; /* 위쪽 여백을 20px로 설정하고 수평 중앙 정렬합니다 */
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
+  .button-apply {
+      display: block;
+      width: 100%;
+      padding: 15px 30px;
+      margin: 20px auto 0;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+  }
+
+  .button-apply:hover {
+      background-color: #0056b3;
+  }
 
   .button-container {
     margin-top: 20px;
@@ -82,12 +86,27 @@
   }
     </style>
 <body>
+<script>
+    function validateAndSubmit() {
+        var stockCode1 = document.getElementsByName("stock_code1")[0].value;
+        var stockCode2 = document.getElementsByName("stock_code2")[0].value;
+
+        // 기업 1과 기업 2 중 하나라도 선택되지 않았을 경우 경고 메시지를 표시합니다.
+        if (stockCode1 === "" || stockCode2 === "") {
+            alert("기업을 선택해주세요.");
+            return false; // 폼을 제출하지 않도록 false를 반환합니다.
+        } else {
+            // 폼을 제출합니다.
+            return true;
+        }
+    }
+</script>
 <div class="header">
         <button class="home-button" onclick="location.href='home.do'">Home</button>
         <h2>분기분석</h2>
 </div>
 
-<form action="analysis_page2.do" method="post">
+<form action="analysis_page2.do" method="post" onsubmit="return validateAndSubmit();">
     <select name="stock_code1">
         <option value="">Select Company 1</option>
         <c:forEach items="${list}" var="availableData">
@@ -105,11 +124,12 @@
                 </option>
             </c:forEach>
         </select>
-        <div class="#">
-            <button onclick="window.location.href='chart.do'">적용</button>
-          </div>
+        <div class="button-container">
+            <input type="submit" class="button-apply" value="적용">
         </div>
+
         </form>
 
 </body>
+
 </html>

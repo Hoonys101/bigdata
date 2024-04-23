@@ -86,8 +86,15 @@
 <div class="container">
 
 <h2 style="text-align: center;">회사 1: ${company1}  회사 2: ${company2}</h2>
+<button id="ai-analysis-button" class="ai-button">AI 분석</button>
+${ai_1}
 </div>
-
+<div id="ai-result" class="ai-result" style="display: none;">
+    <h3>회사 1과 회사 2의 연관성 분석 결과</h3>
+    <!-- AI 분석 결과를 여기에 표시할 구조를 작성합니다. -->
+    ${ai_1}
+    <div id="company-relationship-analysis"></div>
+</div>
 <div class="table-container">
     <table>
         <thead class="fixed-header">
@@ -144,6 +151,14 @@
 <div class="table-container">
 
 <h2 style="text-align: center;">회사 1: ${company2}  회사 2: ${company1}</h2>
+    <button id="ai-analysis-button" class="ai-button">AI 분석</button>
+    ${ai_2}
+    </div>
+    <div id="ai-result" class="ai-result" style="display: none;">
+        <h3>회사 2과 회사 1의 연관성 분석 결과</h3>
+        ${ai_2}
+        <!-- AI 분석 결과를 여기에 표시할 구조를 작성합니다. -->
+        <div id="company-relationship-analysis"></div>
     </div>
 <div class="table-container">
     <table>
@@ -198,6 +213,28 @@
         </tbody>
     </table>
 </div>
-
+<script>
+// AI 분석 버튼 클릭 이벤트 처리
+document.getElementById('ai-analysis-button').addEventListener('click', function() {
+    // Ajax 요청을 통해 서버에서 AI 분석 결과를 가져옵니다.
+    $.ajax({
+        url: '../project/ai_analysis_endpoint.do',
+        method: 'POST',
+        data: {
+            // 요청에 필요한 데이터를 전달합니다.
+        },
+        success: function(response) {
+            // 서버에서 받은 AI 분석 결과를 처리하여 화면에 표시합니다.
+            // 회사 1과 회사 2의 연관성 분석 결과를 company-relationship-analysis에 표시
+            document.getElementById('company-relationship-analysis').innerHTML = response.companyRelationshipAnalysis;
+            document.getElementById('ai-result').style.display = 'block';
+        },
+        error: function(xhr, status, error) {
+            // 오류 처리
+            console.error('AJAX 오류:', status, error);
+        }
+    });
+});
+</script>
 </body>
 </html>
