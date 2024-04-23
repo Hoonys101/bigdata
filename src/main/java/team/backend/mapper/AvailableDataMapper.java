@@ -19,4 +19,6 @@ public interface AvailableDataMapper {
 
     List<AvailableData> getList(Map<String, String> params);
 
+
+
 }

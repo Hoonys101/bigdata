@@ -11,7 +11,14 @@
     <select id="getHistory" parameterType="String" resultType="team.backend.domain.ServiceUsage">
         SELECT *
         FROM ServiceUsage
-        WHERE id = #{id}
+        WHERE id = #{id} and report = '두 데이터는 동시에 움직입니다.
+'
+    </select>
+    <select id="getHistoryByReport" parameterType="String" resultType="team.backend.domain.ServiceUsage">
+        SELECT *
+        FROM ServiceUsage
+        WHERE id = #{id} and report != '두 데이터는 동시에 움직입니다.
+'
     </select>
     <delete id="deleteHistoryBySeq" parameterType="int">
         DELETE FROM ServiceUsage WHERE serviceusage_seq = #{serviceusage_seq}
@@ -21,6 +28,27 @@
         SELECT *
         FROM ServiceUsage
         WHERE id = #{id}
+    </select>
+    <select id="getCompany1" parameterType="String" resultType="String">
+        SELECT ad.name
+        FROM (
+        SELECT ad.name, ROWNUM AS rn
+        FROM ServiceUsage su
+        JOIN AvailableData ad ON su.stock_code1 = ad.stock_code
+        WHERE su.stock_code1 = #{stockCode}
+        ) ad
+        WHERE rn = 1
+
+    </select>
+    <select id="getCompany2" parameterType="String" resultType="String">
+        SELECT ad.name
+        FROM (
+        SELECT ad.name, ROWNUM AS rn
+        FROM ServiceUsage su
+        JOIN AvailableData ad ON su.stock_code2 = ad.stock_code
+        WHERE su.stock_code2 = #{stockCode}
+        ) ad
+        WHERE rn = 1
     </select>
 </mapper>
 

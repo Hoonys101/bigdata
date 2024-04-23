@@ -2,6 +2,7 @@ package team.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import team.backend.domain.AvailableData;
 import team.backend.domain.ServiceUsage;
 import team.backend.mapper.AdditionMapper;
 import team.backend.mapper.HistoryMapper;
@@ -63,12 +64,27 @@ public class addDataServiceImpl implements addDataService {
         System.out.println("historyList"+historyList);
         return historyList;
     }
-    public List<ServiceUsage> getResult(String id){
-        List<ServiceUsage> resultyList = serviceUsageMapper.getResult(id);
-        return resultyList;
+    @Override
+    public List<ServiceUsage> getHistoryByReport(String id){
+        List<ServiceUsage> historyListByReport = serviceUsageMapper.getHistoryByReport(id);
+        return historyListByReport;
     }
+    @Override
+    public List<ServiceUsage> getResult(String id){
+        List<ServiceUsage> resultList = serviceUsageMapper.getResult(id);
+        return resultList;
+    }
+    @Override
     public boolean deleteHistoryBySeq(int serviceusage_seq) {
         serviceUsageMapper.deleteHistoryBySeq(serviceusage_seq);
         return false;
+    }
+    @Override
+    public String getCompany1(String stock_code1){
+        return serviceUsageMapper.getCompany1(stock_code1);
+    }
+    @Override
+    public String getCompany2(String stock_code2){
+        return serviceUsageMapper.getCompany2(stock_code2);
     }
 }

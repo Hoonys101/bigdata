@@ -41,6 +41,7 @@ public class JavaPython implements JavaPythonInter {
     public static void main(String[] args){
 
         JavaPython java = new JavaPython();
+
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             JavaPython.pythonProcess.destroy();
         }));
@@ -49,17 +50,20 @@ public class JavaPython implements JavaPythonInter {
 //        List<String> results=java.strParameter("find_period","1152","1153");
 //        List<String> results=java.strParameter("diff_cal_data","1152","1008","1153","1008","20130101","20130501");
 //        List<String> results=java.strParameter("cal_data","1152","1153","20130101","20130501");
-        List<String> results=java.strParameter("tree_data","1152","1153");
+        List<String> results=java.strParameter("tree_data","041020","025750");
+
         System.out.println("result printing");
         for(String result:results){
             System.out.println(result);
         }
     }
 
+
     // 인자를 이름과 함께 파이썬으로 넘기는 메소드
     // 이름과 함께 리스너에 등록하고 정지 메소드
     // 리스너의 전파에따라 결과값에서 자신의 결과를 찾고, 결과값에서 자신의 결과를 삭제하는 메소드
     // 무한루프로, 파이썬의 결과값을 결과값에 저장하는 옵저버 객체 -> 결과값을 저장할 때마다, 등록된 리스너에 전파
+
 
     //results 중 자신의 답을 찾고, 프로세스 재개하는 리스너
     private void findResult(String threadName,Consumer<String> listener,Object lock){
@@ -76,7 +80,9 @@ public class JavaPython implements JavaPythonInter {
             }
         pln("결과값이 없습니다.");
         }
+
     }
+
 
     //옵저버
     class Listen implements Consumer<String> {
