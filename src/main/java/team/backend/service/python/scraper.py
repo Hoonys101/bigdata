@@ -1,7 +1,7 @@
 import FinanceDataReader as fdr
 import pandas_datareader as web
 import datetime as time
-import ATO as db
+import DAO as db
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
@@ -126,14 +126,15 @@ def delay_df(df1,df2,days):
     return df1,df2
 
 #Sector와 Code를 입력받아서, 동일한 코드 생성
-def add_data(list=[]):
+def add_data(list=[])->str:
     
     db_name=list[1]
     stock_code=list[2]
     # print(db_name,stock_code)
 #    df=stockprice(db_name,stock_code)
     # print('db_name: ',db_name,' stock_code:', stock_code)
-    df=stock_data_all(db_name,stock_code)
+    stock_data_all(db_name,stock_code)
+    return "추가했습니다."
     # print(df)
     
 #    db.create_table_from_dataframe(connect,refine_df,"ArchivedData")
