@@ -60,7 +60,7 @@ public class pageController {
     @Autowired
     private ServiceUsage serviceUsage;
 
-    private static final String PLOTS_DIRECTORY = "C:/plots";
+    public static final String PLOTS_DIRECTORY = "C:/plots";
 
     @Autowired
     public pageController(ServiceUsage serviceUsage) {
@@ -295,7 +295,7 @@ public class pageController {
                                 ServletRequest request,
                                 ServletResponse response
     ) throws UnsupportedEncodingException {
-        FileDeletionUtil.deleteFiles(PLOTS_DIRECTORY);
+//        FileDeletionUtil.deleteFiles(PLOTS_DIRECTORY);
         System.out.println("analysis start");
         String id = (String) session.getAttribute("id");
         System.out.println("id" + id);
@@ -343,14 +343,20 @@ public class pageController {
 
         addData.insertToServiceUsage(serviceUsage);
         List<String> plotFile = new ArrayList<>();
+//        List<String> plotFileUrl = new ArrayList<>();
         List<String> plotFile2 = new ArrayList<>();
+//        List<String> plotFile2Url = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             String plot = "http://127.0.0.1:8080/img/plots/" + stock_code1 + "_" + stock_code2 + "_" + start_date + "_" + end_date + "_" + i + ".png";
+//            String plotUrl = PLOTS_DIRECTORY + "/"+ stock_code1 + "_" + stock_code2 + "_" + start_date + "_" + end_date + "_" + i + ".png";
             plotFile.add(i, plot);
+//            plotFileUrl.add(i,plotUrl);
         }
         for (int i = 0; i < 5; i++) {
             String plot2 = "http://127.0.0.1:8080/img/plots/" + stock_code2 + "_" + stock_code1 + "_" + start_date + "_" + end_date + "_" + i + ".png";
+//            String plotUrl2 = PLOTS_DIRECTORY + "/"+stock_code2 + "_" + stock_code1 + "_" + start_date + "_" + end_date + "_" + i + ".png";
             plotFile2.add(i, plot2);
+//            plotFile2Url.add(i,plotUrl2);
         }
 
         List<String[]> dataList = new ArrayList<>();
@@ -364,7 +370,7 @@ public class pageController {
         dataList2.add(new String[]{"0", result2.get(0)});
         dataList2.add(new String[]{"1", result2.get(1)});
         dataList2.add(new String[]{"2", result2.get(2)});
-       dataList2.add(new String[]{"3", result2.get(3)});
+        dataList2.add(new String[]{"3", result2.get(3)});
         dataList2.add(new String[]{"4", result2.get(4)});
         model.addAttribute("company1", company1);
         model.addAttribute("company2", company2);
@@ -375,6 +381,21 @@ public class pageController {
         model.addAttribute("plots", plotFile);
         model.addAttribute("plots2", plotFile2);
         model.addAttribute("serviceUsage", serviceUsage);
+//        for (String attributeName : model.asMap().keySet()) {
+//            Object attributeValue = model.getAttribute(attributeName);
+//            request.setAttribute(attributeName, attributeValue);
+//        }
+//        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/project/chart.jsp");
+//        try{
+//            dispatcher.forward(request, response);
+//        }catch(IOException | ServletException ie){
+//            System.out.println("오류는 "+ie);
+//        }
+//        try{
+//            Thread.sleep(2000);
+//        }catch(InterruptedException ie){}
+//        FileDeletionUtil.deleteSelectedFile(plotFileUrl);
+//        FileDeletionUtil.deleteSelectedFile(plotFile2Url);
 
         return "/project/chart";
     }
@@ -405,18 +426,18 @@ public class pageController {
                 serviceUsage.setEnd_date(resultArray[1]);
                 serviceUsage.setReport(resultArray[2]);
 
-//                double reportValue = Double.parseDouble(resultArray[2]);
-//                if (reportValue >= 1 && reportValue <= 5) {
-//                    // 1~4 사이의 값이라면 그대로 사용
-//                    serviceUsage.setReport(String.valueOf(reportValue));
-//                } else {
-//                    // 1~4 사이의 값이 아니라면 1로 설정
-//                    serviceUsage.setReport("0");
-//                }
-//                // 값을 설정
-//                System.out.println("reportValue"+reportValue);
-//                String result = generateResult(Double.parseDouble(serviceUsage.getReport()));
-//                serviceUsage.setReport(result);
+                double reportValue = Double.parseDouble(resultArray[2]);
+                if (reportValue >= 1 && reportValue <= 5) {
+                    // 1~4 사이의 값이라면 그대로 사용
+                    serviceUsage.setReport(String.valueOf(reportValue));
+                } else {
+                    // 1~4 사이의 값이 아니라면 1로 설정
+                    serviceUsage.setReport("0");
+                }
+                // 값을 설정
+                System.out.println("reportValue"+reportValue);
+                String result = generateResult(Double.parseDouble(serviceUsage.getReport()));
+                serviceUsage.setReport(result);
 
                 addData.insertToServiceUsage(serviceUsage); // 생성된 객체를 데이터베이스에 추가
                 serviceUsages1.add(serviceUsage); // 생성된 객체를 리스트에 추가
@@ -433,8 +454,8 @@ public class pageController {
                 serviceUsage.setStart_date(resultArray[0]);
                 serviceUsage.setEnd_date(resultArray[1]);
                 serviceUsage.setReport(resultArray[2]);
-//              String result = generateResult(Double.parseDouble(serviceUsage.getReport()));
-//              serviceUsage.setReport(result);
+              String result = generateResult(Double.parseDouble(serviceUsage.getReport()));
+              serviceUsage.setReport(result);
                 addData.insertToServiceUsage(serviceUsage); // 생성된 객체를 데이터베이스에 추가
                 serviceUsages2.add(serviceUsage); // 생성된 객체를 리스트에 추가
             }
