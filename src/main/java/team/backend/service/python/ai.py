@@ -16,9 +16,11 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # FATAL
 # dataFrame을 받아서 라벨링 훈련(3개월로 window로 옮겨가며 훈련)
 # 인자를 받아서, normalNlabel을 호출하여 df를 생성하는 것으로 변경
 def training(df: pd.DataFrame,model=DecisionTreeClassifier(max_depth=3),default='CLOSE')->list:
+
     # tf.get_logger().setLevel('ERROR')
 #    X, y = prepare_training_data(df)
     result=[]
+
     # 훈련 데이터와 테스트 데이터로 분할
 #    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     train_size = int(0.8 * len(df))
@@ -49,6 +51,7 @@ def training(df: pd.DataFrame,model=DecisionTreeClassifier(max_depth=3),default=
     # print("모델 정확도:", accuracy,flush=True)
     result.append("모델 정확도:"+str(accuracy))
     if(y_pred[-1]!=-1):
+
 #        print("현재 주가전파관계가 존재합니다. 확인해보세요. 예측치:",y_pred[-1],"주 전파",flush=True)
         result.append("현재 주가전파관계가 존재합니다. 확인해보세요. 예측치:"+str(y_pred[-1])+"주 전파")
         return result
@@ -56,6 +59,7 @@ def training(df: pd.DataFrame,model=DecisionTreeClassifier(max_depth=3),default=
 #        print("아쉽게도 현재 주가 전파관계는 없는 것으로 보이네요.",flush=True)
         result.append("아쉽게도 현재 주가 전파관계는 없는 것으로 보이네요.")
         return result
+
     # plt.figure(figsize=(20,15))
     # plot_tree(model, filled=True)
     # plt.show()
@@ -103,6 +107,7 @@ def prepare_training_data(df, window_size=60)->tuple[list,list]:
 #     output_layer = tf.keras.layers.Dense(1, activation='sigmoid')(lstm_layer)
 #     model = tf.keras.models.Model(inputs=input_layer, outputs=output_layer)  # 모델 정의
 #     return model
+
 
 # # 강화학습 환경 설정
 # class PricePredictionEnv(gym.Env):
@@ -191,3 +196,4 @@ def prepare_training_data(df, window_size=60)->tuple[list,list]:
 #     average_reward = np.mean(total_rewards)
 #     print("Average reward:", average_reward)
     
+

@@ -3,6 +3,7 @@ package team.backend.service;
 import team.backend.domain.AvailableData;
 
 import java.util.List;
+import java.util.Map;
 
 public interface AvailableDataService {
 
@@ -18,6 +19,8 @@ public interface AvailableDataService {
 //    List<String> getAvailableDataByFilters(String nation, String db_name,String sector,String name, String stock_code) ;
 
     List<AvailableData> getList(String id, AvailableData availableData);
+
+
 
 
 }
