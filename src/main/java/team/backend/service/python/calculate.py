@@ -95,11 +95,12 @@ def delay_df(df1,df2,days=5):
     return df1,df2
 
 # 3-1개의 파라미터를 받아서 2개의 str 반환
-def ai_anal(list):
+def ai_anal(list)->list:
     #파라미터 설정
     first_com=list[1]
     second_com=list[2]
-    ai.training(first_com,second_com)
+    df=normalNlabel(first_com,second_com)
+    return ai.training(df)
 
 #7-1개의 파라미터를 받아서 파일 5개와 correlation 5개 반환
 def diff_cal_data(list,days=5):
@@ -133,7 +134,7 @@ def diff_cal_data(list,days=5):
     result_list=[]
     filename_list=[]
     for i in range(5):
-        filename=first_com+'_'+diff1_com+'_'+startdate+'_'+lastdate+'_'+str(i)+'.png'
+        filename=first_com+'_'+second_com+'_'+startdate+'_'+lastdate+'_'+str(i)+'.png'
         result_list.append(saveplot(df1,df2,filename)) # save 및 파일명 저장
         df1,df2=delay_df(df1,df2,days)
         filename_list.append(filename)
@@ -284,7 +285,7 @@ def yearly(df1:pd.DataFrame,df2:pd.DataFrame,div:int=4,critic:float=0.7)->list:
 #            print(df1.index[startdate].date(),"와 ",df1.index[lastdate-1].date()," 사이의 기간에 관계없음")
 #            print("correlation: ",correlation)
 #            delay_save(df1[startdate:lastdate],df2[startdate:lastdate],str(startdate)+'_'+str(lastdate))
-
+    return result
 #list 0,1,2를 받아서 total_anal 실행
 def total_analy(lst:list)->list:
     stock_code1=lst[1]
@@ -299,20 +300,23 @@ def total_anal(stock_code1:str='1008',stock_code2:str='IBM',yearly=yearly,defaul
     for i in range(10):
         startdate=int(df1.shape[0]/10*i)
         lastdate=int(df1.shape[0]/10*(i+1))
-        correlation = df1[startdate:lastdate].corr(df2[startdate:lastdate])
-        if correlation>0.5:
-#            print(df1.index[startdate].date(),"와 " ,df1.index[lastdate].date(), " 사이의 기간에 연간 양의 상관관계가 있습니다.")
-#            print("correlation: ",correlation)            
-            result.append(yearly(df1[startdate:lastdate],df2[startdate:lastdate]))
+        temp_result=yearly(df1[startdate:lastdate],df2[startdate:lastdate])
+        if len(temp_result)>0:
+            result.extend(temp_result)
+        # correlation = df1[startdate:lastdate].corr(df2[startdate:lastdate])
+        # if correlation>0.5:
+        #     # print(df1.index[startdate].date(),"와 " ,df1.index[lastdate].date(), " 사이의 기간에 연간 양의 상관관계가 있습니다.")
+        #     # print("correlation: ",correlation)            
+        #     result.append(yearly(df1[startdate:lastdate],df2[startdate:lastdate]))
             
-        elif correlation<-0.5:
-#            print(df1.index[startdate].date(),"와 ",df1.index[lastdate].date()," 사이의 기간에 연간 음의 상관관계가 있습니다.")
-#            print("correlation: ",correlation)
-            result.append(yearly(df1[startdate:lastdate],df2[startdate:lastdate]))
-        else:
-#            print(df1.index[startdate-1].date(),"와 ",df1.index[lastdate-1].date()," 사이의 기간에 상관관계가 적습니다.")
-#            print("correlation: ",correlation)
-            result.append(yearly(df1[startdate:lastdate],df2[startdate:lastdate]))
+        # elif correlation<-0.5:
+        #     # print(df1.index[startdate].date(),"와 ",df1.index[lastdate].date()," 사이의 기간에 연간 음의 상관관계가 있습니다.")
+        #     # print("correlation: ",correlation)
+        #     result.append(yearly(df1[startdate:lastdate],df2[startdate:lastdate]))
+        # else:
+        #     # print(df1.index[startdate-1].date(),"와 ",df1.index[lastdate-1].date()," 사이의 기간에 상관관계가 적습니다.")
+        #     # print("correlation: ",correlation)
+        #     result.append(yearly(df1[startdate:lastdate],df2[startdate:lastdate]))
 
     # df1,df2=delay_df(df1,df2)
     return result
@@ -363,4 +367,11 @@ def normalNlabel(stock_code1:str='IBM',stock_code2:str='1008',default='CLOSE')->
 # ai.training(normalNlabel())
 
 
-# ai.deep(normalNlabel())
+# ai.deep(normalNlabel())pip
+
+# result=diff_cal_data(['diff_cal_data', '1152', '1008', '1153', '1008', '20130101', '20130501'])
+# print(result)
+# result=total_analy(['find_period', '1008', 'IBM'])
+# print(result)
+# result=ai_anal(['tree_data', '1008', 'IBM'])
+# print(result)

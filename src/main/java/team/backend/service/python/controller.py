@@ -7,16 +7,15 @@ import threading
 
 # 출력은 병목 처리
 def sending_result(name:str,lst:list):
-    lock=threading.lock()
+    lock=threading.Lock()
     with lock:
-        print(name)
+        print(name,flush=True)
         for str in lst:
-            print(str)
+            print(str,flush=True)
         print("EOF",flush=True)
         
-        
-def run_service(name:str,lst:list):
-            # print(data,flush=True)
+def run_service(name:str,input_data:list):
+    # print(data,flush=True)
     # print("파라미터를 모두 받았습니다.",flush=True)
     # print(input_data,flush=True)
     if input_data[0]=='add_data':#input_data는 0,1,2 값만 가질 것
@@ -35,17 +34,19 @@ def run_service(name:str,lst:list):
         # print(input_data[0]+'를 성공적으로 수행하였습니다.',flush=True)
         # print("EOF",flush=True)
     elif input_data[0]=='diff_cal_data':#input_data는 0,1,2,3,4,5,6 값을 가질 것
-    #        print('diff_cal_data로 들어왔습니다.')
-        # print(input_data,flush=True)
+        # print('diff_cal_data로 들어왔습니다.')
+        # print("input_data=",input_data,flush=True)
+        # print("계산을 시작합니다.",flush=True)
         result=cal.diff_cal_data(input_data)
+        # print("결과는 ",name, result,flush=True)
         sending_result(name, result)
         # for str_value in result:
-        #     print(str_value,flush=True)
+            # print(str_value,flush=True)
         # print(input_data[0]+'를 성공적으로 수행하였습니다.',flush=True)
         # print("EOF",flush=True)
     elif input_data[0]=='find_period':#input_data는 0,1,2 값을 가질 것
-#            print('find_period에 들어왔습니다.',flush=True)
-#            print(input_data,flush=True)
+        # print('find_period에 들어왔습니다.',flush=True)
+        # print(input_data,flush=True)
         result=cal.total_analy(input_data)
         sending_result(name, result)
         # print("EOF",flush=True)
@@ -66,9 +67,11 @@ while True:
             if name==None:
                 name=data
                 continue
+            # print(line)
             input_data.append(data)
         threading.Thread(target=run_service,args=(name,input_data)).start()
             
     except Exception as e:
         print("예외가 발생했습니다:",e,flush=True)
         print("EOF",flush=True)
+        
