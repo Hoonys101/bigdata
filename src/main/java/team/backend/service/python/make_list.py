@@ -1,5 +1,5 @@
 import FinanceDataReader as fdr
-import ATO as db
+import DAO as db
 import datetime as time
 import pandas as pd
 from pykrx import stock
