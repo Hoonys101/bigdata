@@ -1,5 +1,5 @@
 import pandas as pd
-import ATO
+import DAO
 from io import StringIO
 import json_to_df as jtd
 
@@ -17,15 +17,15 @@ json_data = '{"name": ["John", "Alice"], "age": [30, 25], "city": ["New York", "
 df = pd.read_json(StringIO(json_data))
 
 # Oracle에 연결
-connection = ATO.connect_to_oracle()
+connection = DAO.connect_to_oracle()
 
 # DataFrame을 Oracle에 삽입
-ATO.create_person_from_dataframe(connection, df)
+DAO.create_person_from_dataframe(connection, df)
 
 # 특정 이름의 데이터 읽기
-result = ATO.read_person(connection,"John")
+result = DAO.read_person(connection,"John")
 print("Read Result:")
 print(result)
 
 # 연결 종료
-ATO.close_connection(connection)
+DAO.close_connection(connection)
