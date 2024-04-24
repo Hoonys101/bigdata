@@ -167,7 +167,7 @@ public class JavaPython implements JavaPythonInter {
     void pln(String str){
         System.out.println(str);
     }
-    @Scheduled(cron="0 0 24 ? * MON")
+    @Scheduled(cron="0 0 23 ? * MON")
 //    @Scheduled(fixedRate = 60000) // 매분마다 실행
     public void deleteFiles(){
         FileDeletionUtil.deleteFiles(PLOTS_DIRECTORY);

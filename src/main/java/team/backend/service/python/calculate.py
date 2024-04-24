@@ -4,6 +4,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import ai
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import PolynomialFeatures
+import datetime
+
 # import concurrent.futures
 #df 전체에 대해 1차 변화율과 2차 변화율을 추가
 def differ(df:pd.DataFrame,default='CLOSE')->pd.DataFrame:
@@ -60,17 +64,18 @@ def diff(df1, df2):
 
     # 차분 연산 수행
     diff_df = df1.subtract(df2, fill_value=0)  # 누락된 값은 0으로 대체
-
     return diff_df
 
 
 # 2개의 df와 filename을 받아서, plot 저장하고 corr 리턴
-def saveplot(df,df2,filename,column:str='Close_normal'):
+def saveplot(df,df2,filename,column:str='Close_normal')-> float:
     plt.plot(df.index, df[column])
     plt.plot(df2.index, df2[column])
     correlation=df[column].corr(df2[column])
     correlation=f"{correlation:.4f}"
     plt.title('Correlation is'+str(correlation))
+    plt.xlabel('Date')
+    plt.grid()
     # 폴더가 없으면 생성
 #    save_dir = './src/main/resources/static/img/plots'
     save_dir = 'c:/plots/'
@@ -84,7 +89,7 @@ def saveplot(df,df2,filename,column:str='Close_normal'):
     return correlation
 
 #df2개와 int를 받아서 int만큼 뒤로 당긴 df로 변환하고, 두 df의 격차 제거한 df 반환하는 함수
-def delay_df(df1,df2,days=5):
+def delay_df(df1: pd.DataFrame,df2: pd.DataFrame,days=5)-> tuple[pd.DataFrame,pd.DataFrame]:
 
     df1=df1.dropna()
     df2=df2.shift(-days)
@@ -94,16 +99,129 @@ def delay_df(df1,df2,days=5):
     df2=df2.loc[common_dates]
     return df1,df2
 
+# df를 찾아서 추세선을 만들고 변곡점 특정
+def make_trend_and_find_inflect(df:pd.DataFrame,degree:int=2,value:str='Close_normal')->tuple[pd.DataFrame,list[int]]:
+
+    # 다항 회귀 모델 학습
+    # X = np.array(df.index).reshape(-1, 1)  # 날짜를 입력값으로 사용
+    # X = np.array([int(date.strftime('%Y%m%d')) for date in df.index]).reshape(-1, 1)  # 날짜를 정수로 변환하여 입력값으로 사용
+    X = np.arange(1, len(df) + 1).reshape(-1, 1)  # 날짜를 1부터 시작하여 순차적인 정수로 변환하여 입력값으로 사용
+    # print(X)
+    y = df[value].values.reshape(-1, 1)
+    # print(y)
+    poly_features = PolynomialFeatures(degree)  # 5차 다항식 사용 (조절 가능)
+    X_poly = poly_features.fit_transform(X)
+
+    model = LinearRegression()
+    model.fit(X_poly, y)
+
+    # 추세선 예측
+    y_pred = model.predict(X_poly)
+    
+    # # 모델의 다항식 출력
+    # coefficients = model.coef_[0]
+    # polynomial = f"{coefficients[0]} + "
+
+    # for i in range(1, len(coefficients)):
+    #     polynomial += f"{coefficients[i]} * X^{i} + "
+
+    # print("다항식:", polynomial)
+
+    # 추세선 그래프 그리기
+    plt.figure(figsize=(10, 6))
+    plt.plot(df.index, df[value], label=value)
+    plt.plot(df.index, y_pred, label='TREND', linestyle='--')
+    plt.xlabel('DATE')
+    plt.ylabel(value)
+    plt.title('CLOSE and trend')
+    plt.legend()
+
+    # # 변곡점 찾기
+    # coefficients = model.coef_[0]
+    # derivative = np.polyder(coefficients)
+    # roots = np.roots(derivative)
+    # print('roots',roots)
+
+    # 극값 찾기
+    coefficients = model.coef_[0]
+    derivative = np.polyder(coefficients)
+    roots = np.roots(derivative)
+    print('roots',roots)
+    extrema = []
+    for root in roots:
+        if np.isreal(root):
+            x = root.real  # 근의 실수부
+            if x >= 0 and x <= len(df):  # 주어진 데이터 범위 내에서만 검사
+                # y = np.polyval(coefficients, x)  # 다항식 함수의 값을 계산하여 극점(극대값 또는 극소값) 확인
+                extrema.append(x)
+    
+    # 변곡점을 그래프에 표시
+    # for root in roots:
+    for root in extrema:
+        if np.isreal(root):
+            index = int(root)
+            print(index)
+            # date_at_index=df.index[index]
+            plt.scatter(df.index[index], df.iloc[index][value], color='red', marker='o', label='변곡점')
+
+    # plt.show()
+
+#stock code와 날짜2개를 받아서 df생성
+def make_df_with_dates(first_com:str='1008',startdate:str='20130101',lastdate:str='20130606')->pd.DataFrame:
+    connection=db.connect_to_oracle()
+    df=db.read_code_date(connection,first_com,startdate,lastdate)
+    connection.close()
+    return df
+
+# df=make_df_with_dates('1008','20130101','20130401')
+# df=normal(df)
+# make_trend_and_find_inflect(df,4)
+# make_trend_and_find_inflect(df,7)
+# make_trend_and_find_inflect(df,10)
+# plt.show()
+
 # 3-1개의 파라미터를 받아서 2개의 str 반환
-def ai_anal(list)->list:
+def ai_anal(list)->list[str]:
     #파라미터 설정
     first_com=list[1]
     second_com=list[2]
     df=normalNlabel(first_com,second_com)
-    return ai.training(df)
+    result=ai.training(df)
+    if result[1]==-1:
+        result[1]="아쉽게도 현재 주가 전파관계는 없는 것으로 보이네요."
+        result.append("주가를 예측할 수 없습니다.")
+    elif result[1]==0:
+        result[1]="현재 주가는 동시에 움직이고 있습니다."
+        result.append("선행지표가 없으므로 주가를 예측할 수 없습니다.")
+    elif result[1]>0:
+        #생각 정리
+        #추세선이 변곡점이 1 이하가 나올 때까지 가공->포기
+        
+        #result주일 전 선행지표가 상승중, 현재 사이에 변곡점 존재(n개) 최대치가 나오는 날을 추천하고, 변곡점이 ->포기
+        #result주일 전 선행지표가 하락중, 현재 사이에 변곡점 존재 변곡점의 높이가 result주일전 선행지표의 높이보다 작을 것->포기
+        #result주일 전 선행지표 가격이, 선행지표의 현재 가격 사이의 가격의 max 값보다 작고, 그 차가 10보다 크다면, 사세요. max일 때 파세요.
+        #result주일 전 선행지표 가격이, 선행지표의 현재 가격 사이의 가격의 min 값보다 크고, 그 차가 10보다 크다면, 파세요. min일 때 파세요.
+        
+        df=make_df_with_dates(first_com,(datetime.datetime(2022,1,1)+datetime.timedelta(days=result[1]*7)).strftime('%Y%m%d'),datetime.datetime(2022,1,1).strftime('%Y%m%d'))
+        df=normal(df)
+        startvalue=df['Close_normal'].iloc[0]
+        max_value=df['Close_normal'].max()
+        max_position=df['Close_normal'].idxmax()
+        min_value=df['Close_normal'].min()
+        min_position=df['Close_normal'].idxmin()
+        result[1]="현재 주가전파관계가 존재합니다. 확인해보세요. 예측치:"+str(result[1])+"주 전파"
+        if startvalue<max_value and max_value-startvalue>10:
+            result.append("지금은 살 때입니다."+str(max_position)+'업무일 후에 파세요')
+        elif startvalue>min_value and startvalue-min_value>10:
+            result.append("지금은 팔 때입니다."+str(min_position)+'업무일 후에 사세요')
+        else:
+            result.append("향후 변동폭이 크지 않습니다. 판단을 보류합니다.")
+        #지금은 살 때입니다. ~~업무일,~~업무일,~~업무일 후에 파세요.
+        #지금은 팔 때입니다. ~~업무일 후에 사세요.
+    return result
 
 #7-1개의 파라미터를 받아서 파일 5개와 correlation 5개 반환
-def diff_cal_data(list,days=5):
+def diff_cal_data(list,days=5)->list[str]:
     #파라미터 설정
     first_com=list[1]
     diff1_com=list[2]
@@ -142,10 +260,8 @@ def diff_cal_data(list,days=5):
     connection.close()
     return result_list
 
-
-
 #5-1개 파라미터를 받아서, 파일 5개와 correlation 5개 반환
-def cal_data(list,days=5):
+def cal_data(list:list[str],days=5)->list[str]:
     #파라미터 설정
     first_com=list[1]
     second_com=list[2]
@@ -174,7 +290,6 @@ def cal_data(list,days=5):
     connection.close()
     return result_list
 
-
 def delay_save(df1:pd.DataFrame,df2:pd.DataFrame,name,days:int=5)->str:
     result_list=[]
     startdate=df1.index[0].date()
@@ -196,13 +311,21 @@ def delay_save(df1:pd.DataFrame,df2:pd.DataFrame,name,days:int=5)->str:
 # 결과에 출력
 #        print(str(startdate)+','+str(lastdate)+','+str(max_inde))
         return str(startdate)+','+str(lastdate)+','+str(max_inde)
-    
+
+# 리스트를 받아서 극대값과 극대값 위치 산출
 def find_max_and_index(lst:list=[1,2,3,2,1])->tuple[int,int]:
     if not lst:  # 리스트가 비어있는 경우
         return None, None
     max_value = max(lst)
     max_index = lst.index(max_value)
     return max_value, max_index
+# 리스트를 받아서 극소값과 극소값 위치 산출
+def find_min_and_index(lst:list=[3,2,1,2,3])->tuple[int,int]:
+    if not lst:  # 리스트가 비어있는 경우
+        return None, None
+    min_value = min(lst)
+    min_index = lst.index(min_value)
+    return min_value, min_index
 
 # #5-1개 파라미터를 받아서, 파일 5개와 correlation 5개 반환
 # #멀티 쓰레드 버전
@@ -260,6 +383,7 @@ def find_max_and_index(lst:list=[1,2,3,2,1])->tuple[int,int]:
 #     df1,df2=delay_df(df1,df2)
 
 
+# 두 pf를 입력받아서 같은 날이 존재하는 항목만 남긴 두 pf로 변환
 def common_date(df1:pd.DataFrame,df2:pd.DataFrame)->tuple[pd.DataFrame,pd.DataFrame]:
     common_dates=df1.index.intersection(df2.index)
     df1=df1.loc[common_dates]
@@ -267,7 +391,7 @@ def common_date(df1:pd.DataFrame,df2:pd.DataFrame)->tuple[pd.DataFrame,pd.DataFr
     return df1,df2
     
 # 1년을 4개월씩 분석
-def yearly(df1:pd.DataFrame,df2:pd.DataFrame,div:int=4,critic:float=0.7)->list:
+def yearly(df1:pd.DataFrame,df2:pd.DataFrame,div:int=4,critic:float=0.7)->list[str]:
     result=[]
     for i in range(div):
         startdate=int(df1.shape[0]/div*i)
@@ -286,13 +410,14 @@ def yearly(df1:pd.DataFrame,df2:pd.DataFrame,div:int=4,critic:float=0.7)->list:
 #            print("correlation: ",correlation)
 #            delay_save(df1[startdate:lastdate],df2[startdate:lastdate],str(startdate)+'_'+str(lastdate))
     return result
+
 #list 0,1,2를 받아서 total_anal 실행
-def total_analy(lst:list)->list:
+def total_analy(lst:list)->list[str]:
     stock_code1=lst[1]
     stock_code2=lst[2]
     return total_anal(stock_code1,stock_code2)
 # 10 년 전체를 년별 분석
-def total_anal(stock_code1:str='1008',stock_code2:str='IBM',yearly=yearly,default:str='CLOSE')->list:
+def total_anal(stock_code1:str='1008',stock_code2:str='IBM',yearly=yearly,default:str='CLOSE')->list[str]:
     result=[]
     df1=make_df(stock_code1)[default]
     df2=make_df(stock_code2)[default]
@@ -330,6 +455,7 @@ def total_anal(stock_code1:str='1008',stock_code2:str='IBM',yearly=yearly,defaul
 # lst=['find_period','023440','1153']
 # total_analy(lst)
 
+# 두개의 주가 코드를 입력받아서, 하나의 df로 변환
 def normalNlabel(stock_code1:str='IBM',stock_code2:str='1008',default='CLOSE')->pd.DataFrame:
     df1=make_df(stock_code1)[[default]]
     df2=make_df(stock_code2)[[default]]
@@ -375,3 +501,5 @@ def normalNlabel(stock_code1:str='IBM',stock_code2:str='1008',default='CLOSE')->
 # print(result)
 # result=ai_anal(['tree_data', '1008', 'IBM'])
 # print(result)
+
+print(ai_anal(['sdf','1155','004020']))
