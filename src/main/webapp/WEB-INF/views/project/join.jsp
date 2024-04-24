@@ -49,6 +49,7 @@
             border: 1px solid #ccc;
             border-radius: 4px;
             box-sizing: border-box;
+
         }
 
         /* 성별 입력 스타일 */
@@ -79,6 +80,7 @@
             border-radius: 4px;
             cursor: pointer;
         }
+
 
         .btn-cancel {
             background-color: #6c757d;
