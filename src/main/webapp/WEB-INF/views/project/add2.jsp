@@ -71,6 +71,25 @@ button {
      .home-button:hover {
          background-color: #0056b3; /* hover 시 색 변화 */
      }
+     .button-apply {
+               display: block;
+               width: 100%;
+               padding: 15px 30px;
+               margin: 20px auto 0;
+               background-color: #007bff;
+               color: #fff;
+               border: none;
+               border-radius: 5px;
+               cursor: pointer;
+           }
+
+           .button-apply:hover {
+               background-color: #0056b3;
+           }
+
+         .button-container {
+           margin-top: 20px;
+         }
 
 </style>
 <!-- jQuery 라이브러리 추가 -->
@@ -142,6 +161,22 @@ function loadStockCodes() {
         }
     });
 }
+function validateAndSubmit() {
+                var nation = document.getElementsByName("nation")[0].value;
+                var db_name = document.getElementsByName("db_name")[0].value;
+                var sector = document.getElementsByName("sector")[0].value;
+                var name = document.getElementsByName("name")[0].value;
+                var stock_code = document.getElementsByName("stock_code")[0].value;
+
+                // 기업 또는 날짜 중 하나라도 입력되지 않았을 경우 경고 메시지를 표시합니다.
+                if (nation === "" || db_name === "" ||  sector === "" || name === "" || stock_code === "") {
+                    alert("국가, DB, 업종, 기업명, 종목코드를 전부 입력해주세요.");
+                    return false; // 폼을 제출하지 않도록 false를 반환합니다.
+                } else {
+                    // 폼을 제출합니다.
+                    return true;
+                }
+            }
 </script>
 </head>
 <body>
@@ -150,7 +185,7 @@ function loadStockCodes() {
         <h2>기업추가</h2>
 </div>
 
-<form action="add2.do" method="post">
+<form action="add2.do" method="post" onsubmit="return validateAndSubmit();">
 <!-- 국가 선택 창 -->
 <select name="nation" id="nation" onchange="loadDBNames()">
 <option value="">국가 선택</option>
@@ -182,7 +217,10 @@ function loadStockCodes() {
     <option value="">종목 코드 선택</option>
 </select>
 
-<button type="submit">데이터 확인</button>
+
+<div class="button-container">
+              <input type="submit" class="button-apply" value="기업추가">
+          </div>
 </form>
 </body>
 </html>

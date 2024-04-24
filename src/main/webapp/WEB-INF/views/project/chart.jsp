@@ -49,7 +49,7 @@ body {
         <button class="home-button" onclick="location.href='home.do'">Home</button>
 </div>
 <h3 style="text-align: center;">회사 1: ${company1}  회사 2: ${company2}</h3>
-<div style="font-size: 18px; font-weight: bold; color: #333; text-align: center;">결과값 : "${report}"</div>
+<div style="font-size: 18px; font-weight: bold; color: #333; text-align: center;">결과값 : ${report}</div>
 <div class="image-container">
 <c:forEach items="${plots}" var="plot" varStatus="loop">
     <img src="${plot}" alt="그래프" class="inline-img" >
@@ -111,7 +111,7 @@ var dataArray =[
   <!-- 그래프가 표시될 div 요소 -->
   <div id="chart_div" style="width: 120%; height: 400px; position: relative; left: -8%"></div>
 <h3 style="text-align: center;">회사 1: ${company2}  회사 2: ${company1}</h3>
-   <div style="font-size: 18px; font-weight: bold; color: #333; text-align: center;">결과값 : "${report}"</div>
+   <div style="font-size: 18px; font-weight: bold; color: #333; text-align: center;">결과값 : ${report2}</div>
    <div class="image-container">
    <c:forEach items="${plots2}" var="plot" varStatus="loop">
        <img src="${plot}" alt="그래프" class="inline-img" >

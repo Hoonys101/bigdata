@@ -170,57 +170,6 @@ public class pageController {
         return "redirect:add2.do";
     }
 
-    @PostMapping("url.do")
-    @ResponseBody
-    public List<String> add2(@RequestParam("action") String action,
-                             @RequestParam("selectedNation") String selectedNation,
-                             @RequestParam("selectedDb") String selectedDb,
-                             @RequestParam("selectedSection") String selectedSector,
-                             @RequestParam("selectedName") String selectedName,
-
-                             HttpSession session) {
-
-        String id = (String) session.getAttribute("id");
-        selectedNation = selectedNation.split("\\s\\(")[0];
-        selectedDb = selectedDb.split("\\s\\(")[0];
-        selectedSector = selectedSector.split("\\s\\(")[0];
-        System.out.println("action: " + action + "\nselectedNation: " + selectedNation + "\nid: " + id);
-        // 요청에 따라 데이터를 로드하고 응답할 리스트를 생성합니다.
-        List<String> responseData = null;
-
-        // 요청에 따라 처리합니다.
-        switch (action) {
-            case "getNation":
-                // 데이터베이스에서 나라를 가져옵니다.
-                responseData = availableDataService.getNation(id);
-                System.out.println(responseData);
-                break;
-            case "getDb":
-                // 데이터베이스에서 db명을 가져옵니다.
-                responseData = availableDataService.getDb(id, selectedNation);
-                System.out.println(responseData);
-                break;
-            case "getSector":
-                // 데이터베이스에서 업종명 가져옵니다.
-                responseData = availableDataService.getSector(id, selectedDb);
-                System.out.println(responseData);
-                break;
-            case "getName":
-                // 데이터베이스에서 회사명을 가져옵니다.
-                responseData = availableDataService.getName(id, selectedSector);
-                System.out.println(responseData);
-                break;
-            case "getStockCode":
-                responseData = availableDataService.getStockCode(id, selectedName);
-                System.out.println(responseData);
-            default:
-                // 알 수 없는 액션인 경우, null 또는 적절한 오류 응답을 반환합니다.
-                break;
-        }
-        return responseData;
-    }
-
-
     @PostMapping("add2.do")
     public String excuteAdd(@RequestParam("db_name") String db_name, @RequestParam("stock_code") String stock_code, HttpSession session) {
         String id = (String) session.getAttribute("id");
@@ -272,19 +221,128 @@ public class pageController {
 
         return "/project/analysis_page4";
     }
-    @PostMapping("analysis_page4.do")
-    public String analysis_page4(@RequestParam("stock_code1") String stock_code1,
-                                 @RequestParam("stock_code2") String stock_code2,
-                                 @RequestParam("stock_code3") String stock_code3,
-                                 @RequestParam("stock_code4") String stock_code4,
-                                 @RequestParam("start_date") String start_date,
-                                 @RequestParam("end_date") String end_date,
-                                 HttpSession session, Model model) {
-        //List<String> result = javaPy.strParameter("cal_data", stock_code1, stock_code2, start_date, end_date);
-        //List<String> result2 = javaPy.strParameter("cal_data", stock_code3, stock_code4, start_date, end_date);
-
-        return "/project/chart";
-    }
+//    @PostMapping("analysis_page4.do")
+//    public String analysis_page4(@RequestParam("stock_code1") String stock_code1,
+//                                 @RequestParam("stock_code2") String stock_code2,
+//                                 @RequestParam("start_date") String start_date,
+//                                 @RequestParam("end_date") String end_date,
+//                                 HttpSession session, Model model) {
+//        String id = (String) session.getAttribute("id");
+//        List<String> result = javaPy.strParameter("find_period", stock_code1, stock_code2);
+//        List<String> result2 = javaPy.strParameter("find_period", stock_code2, stock_code1);
+//
+//        System.out.println("result"+ result);
+//        System.out.println("result2"+ result2);
+//        List<ServiceUsage> serviceUsages1 = new ArrayList<>();
+//        List<ServiceUsage> serviceUsages2 = new ArrayList<>();
+//
+//
+//        for (String item : result) {
+//            String[] resultArray = item.split(",\\s*");
+//            if (resultArray.length >= 3) {
+//                ServiceUsage serviceUsage = new ServiceUsage(); // 각 요소에 대해 새로운 ServiceUsage 객체를 생성
+//                serviceUsage.setStock_code1(stock_code1);
+//                serviceUsage.setStock_code2(stock_code2);
+//                serviceUsage.setId(id);
+//                serviceUsage.setStart_date(resultArray[0]);
+//                serviceUsage.setEnd_date(resultArray[1]);
+//                serviceUsage.setReport(resultArray[2]);
+//
+//                int reportValue = Integer.parseInt(resultArray[2]);
+//                if (reportValue >= 1 && reportValue <= 5) {
+//                    // 1~4 사이의 값이라면 그대로 사용
+//                    serviceUsage.setReport(String.valueOf(reportValue));
+//                } else {
+//                    // 1~4 사이의 값이 아니라면 1로 설정
+//                    serviceUsage.setReport("0");
+//                }
+//                // 값을 설정
+//                System.out.println("reportValue"+reportValue);
+//                String result1 = generateResult(Double.parseDouble(serviceUsage.getReport()));
+//                serviceUsage.setReport(result1);
+//
+//                addData.insertToServiceUsage(serviceUsage); // 생성된 객체를 데이터베이스에 추가
+//                serviceUsages1.add(serviceUsage); // 생성된 객체를 리스트에 추가
+//            }
+//        }
+//
+//        for (String item : result2) {
+//            String[] resultArray = item.split(",\\s*");
+//            if (resultArray.length >= 3) {
+//                ServiceUsage serviceUsage = new ServiceUsage(); // 각 요소에 대해 새로운 ServiceUsage 객체를 생성
+//                serviceUsage.setStock_code1(stock_code2);
+//                serviceUsage.setStock_code2(stock_code1);
+//                serviceUsage.setId(id);
+//                serviceUsage.setStart_date(resultArray[0]);
+//                serviceUsage.setEnd_date(resultArray[1]);
+//                serviceUsage.setReport(resultArray[2]);
+//                String result1 = generateResult(Double.parseDouble(serviceUsage.getReport()));
+//                serviceUsage.setReport(result1);
+//                addData.insertToServiceUsage(serviceUsage); // 생성된 객체를 데이터베이스에 추가
+//                serviceUsages2.add(serviceUsage); // 생성된 객체를 리스트에 추가
+//            }
+//        }
+//        int length = result.size();
+//        int length2 = result.size();
+//        System.out.println("length: " + length);
+//        for (int i = 0; i < length; i++) {
+//            result.set(i, result.get(length + i - length));
+//            System.out.println("result.get(length): "+result.get(length + i - length));
+//        }
+//        for (int i = 0; i < length2; i++) {
+//            result2.set(i, result2.get(length + i - length));
+//            System.out.println("result2.get(length): "+result2.get(length + i - length));
+//        }
+//
+//
+//
+//        for (int i = 5; i < 10; i++) {
+//            result.set(i, "img/plots/" + result.get(i));
+//        }
+//        for (int i = 5; i < 10; i++) {
+//            result2.set(i, "img/plots/" + result2.get(i));
+//        }
+//        String company1 = addData.getCompany1(stock_code1);
+//        String company2 = addData.getCompany2(stock_code2);
+//
+//        System.out.println("company1"+company1);
+//        System.out.println("company2"+company2);
+//
+//        addData.insertToServiceUsage(serviceUsage);
+//        List<String> plotFile = new ArrayList<>();
+//        List<String> plotFile2 = new ArrayList<>();
+//        for (int i = 0; i < 5; i++) {
+//            String plot = "http://127.0.0.1:8080/img/plots/" + stock_code1 + "_" + stock_code2 + "_" + start_date + "_" + end_date + "_" + i + ".png";
+//            plotFile.add(i, plot);
+//        }
+//        for (int i = 0; i < 5; i++) {
+//            String plot2 = "http://127.0.0.1:8080/img/plots/" + stock_code2 + "_" + stock_code1 + "_" + start_date + "_" + end_date + "_" + i + ".png";
+//            plotFile2.add(i, plot2);
+//        }
+//
+//        List<String[]> dataList = new ArrayList<>();
+//        dataList.add(new String[]{"0", result.get(0)});
+//        dataList.add(new String[]{"1", result.get(1)});
+//        dataList.add(new String[]{"2", result.get(2)});
+//        dataList.add(new String[]{"3", result.get(3)});
+//        dataList.add(new String[]{"4", result.get(4)});
+//
+//        List<String[]> dataList2 = new ArrayList<>();
+//        dataList2.add(new String[]{"0", result2.get(0)});
+//        dataList2.add(new String[]{"1", result2.get(1)});
+//        dataList2.add(new String[]{"2", result2.get(2)});
+//        dataList2.add(new String[]{"3", result2.get(3)});
+//        dataList2.add(new String[]{"4", result2.get(4)});
+//        model.addAttribute("company1", company1);
+//        model.addAttribute("company2", company2);
+//        model.addAttribute("dataList", dataList);
+//        model.addAttribute("dataList2", dataList2);
+//        model.addAttribute("plots", plotFile);
+//        model.addAttribute("plots2", plotFile2);
+//        model.addAttribute("serviceUsage", serviceUsage);
+//
+//        return "/project/chart";
+//    }
 
     @PostMapping("analysis_page.do") //분석하기
     public String analysis_page(@RequestParam("stock_code1") String stock_code1,
@@ -336,7 +394,7 @@ public class pageController {
             result2.set(i, "img/plots/" + result2.get(i));
         }
         String company1 = addData.getCompany1(stock_code1);
-        String company2 = addData.getCompany1(stock_code2);
+        String company2 = addData.getCompany2(stock_code2);
 
         System.out.println("company1"+company1);
         System.out.println("company2"+company2);
@@ -370,7 +428,7 @@ public class pageController {
         dataList2.add(new String[]{"0", result2.get(0)});
         dataList2.add(new String[]{"1", result2.get(1)});
         dataList2.add(new String[]{"2", result2.get(2)});
-        dataList2.add(new String[]{"3", result2.get(3)});
+       dataList2.add(new String[]{"3", result2.get(3)});
         dataList2.add(new String[]{"4", result2.get(4)});
         model.addAttribute("company1", company1);
         model.addAttribute("company2", company2);
@@ -409,6 +467,12 @@ public class pageController {
         String id = (String) session.getAttribute("id");
         List<String> result1 = javaPy.strParameter("find_period", stock_code1, stock_code2);
         List<String> result2 = javaPy.strParameter("find_period", stock_code2, stock_code1);
+        List<String> ai_1 = javaPy.strParameter("tree_data",stock_code1,stock_code2);
+        List<String> ai_2 = javaPy.strParameter("tree_data",stock_code2,stock_code1);
+        System.out.println("result1"+ result1);
+        System.out.println("result2"+ result2);
+        System.out.println("ai_1"+ ai_1);
+        System.out.println("ai_2"+ ai_2);
         System.out.println("result1"+result1);
 
         List<ServiceUsage> serviceUsages1 = new ArrayList<>();
@@ -426,7 +490,7 @@ public class pageController {
                 serviceUsage.setEnd_date(resultArray[1]);
                 serviceUsage.setReport(resultArray[2]);
 
-                double reportValue = Double.parseDouble(resultArray[2]);
+                int reportValue = Integer.parseInt(resultArray[2]);
                 if (reportValue >= 1 && reportValue <= 5) {
                     // 1~4 사이의 값이라면 그대로 사용
                     serviceUsage.setReport(String.valueOf(reportValue));
@@ -462,10 +526,16 @@ public class pageController {
         }
 
         String company1 = addData.getCompany1(stock_code1);
-        String company2 = addData.getCompany1(stock_code2);
+        String company2 = addData.getCompany2(stock_code2);
 
+        System.out.println("company1: " + company1);
+        System.out.println("company2: " + company2);
+        System.out.println("serviceUsages1: " + serviceUsages1);
+        System.out.println("serviceUsages2: " + serviceUsages2);
         System.out.println("result1: " + result1);
         System.out.println("result2: " + result2);
+        model.addAttribute("ai_1", ai_1);
+        model.addAttribute("ai_2", ai_2);
         model.addAttribute("company1", company1);
         model.addAttribute("company2", company2);
         model.addAttribute("serviceUsages1", serviceUsages1);
@@ -554,7 +624,11 @@ public class pageController {
         dataList2.add(new String[]{"2", result2.get(2)});
         dataList2.add(new String[]{"3", result2.get(3)});
         dataList2.add(new String[]{"4", result2.get(4)});
+        String company1 = addData.getCompany1(stock_code1);
+        String company2 = addData.getCompany2(stock_code2);
 
+        model.addAttribute("company1", company1);
+        model.addAttribute("company2", company2);
         model.addAttribute("dataList", dataList);
         model.addAttribute("dataList2", dataList2);
         model.addAttribute("report", report);
@@ -717,6 +791,89 @@ public class pageController {
             return false; // 이메일 전송 실패를 나타내는 false 반환
         }
     }
+    @PostMapping("ai_analysis_endpoint.do")
+    @ResponseBody
+    public ResponseEntity<?> performAIAnalysis(@RequestParam("stock_code1") String stock_code1,
+                                               @RequestParam("stock_code2") String stock_code2,
+
+                                               HttpSession session
+                                               ) {
+        System.out.println("performAIAnalysis start");
+        System.out.println("performAIAnalysis start");
+        System.out.println("performAIAnalysis start");
+        System.out.println("performAIAnalysis start");
+        System.out.println("performAIAnalysis start");
+
+        // AI 분석을 수행하고 결과를 얻는 로직을 작성합니다.
+        // 예를 들어, AI 분석 서비스를 호출하고 결과를 받아온다고 가정합니다.
+
+        // 아래는 가상의 AI 분석 결과를 생성하는 코드입니다. 실제로는 AI 분석을 수행하는 코드로 대체되어야 합니다.
+        List<String> result1 = javaPy.strParameter("find_period", stock_code1, stock_code2);
+        List<String> result2 = javaPy.strParameter("find_period", stock_code2, stock_code1);
+        System.out.println("result2"+result1);
+        System.out.println("result2"+result2);
+        System.out.println("stock_code1"+stock_code1);
+        System.out.println("stock_code2"+stock_code2);
+
+
+        List<String> aiResult = javaPy.strParameter("tree_data",stock_code1,stock_code2);
+
+
+        System.out.println(aiResult);
+        List<String> ai_2 = javaPy.strParameter("tree_data",stock_code2,stock_code1);
+        // 클라이언트에게 JSON 형태로 결과를 반환합니다.
+        return ResponseEntity.ok().body("{\"companyRelationshipAnalysis\": \"" + aiResult + "\"}");
+    }
+    @PostMapping("url.do")
+    @ResponseBody
+    public List<String> add2(@RequestParam("action") String action,
+                             @RequestParam("selectedNation") String selectedNation,
+                             @RequestParam("selectedDb") String selectedDb,
+                             @RequestParam("selectedSection") String selectedSector,
+                             @RequestParam("selectedName") String selectedName,
+
+                             HttpSession session) {
+
+        String id = (String) session.getAttribute("id");
+        selectedNation = selectedNation.split("\\s\\(")[0];
+        selectedDb = selectedDb.split("\\s\\(")[0];
+        selectedSector = selectedSector.split("\\s\\(")[0];
+        System.out.println("action: " + action + "\nselectedNation: " + selectedNation + "\nid: " + id);
+        // 요청에 따라 데이터를 로드하고 응답할 리스트를 생성합니다.
+        List<String> responseData = null;
+
+        // 요청에 따라 처리합니다.
+        switch (action) {
+            case "getNation":
+                // 데이터베이스에서 나라를 가져옵니다.
+                responseData = availableDataService.getNation(id);
+                System.out.println(responseData);
+                break;
+            case "getDb":
+                // 데이터베이스에서 db명을 가져옵니다.
+                responseData = availableDataService.getDb(id, selectedNation);
+                System.out.println(responseData);
+                break;
+            case "getSector":
+                // 데이터베이스에서 업종명 가져옵니다.
+                responseData = availableDataService.getSector(id, selectedDb);
+                System.out.println(responseData);
+                break;
+            case "getName":
+                // 데이터베이스에서 회사명을 가져옵니다.
+                responseData = availableDataService.getName(id, selectedSector);
+                System.out.println(responseData);
+                break;
+            case "getStockCode":
+                responseData = availableDataService.getStockCode(id, selectedName);
+                System.out.println(responseData);
+            default:
+                // 알 수 없는 액션인 경우, null 또는 적절한 오류 응답을 반환합니다.
+                break;
+        }
+        return responseData;
+    }
 }
+
 
 

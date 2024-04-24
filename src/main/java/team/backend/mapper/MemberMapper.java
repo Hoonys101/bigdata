@@ -17,6 +17,12 @@ public interface MemberMapper {
 
     void deleteUser(String id);
 
+    void deleteUserByAddition(String id);
+
+    void deleteUserByServiceUsage(String id);
+
+
+
     Member findUserByUsernameDobAndEmail(Member member);
     Member findUserByPwd(Member member);
 }

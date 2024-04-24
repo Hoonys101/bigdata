@@ -3,6 +3,7 @@
 
 <html>
 <head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <meta charset="UTF-8">
     <title>Chart</title>
     <style>
@@ -86,8 +87,18 @@
 <div class="container">
 
 <h2 style="text-align: center;">회사 1: ${company1}  회사 2: ${company2}</h2>
-</div>
+<button id="ai-analysis-button" class="ai-button">AI 분석</button>
 
+</div>
+<div id="ai-result" class="ai-result" style="display: none;">
+    <h3>회사 1과 회사 2의 연관성 분석 결과</h3>
+    <!-- AI 분석 결과를 여기에 표시할 구조를 작성합니다. -->
+
+    <div id="company-relationship-analysis">
+    <input type="text" id="stock_code1" name="stock_code1" vaule="${stock_code1}">
+    <input type="text" id="stock_code2" name="stock_code2" vaule="${stock_code2}">
+    </div>
+</div>
 <div class="table-container">
     <table>
         <thead class="fixed-header">
@@ -144,7 +155,15 @@
 <div class="table-container">
 
 <h2 style="text-align: center;">회사 1: ${company2}  회사 2: ${company1}</h2>
+    <!--<button id="ai-analysis-button" class="ai-button">AI 분석</button>
+    ${ai_2}
     </div>
+    <div id="ai-result" class="ai-result" style="display: none;">
+        <h3>회사 2과 회사 1의 연관성 분석 결과</h3>
+        ${ai-result}
+         AI 분석 결과를 여기에 표시할 구조를 작성합니다.
+        <div id="company-relationship-analysis"></div>
+    </div>-->
 <div class="table-container">
     <table>
         <thead class="fixed-header">
@@ -198,6 +217,32 @@
         </tbody>
     </table>
 </div>
+<script>
+// AI 분석 버튼 클릭 이벤트 처리
+document.getElementById('ai-analysis-button').addEventListener('click', function() {
 
+    // Ajax 요청을 통해 서버에서 AI 분석 결과를 가져옵니다.
+    $.ajax({
+        url: '../project/ai_analysis_endpoint.do',
+        method: 'POST',
+        data: {
+            stock_code1: $("#stock_code1").val(), // stock_code1 입력 필드의 값 가져오기
+            stock_code2: $("#stock_code2").val() // stock_code2 입력 필드의 값 가져오기
+        },
+        success: function(response) {
+            // 서버에서 받은 AI 분석 결과를 처리하여 화면에 표시합니다.
+            // 회사 1과 회사 2의 연관성 분석 결과를 company-relationship-analysis에 표시
+            document.getElementById('company-relationship-analysis').innerHTML = response.companyRelationshipAnalysis;
+            document.getElementById('stock_code1').value = response.stock_code1;
+            document.getElementById('stock_code2').value = response.stock_code2;
+            document.getElementById('ai-result').style.display = 'block';
+        },
+        error: function(xhr, status, error) {
+            // 오류 처리
+            console.error('AJAX 오류:', status, error);
+        }
+    });
+});
+</script>
 </body>
 </html>
