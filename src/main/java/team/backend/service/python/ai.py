@@ -53,11 +53,11 @@ def training(df: pd.DataFrame,model=DecisionTreeClassifier(max_depth=3),default=
     if(y_pred[-1]!=-1):
 
 #        print("현재 주가전파관계가 존재합니다. 확인해보세요. 예측치:",y_pred[-1],"주 전파",flush=True)
-        result.append("현재 주가전파관계가 존재합니다. 확인해보세요. 예측치:"+str(y_pred[-1])+"주 전파")
+        result.append(y_pred[-1])
         return result
     else:
 #        print("아쉽게도 현재 주가 전파관계는 없는 것으로 보이네요.",flush=True)
-        result.append("아쉽게도 현재 주가 전파관계는 없는 것으로 보이네요.")
+        result.append(-1)
         return result
 
     # plt.figure(figsize=(20,15))
