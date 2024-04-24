@@ -95,8 +95,8 @@
     <!-- AI 분석 결과를 여기에 표시할 구조를 작성합니다. -->
 
     <div id="company-relationship-analysis">
-    <input type="text" id="stock_code1" name="stock_code1" vaule="${stock_code1}">
-    <input type="text" id="stock_code2" name="stock_code2" vaule="${stock_code2}">
+    <input type="text" id="stock_code1" name="stock_code1" vaule=${serviceUsages1.stock_code1}>
+    <input type="text" id="stock_code2" name="stock_code2" vaule=${serviceUsages1.stock_code2}>
     </div>
 </div>
 <div class="table-container">

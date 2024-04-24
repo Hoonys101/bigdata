@@ -808,10 +808,10 @@ public class pageController {
         // 예를 들어, AI 분석 서비스를 호출하고 결과를 받아온다고 가정합니다.
 
         // 아래는 가상의 AI 분석 결과를 생성하는 코드입니다. 실제로는 AI 분석을 수행하는 코드로 대체되어야 합니다.
-        List<String> result1 = javaPy.strParameter("find_period", stock_code1, stock_code2);
-        List<String> result2 = javaPy.strParameter("find_period", stock_code2, stock_code1);
-        System.out.println("result2"+result1);
-        System.out.println("result2"+result2);
+//        List<String> result1 = javaPy.strParameter("find_period", stock_code1, stock_code2);
+//        List<String> result2 = javaPy.strParameter("find_period", stock_code2, stock_code1);
+//        System.out.println("result2"+result1);
+//        System.out.println("result2"+result2);
         System.out.println("stock_code1"+stock_code1);
         System.out.println("stock_code2"+stock_code2);
 
