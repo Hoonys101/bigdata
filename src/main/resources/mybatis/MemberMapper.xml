@@ -19,6 +19,12 @@
     <delete id="deleteUser" parameterType="String">
         DELETE FROM ID WHERE ID = #{id}
     </delete>
+    <delete id="deleteUserByAddition" parameterType="String">
+        DELETE FROM addition WHERE ID = #{id}
+    </delete>
+    <delete id="deleteUserByServiceUsage" parameterType="String">
+        DELETE FROM ServiceUsage WHERE ID = #{id}
+    </delete>
     <select id="findUserByUsernameDobAndEmail" resultType="team.backend.domain.Member">
         SELECT id FROM ID
         WHERE user_name = #{user_name}
