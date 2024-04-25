@@ -55,9 +55,9 @@ public class JavaPython implements JavaPythonInter {
 //        List<String> results=java.strParameter("add_data","Index","1001");
 //        List<String> results=java.strParameter("find_period","1152","1153");
 //        List<String> results=java.strParameter("diff_cal_data","1152","1008","1153","1008","20130101","20130501");
-
         //List<String> results=java.strParameter("cal_data","1152","1153","20130101","20130501");
-        List<String> results=java.strParameter("tree_data","041020","025750");
+        //List<String> results=java.strParameter("tree_data","041020","025750");
+        List<String> results=java.strParameter("diff_find_period","1152","1153","1001");
         System.out.println("result printing");
         for(String result:results){
             System.out.println(result);
@@ -116,7 +116,7 @@ public class JavaPython implements JavaPythonInter {
         writer.flush();
         pln("입력완료");
     }
-
+//파이썬 구동 메소드
     public List<String> strParameter(String... args){
         lock.set(new Object());
 //        pln(lock.get().toString());
@@ -124,7 +124,8 @@ public class JavaPython implements JavaPythonInter {
         List<String> finalresult=null;
         String threadName=String.valueOf(assignIndex());
         pln("threadName: "+threadName);
-        if (args[0].equals("diff_cal_data")&&(args.length==7)||args[0].equals("add_data")&&args.length==3||args[0].equals("cal_data")&&args.length==5||args[0].equals("find_period")&&args.length==3||args[0].equals("tree_data")&&args.length==3){
+        //명령어 및 파라미터 개수 체크
+        if (args[0].equals("diff_cal_data")&&(args.length==7)||args[0].equals("add_data")&&args.length==3||args[0].equals("cal_data")&&args.length==5||args[0].equals("find_period")&&args.length==3||args[0].equals("tree_data")&&args.length==3||args[0].equals("diff_find_period")&&(args.length==4)){
             String resultString=threadName+"\n"+args[0];
             pln("strParam 첫번째 인자\n"+args[0]);
             for(int i=1;i<args.length;i++){

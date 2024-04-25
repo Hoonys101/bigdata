@@ -54,6 +54,9 @@ def run_service(thread_name:str,input_data:list):
         result=cal.ai_anal(input_data)
         sending_result(thread_name, result)
         # print("EOF",flush=True)
+    elif input_data[0]==("diff_find_period"):
+        result=cal.diff_find_period(input_data)
+        sending_result(thread_name,result)
 
 while True:
     input_data=[]
