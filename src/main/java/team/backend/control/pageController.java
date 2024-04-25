@@ -382,8 +382,9 @@ public class pageController {
             result2.set(i, result2.get(length + i - 10));
             System.out.println("result2.get(length): "+result2.get(length + i - 10));
         }
-        String report = javaPy.analysisData(result.subList(0, 4));
-        String report2 = javaPy.analysisData(result2.subList(0, 4));
+        System.out.println("result sublist"+result.subList(0, 5));
+        String report = javaPy.analysisData(result.subList(0, 5));
+        String report2 = javaPy.analysisData(result2.subList(0, 5));
         serviceUsage.setReport(report);
         serviceUsage.setReport(report2);
 
@@ -586,8 +587,8 @@ public class pageController {
             result2.set(i, result2.get(length + i - 10));
             System.out.println("result2.get(length): "+result2.get(length + i - 10));
         }
-        String report = javaPy.analysisData(result.subList(0, 4));
-        String report2 = javaPy.analysisData(result2.subList(0, 4));
+        String report = javaPy.analysisData(result.subList(0, 5));
+        String report2 = javaPy.analysisData(result2.subList(0, 5));
         serviceUsage.setReport(report);
         serviceUsage.setReport(report2);
 
