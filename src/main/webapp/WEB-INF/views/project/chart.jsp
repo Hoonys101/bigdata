@@ -40,6 +40,7 @@ body {
         .home-button:hover {
             background-color: #0056b3; /* hover 시 색 변화 */
         }
+
 </style>
 <script src="https://code.jquery.com/jquery-latest.js"></script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -49,6 +50,14 @@ body {
         <button class="home-button" onclick="location.href='home.do'">Home</button>
 </div>
 <h3 style="text-align: center;">회사 1: ${company1}  회사 2: ${company2}</h3>
+ <div style="text-align: left;">
+     <span style="color: blue;">ㅡ : </span>
+     <span>${company1}</span>
+ </div>
+ <div style="text-align: left;">
+     <span style="color: orange;">ㅡ : </span>
+     <span>${company2}</span>
+ </div>
 <div style="font-size: 18px; font-weight: bold; color: #333; text-align: center;">결과값 : ${report}</div>
 <div class="image-container">
 <c:forEach items="${plots}" var="plot" varStatus="loop">
@@ -111,6 +120,14 @@ var dataArray =[
   <!-- 그래프가 표시될 div 요소 -->
   <div id="chart_div" style="width: 120%; height: 400px; position: relative; left: -8%"></div>
 <h3 style="text-align: center;">회사 1: ${company2}  회사 2: ${company1}</h3>
+ <div style="text-align: left;">
+     <span style="color: blue;">ㅡ : </span>
+     <span>${company2}</span>
+ </div>
+ <div style="text-align: left;">
+     <span style="color: orange;">ㅡ : </span>
+     <span>${company1}</span>
+ </div>
    <div style="font-size: 18px; font-weight: bold; color: #333; text-align: center;">결과값 : ${report2}</div>
    <div class="image-container">
    <c:forEach items="${plots2}" var="plot" varStatus="loop">
