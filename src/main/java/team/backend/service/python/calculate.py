@@ -502,4 +502,4 @@ def normalNlabel(stock_code1:str='IBM',stock_code2:str='1008',default='CLOSE')->
 # result=ai_anal(['tree_data', '1008', 'IBM'])
 # print(result)
 
-print(ai_anal(['sdf','1155','004020']))
+# print(ai_anal(['sdf','1155','004020']))

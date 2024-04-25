@@ -1,6 +1,10 @@
 <%@ page contentType="text/html;charset=utf-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-
+<%@ page import="java.util.List" %>
+<%
+// 세션에서 aiResult 값을 읽어옴
+List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult");
+%>
 <html>
 <head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -90,13 +94,21 @@
 <button id="ai-analysis-button" class="ai-button">AI 분석</button>
 
 </div>
-<div id="ai-result" class="ai-result" style="display: none;">
+<div id="aiResult" class="aiResult" style="display: none;">
     <h3>회사 1과 회사 2의 연관성 분석 결과</h3>
     <!-- AI 분석 결과를 여기에 표시할 구조를 작성합니다. -->
+    <ul>
 
+
+
+    </ul>
     <div id="company-relationship-analysis">
-    <input type="text" id="stock_code1" name="stock_code1" vaule=${serviceUsages1.stock_code1}>
-    <input type="text" id="stock_code2" name="stock_code2" vaule=${serviceUsages1.stock_code2}>
+        <!-- serviceUsages1 리스트의 각 요소에 대해 반복문을 사용하여 값을 가져옴 -->
+        <c:forEach items="${serviceUsages1}" var="item">
+            <input type="text" name="stock_code1_${item.id}" value="${item.stock_code1}">
+            <input type="text" name="stock_code2_${item.id}" value="${item.stock_code2}">
+        </c:forEach>
+        ${aiResult}
     </div>
 </div>
 <div class="table-container">
@@ -152,18 +164,26 @@
         </tbody>
     </table>
 </div>
-<div class="table-container">
+<div class="container">
 
 <h2 style="text-align: center;">회사 1: ${company2}  회사 2: ${company1}</h2>
-    <!--<button id="ai-analysis-button" class="ai-button">AI 분석</button>
-    ${ai_2}
+<button id="aai-analysis-button-2" class="ai-button">AI 분석</button> <!-- 수정된 아이디 사용 -->
+
+</div>
+<div id="aiResult" class="aiResult" style="display: none;">
+    <h3>회사 1과 회사 2의 연관성 분석 결과</h3>
+    <!-- AI 분석 결과를 여기에 표시할 구조를 작성합니다. -->
+    <ul>
+
+    </ul>
+    <div id="company-relationship-analysis-2">
+        <!-- serviceUsages1 리스트의 각 요소에 대해 반복문을 사용하여 값을 가져옴 -->
+        <c:forEach items="${serviceUsages2}" var="item">
+            <input type="text" name="stock_code1_${item.id}" value="${item.stock_code1}">
+            <input type="text" name="stock_code2_${item.id}" value="${item.stock_code2}">
+        </c:forEach>
     </div>
-    <div id="ai-result" class="ai-result" style="display: none;">
-        <h3>회사 2과 회사 1의 연관성 분석 결과</h3>
-        ${ai-result}
-         AI 분석 결과를 여기에 표시할 구조를 작성합니다.
-        <div id="company-relationship-analysis"></div>
-    </div>-->
+</div>
 <div class="table-container">
     <table>
         <thead class="fixed-header">
@@ -220,22 +240,33 @@
 <script>
 // AI 분석 버튼 클릭 이벤트 처리
 document.getElementById('ai-analysis-button').addEventListener('click', function() {
-
     // Ajax 요청을 통해 서버에서 AI 분석 결과를 가져옵니다.
     $.ajax({
         url: '../project/ai_analysis_endpoint.do',
         method: 'POST',
         data: {
-            stock_code1: $("#stock_code1").val(), // stock_code1 입력 필드의 값 가져오기
-            stock_code2: $("#stock_code2").val() // stock_code2 입력 필드의 값 가져오기
+            stock_code1: $("input[name^='stock_code1_']:first").val(),
+            stock_code2: $("input[name^='stock_code2_']:first").val()
         },
         success: function(response) {
             // 서버에서 받은 AI 분석 결과를 처리하여 화면에 표시합니다.
-            // 회사 1과 회사 2의 연관성 분석 결과를 company-relationship-analysis에 표시
-            document.getElementById('company-relationship-analysis').innerHTML = response.companyRelationshipAnalysis;
-            document.getElementById('stock_code1').value = response.stock_code1;
-            document.getElementById('stock_code2').value = response.stock_code2;
-            document.getElementById('ai-result').style.display = 'block';
+            var aiResult = response;
+
+            // 결과를 보여줄 영역을 화면에 표시
+            document.getElementById('aiResult').style.display = 'block';
+
+            // 결과를 리스트 형태로 표시
+            var resultList = document.createElement('ul');
+            aiResult.forEach(function(result) {
+                var listItem = document.createElement('li');
+                listItem.textContent = result;
+                resultList.appendChild(listItem);
+            });
+
+            // 기존 결과를 지우고 새 결과를 추가
+            var analysisDiv = document.getElementById('company-relationship-analysis');
+            analysisDiv.innerHTML = ''; // 기존 결과 삭제
+            analysisDiv.appendChild(resultList); // 새 결과 추가
         },
         error: function(xhr, status, error) {
             // 오류 처리
@@ -243,6 +274,44 @@ document.getElementById('ai-analysis-button').addEventListener('click', function
         }
     });
 });
+
+document.getElementById('ai-analysis-button-2').addEventListener('click', function() {
+     // Ajax 요청을 통해 서버에서 AI 분석 결과를 가져옵니다.
+     $.ajax({
+         url: '../project/aai_analysis_endpoint.do',
+         method: 'POST',
+         data: {
+             stock_code1: $("input[name^='stock_code1_']:first").val(),
+             stock_code2: $("input[name^='stock_code2_']:first").val()
+         },
+         success: function(response) {
+             // 서버에서 받은 AI 분석 결과를 처리하여 화면에 표시합니다.
+             var aiResult = response;
+
+             // 결과를 보여줄 영역을 화면에 표시
+             document.getElementById('aiResult').style.display = 'block';
+
+             // 결과를 리스트 형태로 표시
+             var resultList = document.createElement('ul');
+             aiResult.forEach(function(result) {
+                 var listItem = document.createElement('li');
+                 listItem.textContent = result;
+                 resultList.appendChild(listItem);
+             });
+
+             // 기존 결과를 지우고 새 결과를 추가
+             var analysisDiv = document.getElementById('company-relationship-analysis-2');
+             analysisDiv.innerHTML = ''; // 기존 결과 삭제
+             analysisDiv.appendChild(resultList); // 새 결과 추가
+         },
+         error: function(xhr, status, error) {
+             // 오류 처리
+             console.error('AJAX 오류:', status, error);
+         }
+     });
+ });
+
+
 </script>
 </body>
 </html>

@@ -467,12 +467,12 @@ public class pageController {
         String id = (String) session.getAttribute("id");
         List<String> result1 = javaPy.strParameter("find_period", stock_code1, stock_code2);
         List<String> result2 = javaPy.strParameter("find_period", stock_code2, stock_code1);
-        List<String> ai_1 = javaPy.strParameter("tree_data",stock_code1,stock_code2);
-        List<String> ai_2 = javaPy.strParameter("tree_data",stock_code2,stock_code1);
+//        List<String> ai_1 = javaPy.strParameter("tree_data",stock_code1,stock_code2);
+//        List<String> ai_2 = javaPy.strParameter("tree_data",stock_code2,stock_code1);
         System.out.println("result1"+ result1);
         System.out.println("result2"+ result2);
-        System.out.println("ai_1"+ ai_1);
-        System.out.println("ai_2"+ ai_2);
+//        System.out.println("ai_1"+ ai_1);
+//        System.out.println("ai_2"+ ai_2);
         System.out.println("result1"+result1);
 
         List<ServiceUsage> serviceUsages1 = new ArrayList<>();
@@ -534,8 +534,8 @@ public class pageController {
         System.out.println("serviceUsages2: " + serviceUsages2);
         System.out.println("result1: " + result1);
         System.out.println("result2: " + result2);
-        model.addAttribute("ai_1", ai_1);
-        model.addAttribute("ai_2", ai_2);
+//        model.addAttribute("ai_1", ai_1);
+//        model.addAttribute("ai_2", ai_2);
         model.addAttribute("company1", company1);
         model.addAttribute("company2", company2);
         model.addAttribute("serviceUsages1", serviceUsages1);
@@ -795,7 +795,7 @@ public class pageController {
     @ResponseBody
     public ResponseEntity<?> performAIAnalysis(@RequestParam("stock_code1") String stock_code1,
                                                @RequestParam("stock_code2") String stock_code2,
-
+                                                Model model,
                                                HttpSession session
                                                ) {
         System.out.println("performAIAnalysis start");
@@ -803,26 +803,56 @@ public class pageController {
         System.out.println("performAIAnalysis start");
         System.out.println("performAIAnalysis start");
         System.out.println("performAIAnalysis start");
+        System.out.println("stock_code1"+stock_code1);
+        System.out.println("stock_code2"+stock_code2);
 
         // AI 분석을 수행하고 결과를 얻는 로직을 작성합니다.
         // 예를 들어, AI 분석 서비스를 호출하고 결과를 받아온다고 가정합니다.
 
         // 아래는 가상의 AI 분석 결과를 생성하는 코드입니다. 실제로는 AI 분석을 수행하는 코드로 대체되어야 합니다.
-//        List<String> result1 = javaPy.strParameter("find_period", stock_code1, stock_code2);
-//        List<String> result2 = javaPy.strParameter("find_period", stock_code2, stock_code1);
-//        System.out.println("result2"+result1);
-//        System.out.println("result2"+result2);
-        System.out.println("stock_code1"+stock_code1);
-        System.out.println("stock_code2"+stock_code2);
-
-
         List<String> aiResult = javaPy.strParameter("tree_data",stock_code1,stock_code2);
 
+        session.setAttribute("aiResult", aiResult);
+        System.out.println("ai -------------- " +aiResult);
+        System.out.println("AI 결과: " + aiResult);
 
-        System.out.println(aiResult);
+        model.addAttribute("aiResult", aiResult);
+
+
         List<String> ai_2 = javaPy.strParameter("tree_data",stock_code2,stock_code1);
         // 클라이언트에게 JSON 형태로 결과를 반환합니다.
-        return ResponseEntity.ok().body("{\"companyRelationshipAnalysis\": \"" + aiResult + "\"}");
+        return ResponseEntity.ok().body(aiResult);
+    }
+    @PostMapping("aai_analysis_endpoint.do")
+    @ResponseBody
+    public ResponseEntity<?> performAIAnalysiss(@RequestParam("stock_code1") String stock_code1,
+                                               @RequestParam("stock_code2") String stock_code2,
+                                               Model model,
+                                               HttpSession session
+    ) {
+        System.out.println("performAIAnalysis start");
+        System.out.println("performAIAnalysis start");
+        System.out.println("performAIAnalysis start");
+        System.out.println("performAIAnalysis start");
+        System.out.println("performAIAnalysis start");
+        System.out.println("stock_code1" + stock_code1);
+        System.out.println("stock_code2" + stock_code2);
+
+        // AI 분석을 수행하고 결과를 얻는 로직을 작성합니다.
+        // 예를 들어, AI 분석 서비스를 호출하고 결과를 받아온다고 가정합니다.
+
+        // 아래는 가상의 AI 분석 결과를 생성하는 코드입니다. 실제로는 AI 분석을 수행하는 코드로 대체되어야 합니다.
+        List<String> aiResult = javaPy.strParameter("tree_data", stock_code2, stock_code1);
+
+        session.setAttribute("aiResult", aiResult);
+        System.out.println("ai2-------------- " + aiResult);
+        System.out.println("AI2 결과: " + aiResult);
+
+
+
+
+        // 클라이언트에게 JSON 형태로 결과를 반환합니다.
+        return ResponseEntity.ok().body(aiResult);
     }
     @PostMapping("url.do")
     @ResponseBody
