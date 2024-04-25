@@ -50,6 +50,7 @@ def make_df(stock_code:str='005810')->pd.DataFrame:
 # df를 str으로 받아서, -100~100까지로 정규화된 df 반환
 def normal(df, default='CLOSE'):
     # Close 컬럼의 최대값과 최소값 계산
+    # print(df)
     max_close = df['CLOSE'].max()
     min_close = df['CLOSE'].min()
     # Close 값을 -100부터 100까지의 범위로 정규화하여 새로운 열 추가
@@ -146,7 +147,7 @@ def make_trend_and_find_inflect(df:pd.DataFrame,degree:int=2,value:str='Close_no
     coefficients = model.coef_[0]
     derivative = np.polyder(coefficients)
     roots = np.roots(derivative)
-    print('roots',roots)
+    # print('roots',roots)
     extrema = []
     for root in roots:
         if np.isreal(root):
@@ -160,7 +161,7 @@ def make_trend_and_find_inflect(df:pd.DataFrame,degree:int=2,value:str='Close_no
     for root in extrema:
         if np.isreal(root):
             index = int(root)
-            print(index)
+            # print(index)
             # date_at_index=df.index[index]
             plt.scatter(df.index[index], df.iloc[index][value], color='red', marker='o', label='변곡점')
 
@@ -203,6 +204,7 @@ def ai_anal(list)->list[str]:
         #result주일 전 선행지표 가격이, 선행지표의 현재 가격 사이의 가격의 min 값보다 크고, 그 차가 10보다 크다면, 파세요. min일 때 파세요.
         
         df=make_df_with_dates(first_com,(datetime.datetime(2022,1,1)+datetime.timedelta(days=result[1]*7)).strftime('%Y%m%d'),datetime.datetime(2022,1,1).strftime('%Y%m%d'))
+        # print(df,first_com,(datetime.datetime(2022,1,1)+datetime.timedelta(days=result[1]*7)).strftime('%Y%m%d'),datetime.datetime(2022,1,1).strftime('%Y%m%d'))
         df=normal(df)
         startvalue=df['Close_normal'].iloc[0]
         max_value=df['Close_normal'].max()
@@ -561,3 +563,39 @@ def normalNlabel(stock_code1:str='IBM',stock_code2:str='1008',default='CLOSE')->
 # print(result)
 
 # print(ai_anal(['sdf','1155','004020']))
+
+def find_usable(lst:list[str]=[
+    '1152',
+    '1160',
+    '1153',
+    '026960',
+    'IBM',
+    '1154',
+    '1001',
+    '1020',
+    '012330',
+    '1011',
+    '058650',
+    '1159',
+    '058430',
+    '004020',
+    '1008',
+    '004100',
+    '1034',
+    '1002',
+    '063160',
+    '1155']):
+    for stock_code1 in lst:
+        for stock_code2 in lst:
+            print(stock_code1,'과',stock_code2)
+            result=ai_anal(['asdf',stock_code1,stock_code2])
+            if result[1][0]=='아':
+                continue
+            else:
+                print(result)
+            print('\n\n')
+            
+# find_usable()
+# print(ai_anal(['1111','1160','1152']))
+
+# print(ai_anal('1111','005740','023770'))

@@ -58,22 +58,24 @@ def run_service(thread_name:str,input_data:list):
         result=cal.diff_find_period(input_data)
         sending_result(thread_name,result)
 
-while True:
-    input_data=[]
-    thread_name=None
-    try:
-        for line in sys.stdin:
-            data = line.strip()
-            if data=="EOF":
-                # print("입력이 끝났습니다.",flush=True)
-                break
-            if thread_name==None:
-                thread_name=data
-                continue
-            # print(line)
-            input_data.append(data)
-        threading.Thread(target=run_service,args=(thread_name,input_data)).start()
-            
-    except Exception as e:
-        print("예외가 발생했습니다:",e,flush=True)
-        print("EOF",flush=True)
+def main():
+    while True:
+        input_data=[]
+        thread_name=None
+        try:
+            for line in sys.stdin:
+                data = line.strip()
+                if data=="EOF":
+                    # print("입력이 끝났습니다.",flush=True)
+                    break
+                if thread_name==None:
+                    thread_name=data
+                    continue
+                # print(line)
+                input_data.append(data)
+            threading.Thread(target=run_service,args=(thread_name,input_data)).start()
+                
+        except Exception as e:
+            print("예외가 발생했습니다:",e,flush=True)
+            print("EOF",flush=True)
+main()

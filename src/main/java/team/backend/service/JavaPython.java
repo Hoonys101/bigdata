@@ -57,7 +57,7 @@ public class JavaPython implements JavaPythonInter {
 //        List<String> results=java.strParameter("diff_cal_data","1152","1008","1153","1008","20130101","20130501");
         //List<String> results=java.strParameter("cal_data","1152","1153","20130101","20130501");
         //List<String> results=java.strParameter("tree_data","041020","025750");
-        List<String> results=java.strParameter("diff_find_period","1152","1153","1001");
+        List<String> results=java.strParameter("diff_find_period","024720","2218","030520");
         System.out.println("result printing");
         for(String result:results){
             System.out.println(result);
@@ -183,6 +183,7 @@ public class JavaPython implements JavaPythonInter {
         List<Double> data= new ArrayList<>();
         double max=-2;
         int maxIndex = -1;
+        pln("corresize="+corre.size());
         for (int i =0 ;i<corre.size(); i++){
             double current=Double.parseDouble(corre.get(i));
             data.add(current);
@@ -191,12 +192,13 @@ public class JavaPython implements JavaPythonInter {
                 maxIndex=i;
             }
         }
+        pln("maxIndex: "+maxIndex);
         if (Collections.max(data)<0.5){
             result="큰 관련이 없습니다.(correlationMax<0.5)\n";
         }else if(maxIndex==0){
             result=result+"두 데이터는 동시에 움직입니다.\n";
-        }else if(maxIndex>0&&maxIndex<4){
-            result=result+"두 데이터는 "+maxIndex+"주의 간격을 두고 전파되는 관계에 있습니다.\n";
+        }else if(maxIndex>0&&maxIndex<=3){
+            result=result+"두 데이터는 "+(maxIndex)+"주의 간격을 두고 전파되는 관계에 있습니다.\n";
         }else{
             result=result+"두 데이터는 4주 이상의 간격을 두고 전파되는 관계에 있습니다.\n";
         }
@@ -250,9 +252,12 @@ public class JavaPython implements JavaPythonInter {
                     System.out.println("ie: "+ie);
                 }
                 pln("출력완료");
-                for(Consumer<String> listener:Listeners){
-//                    pln(result.get(0));
-                    listener.accept(result.get(0));
+                pln("Listeners.size(): "+Listeners.size());
+                if(Listeners.size()!=0){
+                    for(Consumer<String> listener:Listeners){
+    //                    pln(result.get(0));
+                        listener.accept(result.get(0));
+                    }
                 }
             }
         }
