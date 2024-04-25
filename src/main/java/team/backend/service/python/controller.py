@@ -79,3 +79,4 @@ def main():
             print("예외가 발생했습니다:",e,flush=True)
             print("EOF",flush=True)
 main()
+# print(scr.add_data(['add','Index','1152']))
