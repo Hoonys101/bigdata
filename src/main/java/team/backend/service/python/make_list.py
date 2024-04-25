@@ -99,7 +99,7 @@ def save_data():
     db.close_connection(connection)
 
 save_data()
-scr.add_data(['','Index','1001'])
+# scr.add_data(['','Index','1001'])
 
 # 시작 날짜, 끝 날짜를 8자리 str으로 받고, 검색 대상을 str으로 받아서(한국주식은 6자리 코드) df로 반환
 

@@ -136,7 +136,7 @@ public class JavaPython implements JavaPythonInter {
             toPython(resultString);
         }
         else{
-            pln("인자의 수 또는 종류가 다릅니다.");
+            pln("인자의 수 또는 명령어 인자가 다릅니다.");
         }
         Listener.addListener(new Listen(lock.get(),threadName));
         pln("리스너 등록");
@@ -144,7 +144,7 @@ public class JavaPython implements JavaPythonInter {
 
             try{
                 pln("기다리기시작");
-                lock.get().wait();
+                lock.get().wait(180000);//타임아웃을 3초로 설정
                 pln("찾기");
                 for(int i=0;i<results.size();i++){
                     if(results.get(i).get(0).equals(threadName)){
@@ -155,6 +155,10 @@ public class JavaPython implements JavaPythonInter {
                 }
             }catch(InterruptedException e){
                 e.printStackTrace();
+            }
+            if(finalresult==null){
+                pln("타임아웃이 발생하여 쓰레드를 제거합니다.");
+                return null;
             }
             pln("재개");
         }
