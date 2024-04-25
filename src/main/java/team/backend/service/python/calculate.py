@@ -391,11 +391,13 @@ def common_date(df1:pd.DataFrame,df2:pd.DataFrame)->tuple[pd.DataFrame,pd.DataFr
     return df1,df2
     
 # 1년을 4개월씩 분석
-def yearly(df1:pd.DataFrame,df2:pd.DataFrame,div:int=4,critic:float=0.7)->list[str]:
+def yearly(df1:pd.DataFrame,df2:pd.DataFrame,normal_diff=None,diff=None,div:int=4,critic:float=0.7)->list[str]:
     result=[]
     for i in range(div):
         startdate=int(df1.shape[0]/div*i)
         lastdate=int(df1.shape[0]/div*(i+1))
+        if normal_diff!=None:
+            df1,df2=normal_diff(df1,df2,diff)
         correlation = df1[startdate:lastdate].corr(df2[startdate:lastdate])
         if correlation>critic:
 #            print(df1.index[startdate].date(),"와 " ,df1.index[lastdate-1].date(), " 사이의 분기에 양의 상관관계")
@@ -445,7 +447,63 @@ def total_anal(stock_code1:str='1008',stock_code2:str='IBM',yearly=yearly,defaul
 
     # df1,df2=delay_df(df1,df2)
     return result
+def diff_find_period(lst:list)->list[str]:
+    stock_code1=lst[1]
+    diff_code1=lst[2]
+    stock_code2=lst[3]
+    # diff_code2=lst[4]
+    return diff_find_period_work(stock_code1,diff_code1,stock_code2)
+def normal_series(df:pd.Series)->pd.Series:
+    max_close=df.max()
+    min_close=df.min()
+    df=((df-min_close)/(max_close-min_close))*200-100
+    return df
 
+def normal_diff(df1:pd.Series,df2:pd.Series,diff:pd.Series)-> tuple[pd.Series,pd.Series]:
+    df1=normal_series(df1)
+    df2=normal_series(df2)
+    diff=normal_series(diff)
+    df1=df1-diff
+    df2=df2-diff
+    return df1,df2
+def diff_find_period_work(stock_code1:str='1008',diff_code:str='1001',stock_code2:str='IBM',yearly=yearly,default:str='CLOSE')->list[str]:
+    
+    result=[]
+    df1=make_df(stock_code1)[default]
+    df2=make_df(stock_code2)[default]
+    diff=make_df(diff_code)[default]
+    df1,diff=common_date(df1,diff)
+    df2,diff=common_date(df2,diff)
+    df1,diff=common_date(df1,diff)
+    
+    # print(df1)
+    # 분기별로 normalize해서 차를 계산해야 맞을 듯.
+    for i in range(10):
+        startdate=int(df1.shape[0]/10*i)
+        lastdate=int(df1.shape[0]/10*(i+1))
+        temp_result=yearly(df1[startdate:lastdate],df2[startdate:lastdate],normal_diff,diff)
+        if len(temp_result)>0:
+            result.extend(temp_result)
+        # correlation = df1[startdate:lastdate].corr(df2[startdate:lastdate])
+        # if correlation>0.5:
+        #     # print(df1.index[startdate].date(),"와 " ,df1.index[lastdate].date(), " 사이의 기간에 연간 양의 상관관계가 있습니다.")
+        #     # print("correlation: ",correlation)            
+        #     result.append(yearly(df1[startdate:lastdate],df2[startdate:lastdate]))
+            
+        # elif correlation<-0.5:
+        #     # print(df1.index[startdate].date(),"와 ",df1.index[lastdate].date()," 사이의 기간에 연간 음의 상관관계가 있습니다.")
+        #     # print("correlation: ",correlation)
+        #     result.append(yearly(df1[startdate:lastdate],df2[startdate:lastdate]))
+        # else:
+        #     # print(df1.index[startdate-1].date(),"와 ",df1.index[lastdate-1].date()," 사이의 기간에 상관관계가 적습니다.")
+        #     # print("correlation: ",correlation)
+        #     result.append(yearly(df1[startdate:lastdate],df2[startdate:lastdate]))
+
+    # df1,df2=delay_df(df1,df2)
+    return result
+
+# print(diff_find_period_work('1152','1153','1034'))
+# print(total_anal('1152','1153'))
 # df1=make_diff('1008')
 # df2=make_diff('IBM')
 # for i in range(5):
