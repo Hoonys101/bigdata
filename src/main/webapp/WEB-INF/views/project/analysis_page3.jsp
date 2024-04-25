@@ -104,7 +104,7 @@
             </c:forEach>
         </select>
         <select name="stock_code3">
-                    <option value="">Excluded companie</option>
+                    <option value="">Excluded company</option>
                     <c:forEach items="${list}" var="availableData">
                         <option value="${availableData.stock_code}"">
                             ${availableData.nation}, ${availableData.db_name}, ${availableData.sector}, ${availableData.name}

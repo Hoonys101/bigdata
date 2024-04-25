@@ -80,33 +80,17 @@
         <h2>분석</h2>
 </div>
 <div class="container">
-  <form action="analysis_page.do" method="post">
+  <form action="analysis_page4.do" method="post">
     <select name="stock_code1">
-        <option value="">Select Company 1</option>
-        <c:forEach items="${list}" var="availableData">
-            <option value="${availableData.stock_code}">
-                ${availableData.nation}, ${availableData.db_name}, ${availableData.sector}, ${availableData.name}
-                ${stock_code1}
-            </option>
-        </c:forEach>
-    </select>
-    <select name="stock_code2">
-            <option value="">Select Company 3</option>
+            <option value="">Select Company 1</option>
             <c:forEach items="${list}" var="availableData">
-                <option value="${availableData.stock_code}"">
+                <option value="${availableData.stock_code}">
                     ${availableData.nation}, ${availableData.db_name}, ${availableData.sector}, ${availableData.name}
+                    ${stock_code1}
                 </option>
             </c:forEach>
         </select>
-    <select name="stock_code3">
-                <option value="">Select Company 4</option>
-                <c:forEach items="${list}" var="availableData">
-                    <option value="${availableData.stock_code}"">
-                        ${availableData.nation}, ${availableData.db_name}, ${availableData.sector}, ${availableData.name}
-                    </option>
-                </c:forEach>
-            </select>
-    <select name="stock_code4">
+        <select name="stock_code2">
                 <option value="">Select Company 2</option>
                 <c:forEach items="${list}" var="availableData">
                     <option value="${availableData.stock_code}"">
@@ -114,18 +98,14 @@
                     </option>
                 </c:forEach>
             </select>
-
-  <section style="text-align: center; color: black;">
-    <h2>날짜 선택</h2>
-    <div>
-      <label for="start_date" style="color: black;">시작 날짜:</label>
-      <input type="date" id="start_date" name="start_date" min="2012-01-01" max="2022-01-01">
-    </div>
-    <div>
-      <label for="end_date" style="color: black;">종료 날짜:</label>
-      <input type="date" id="end_date" name="end_date" min="2012-01-01" max="2022-01-01">
-    </div>
-  </section>
+            <select name="stock_code3" value="${stock_code3}">
+                        <option value="">Excluded company</option>
+                        <c:forEach items="${list}" var="availableData">
+                            <option value="${availableData.stock_code}"">
+                                ${availableData.nation}, ${availableData.db_name}, ${availableData.sector}, ${availableData.name}
+                            </option>
+                        </c:forEach>
+                    </select>
   <div class="button-container">
     <button onclick="window.location.href='chart.do'">적용</button>
   </div>

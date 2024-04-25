@@ -232,8 +232,9 @@
                         <a href="analysis_page.do" class="analyze-button">기간분석</a>
                     </div>
                     <div class="analyze-buttons">
-                        <a href="analysis_page2.do" class="analyze-button">분기분석</a>|
-                        <a href="analysis_page4.do" class="analyze-button">분석</a>
+                        <a href="analysis_page4.do" class="analyze-button">제외분기분석</a>|
+                        <a href="analysis_page2.do" class="analyze-button">분기분석</a>
+
                         </div>
             </c:if>
     </nav>
