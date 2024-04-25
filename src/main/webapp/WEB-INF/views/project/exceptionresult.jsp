@@ -106,6 +106,7 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
         <c:forEach items="${serviceUsages1}" var="item">
             <input type="text" name="stock_code1_${item.id}" value="${item.stock_code1}">
             <input type="text" name="stock_code2_${item.id}" value="${item.stock_code2}">
+            <input type="text" name="stock_code3" value="${stock_code3}">
         </c:forEach>
     </div>
 </div>
@@ -134,11 +135,12 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
                     <td>${item.end_date}</td>
                     <td>${item.report}</td>
                     <td>
-                        <form action="analysis_page.do" method="post">
+                        <form action="analysis_page3.do" method="post">
                             <input type="hidden" name="serviceusage_seq" value="${item.serviceusage_seq}">
                             <input type="hidden" name="id" value="${item.id}">
                             <input type="hidden" name="stock_code1" value="${item.stock_code1}">
                             <input type="hidden" name="stock_code2" value="${item.stock_code2}">
+                            <input type="hidden" name="stock_code2" value="${stock_code3}">
                             <input type="hidden" name="start_date" value="${item.start_date}">
                             <input type="hidden" name="end_date" value="${item.end_date}">
                             <input type="hidden" name="report" value="${item.report}">
@@ -151,6 +153,7 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
                             <input type="hidden" name="id" value="${item.id}">
                             <input type="hidden" name="stock_code1" value="${item.stock_code1}">
                             <input type="hidden" name="stock_code2" value="${item.stock_code2}">
+                            <input type="hidden" name="stock_code2" value="${stock_code3}">
                             <input type="hidden" name="start_date" value="${item.start_date}">
                             <input type="hidden" name="end_date" value="${item.end_date}">
                             <input type="hidden" name="report" value="${item.report}">
@@ -178,6 +181,7 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
         <c:forEach items="${serviceUsages2}" var="item">
             <input type="text" name="stock_code1_${item.id}" value="${item.stock_code1}">
             <input type="text" name="stock_code2_${item.id}" value="${item.stock_code2}">
+            <input type="text" name="stock_code3" value="${stock_code3}">
         </c:forEach>
     </div>
 </div>
@@ -206,11 +210,12 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
                     <td>${item.end_date}</td>
                     <td>${item.report}</td>
                     <td>
-                        <form action="analysis_page.do" method="post">
+                        <form action="analysis_page3.do" method="post">
                             <input type="hidden" name="serviceusage_seq" value="${item.serviceusage_seq}">
                             <input type="hidden" name="id" value="${item.id}">
                             <input type="hidden" name="stock_code1" value="${item.stock_code1}">
                             <input type="hidden" name="stock_code2" value="${item.stock_code2}">
+                            <input type="hidden" name="stock_code2" value="${stock_code3}">
                             <input type="hidden" name="start_date" value="${item.start_date}">
                             <input type="hidden" name="end_date" value="${item.end_date}">
                             <input type="hidden" name="report" value="${item.report}">
@@ -223,6 +228,7 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
                             <input type="hidden" name="id" value="${item.id}">
                             <input type="hidden" name="stock_code1" value="${item.stock_code1}">
                             <input type="hidden" name="stock_code2" value="${item.stock_code2}">
+                            <input type="hidden" name="stock_code2" value="${stock_code3}">
                             <input type="hidden" name="start_date" value="${item.start_date}">
                             <input type="hidden" name="end_date" value="${item.end_date}">
                             <input type="hidden" name="report" value="${item.report}">
@@ -244,6 +250,7 @@ document.getElementById('ai-analysis-button').addEventListener('click', function
         data: {
             stock_code1: $("input[name^='stock_code1_']:first").val(),
             stock_code2: $("input[name^='stock_code2_']:first").val()
+
         },
         success: function(response) {
             // 서버에서 받은 AI 분석 결과를 처리하여 화면에 표시합니다.
