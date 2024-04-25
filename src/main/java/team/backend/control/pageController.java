@@ -262,6 +262,7 @@ public class pageController {
             result2.set(i, result2.get(length + i - 10));
             System.out.println("result2.get(length): "+result2.get(length + i - 10));
         }
+git 
         String report = javaPy.analysisData(result.subList(0, 5));
         String report2 = javaPy.analysisData(result2.subList(0, 5));
         serviceUsage.setReport(report);
