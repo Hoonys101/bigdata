@@ -140,7 +140,7 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
                             <input type="hidden" name="id" value="${item.id}">
                             <input type="hidden" name="stock_code1" value="${item.stock_code1}">
                             <input type="hidden" name="stock_code2" value="${item.stock_code2}">
-                            <input type="hidden" name="stock_code2" value="${stock_code3}">
+                            <input type="hidden" name="stock_code3" value="${stock_code3}">
                             <input type="hidden" name="start_date" value="${item.start_date}">
                             <input type="hidden" name="end_date" value="${item.end_date}">
                             <input type="hidden" name="report" value="${item.report}">
@@ -153,7 +153,7 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
                             <input type="hidden" name="id" value="${item.id}">
                             <input type="hidden" name="stock_code1" value="${item.stock_code1}">
                             <input type="hidden" name="stock_code2" value="${item.stock_code2}">
-                            <input type="hidden" name="stock_code2" value="${stock_code3}">
+                            <input type="hidden" name="stock_code3" value="${stock_code3}">
                             <input type="hidden" name="start_date" value="${item.start_date}">
                             <input type="hidden" name="end_date" value="${item.end_date}">
                             <input type="hidden" name="report" value="${item.report}">
@@ -215,7 +215,7 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
                             <input type="hidden" name="id" value="${item.id}">
                             <input type="hidden" name="stock_code1" value="${item.stock_code1}">
                             <input type="hidden" name="stock_code2" value="${item.stock_code2}">
-                            <input type="hidden" name="stock_code2" value="${stock_code3}">
+                            <input type="hidden" name="stock_code3" value="${stock_code3}">
                             <input type="hidden" name="start_date" value="${item.start_date}">
                             <input type="hidden" name="end_date" value="${item.end_date}">
                             <input type="hidden" name="report" value="${item.report}">
@@ -228,7 +228,7 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
                             <input type="hidden" name="id" value="${item.id}">
                             <input type="hidden" name="stock_code1" value="${item.stock_code1}">
                             <input type="hidden" name="stock_code2" value="${item.stock_code2}">
-                            <input type="hidden" name="stock_code2" value="${stock_code3}">
+                            <input type="hidden" name="stock_code3" value="${stock_code3}">
                             <input type="hidden" name="start_date" value="${item.start_date}">
                             <input type="hidden" name="end_date" value="${item.end_date}">
                             <input type="hidden" name="report" value="${item.report}">
