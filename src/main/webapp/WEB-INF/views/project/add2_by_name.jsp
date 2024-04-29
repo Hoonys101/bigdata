@@ -15,12 +15,19 @@
     margin: 0;
     text-align: center; /* 수정된 부분: body의 텍스트를 가운데 정렬 */
   }
+  .center {
+      position: fixed; /* 고정 위치로 설정 */
+      top: calc(15% - 10px); /* 상단 여백을 화면의 1/3 지점으로 설정 (50px은 center 요소의 높이에 따라 조절) */
+      left: 50%; /* 좌우 중앙 정렬 */
+      transform: translateX(-50%); /* 좌우 중앙 정렬을 위한 보정 */
+      text-align: center; /* 텍스트를 가운데 정렬 */
+  }
 h2 {
     text-align: center;
     margin-top: 50px;
 }
 form {
-    max-width: 800px;
+    width: 600px;
     margin: 0 auto;
     padding: 20px;
     background-color: #fff;
@@ -28,14 +35,15 @@ form {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 .form-wrapper {
-    max-width: 800px;
+    max-width: 600px;
+    width: 90%;
     margin: 0 auto;
     padding: 20px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     overflow-y: auto; /* 세로 스크롤이 내용이 넘칠 때만 표시 */
-    max-height: 600px; /* 최대 높이 설정 */
+    max-height: 400px; /* 최대 높이 설정 */
 }
 select {
   width: 100%;
@@ -83,7 +91,7 @@ button {
      }
      .button-apply {
                display: block;
-               width: 100%;
+               width: 200px;
                padding: 15px 30px;
                margin: 20px auto 0;
                background-color: #007bff;
@@ -140,21 +148,21 @@ button {
             data: { stock_code_or_name: $('#stock_code_or_name').val() },
             success: function (data) {
               var html = '';
-              if (data.length == 0) {
+              if (!data||data.length == 0) {
                 html += '<tr>';
                 html +=
                   "<td colspan='4' align='center'>그런 이름또는 코드를 가진 기업은 없음</td>";
                 html += '</tr>';
               } else {
-                html +="<div class='form-wrapper'>"
                 html +=
-                                  "<form action= 'add2.do' id='myForm' method='post' onsubmit='return validateAndSubmit();'>";
-                html += "<table border='1' width='50%'>";
+                                                  "<form action= 'add2.do' id='myForm' method='post' onsubmit='return validateAndSubmit();'>";
+                html +="<div class='form-wrapper'>"
+                html += "<table border='1' width='100%'>";
                 html += '<tr>';
                 html += '<th>stock_code</th>';
                 html += '<th>기업명</th>';
                 html += '<th>db_name</th>';
-                html += '<th>radiobutton</th></tr>';
+                html += '<th>select one</th></tr>';
 
                 $.each(data, function (index, AvailableData) {
                   html += '<tr>';
@@ -177,6 +185,7 @@ button {
 
               }
               html += '</table>';
+              html += '</div>';
               html += '<div class="button-container">';
               html +=
                 '<input type="hidden" name="db_name" id="db_name_hidden">';
@@ -186,7 +195,7 @@ button {
                 '  <input type="submit" class="button-apply" value="기업추가" />';
               html += '</div>';
               html += '</form>';
-              html += '</div>';
+
               $('#container_by_stock_code_or_name').html(html);
             },
             error: function (data) {
@@ -206,6 +215,7 @@ button {
     </div>
 
     <center>
+    <div class="center">
       <h2>기업명 또는 stock_code 검색</h2>
 
       stock_code_or_name:
@@ -213,6 +223,7 @@ button {
       <br />
 
       <div id="container_by_stock_code_or_name"></div>
+      </div>
     </center>
   </body>
 </html>
