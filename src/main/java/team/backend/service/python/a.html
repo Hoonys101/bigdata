@@ -1,707 +1,117 @@
-
-
-
-
+<!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <title>Chart</title>
+  <head>
+    <meta charset="UTF-8" />
+    <title>데이터 선택</title>
     <style>
-        /* Common styling */
-        .container {
-            text-align: center;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 50px; /* Added margin to separate header from content */
-        }
-
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        ul {
-            list-style-type: none;
-        }
-
-        li {
-            margin-bottom: 5px;
-        }
-
-        .header {
-            text-align: center;
-            padding: 20px 0;
-            top: 0;
-            position: fixed;
-            width: 100%; /* Adjusted to cover the entire width */
-            background-color: #ffffff; /* Added background color */
-            z-index: 1; /* Ensures header stays on top */
-        }
-
-        .home-button {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .home-button:hover {
-            background-color: #0056b3;
-        }
-
-        /* Table styling */
-        .table-container {
-            max-height: 70vh; /* Set maximum height for the table container */
-            overflow-y: auto; /* Enable vertical scrolling if table exceeds maximum height */
-        }
-
-        .fixed-header {
-
-            top: 0;
-            background-color: #f2f2f2; /* Background color for fixed header */
-            z-index: 2; /* Ensure fixed header stays on top */
-        }
+      /* 스타일은 이전 코드와 동일 */
     </style>
-</head>
-<body>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      function validateAndSubmit() {
+        var form = document.getElementById('myForm');
+        var selectedOption = form.querySelector('input[name="option"]:checked');
+        if (selectedOption) {
+          var db_name = selectedOption.getAttribute('data-custom-db_name');
+          var stock_code = selectedOption.getAttribute(
+            'data-custom-stock_code'
+          );
 
-<div class="header">
-    <button class="home-button" onclick="location.href='home.do'">Home</button>
+          if (db_name === '' || stock_code === '') {
+            alert(
+              '기업명 또는 stock_code는 직접 입력할 수 없습니다. 라디오 버튼 선택을 통해 입력해주세요.'
+            );
+            return false;
+          } else {
+            return true;
+          }
+        }
+      }
 
-</div>
+      // hidden input 값을 업데이트하는 함수
+      function updateHiddenInputs(selectedOption) {
+        var db_name = selectedOption.getAttribute('data-custom-db_name');
+        var stock_code = selectedOption.getAttribute('data-custom-stock_code');
+        document.getElementById('db_name_hidden').value = db_name;
+        document.getElementById('stock_code_hidden').value = stock_code;
+      }
 
-<div class="container">
-    <h2 style="text-align: center;">결과</h2>
-</div>
+      $(function () {
+        $('#btnStock_code').on('keyup', function () {
+          $.ajax({
+            url: '../project/add_by_name.do',
+            type: 'GET',
+            data: { stock_code_or_name: $('#stock_code_or_name').val() },
+            success: function (data) {
+              var html = '';
+              if (data.length == 0) {
+                html += '<tr>';
+                html +=
+                  "<td colspan='4' align='center'>그런 이름또는 코드를 가진 기업은 없음</td>";
+                html += '</tr>';
+              } else {
+                html += "<table border='1' width='50%'>";
+                html += '<tr>';
+                html += '<th>stock_code</th>';
+                html += '<th>기업명</th>';
+                html += '<th>db_name</th>';
+                html += '<th>radiobutton</th></tr>';
+                html +=
+                  "<form id='myForm' method='post' onsubmit='return validateAndSubmit();'>";
+                $.each(data, function (index, address) {
+                  html += '<tr>';
+                  html += "<td align='center'>" + address.stock_code + '</td>';
+                  html += "<td align='center'>" + address.name + '</td>';
+                  html += "<td align='center'>" + address.db_name + '</td>';
+                  html += "<td align='center'>";
+                  html +=
+                    "<input type='radio' name='option' value='" +
+                    index +
+                    "' data-custom-stock_code='" +
+                    address.stock_code +
+                    "' data-custom-db_name='" +
+                    address.db_name +
+                    "' onchange='updateHiddenInputs(this)'></td>";
+                  html += '</tr>';
+                });
 
-<div class="table-container">
-    <table>
-        <thead class="fixed-header">
-        <tr>
-            <th>ID</th>
-            <th>Stock Code 1</th>
-            <th>Stock Code 2</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Report</th>
-            <th>Action</th>
-            <th>삭제</th>
-        </tr>
-        </thead>
-        <tbody>
-        <!-- result1 테이블 표시 -->
+                html += '<div class="button-container">';
+                html +=
+                  '<input type="hidden" name="db_name" id="db_name_hidden">';
+                html +=
+                  '<input type="hidden" name="stock_code" id="stock_code_hidden">';
+                html +=
+                  '  <input type="submit" class="button-apply" value="기업추가" />';
+                html += '</div>';
+                html += '</form>';
+              }
+              html += '</table>';
+              $('#container_by_stock_code_or_name').html(html);
+            },
+            error: function (data) {
+              $('#container').html('존재하지않는 stock_code');
+            },
+          });
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <button class="home-button" onclick="location.href='home.do'">
+        Home
+      </button>
+      <h2>기업추가</h2>
+    </div>
 
-        <tr>
-            <td>1</td>
-            <td>054920</td>
-            <td>030520</td>
-            <td>2013-12-26</td>
-            <td>2014-03-26</td>
-            <td>두 데이터는 동시에 움직입니다.
-            </td>
-            <td>
-                <form action="analysis_page2.do" method="post">
-                    <input type="hidden" name="serviceusage_seq" value="0">
-                    <input type="hidden" name="id" value="1">
-                    <input type="hidden" name="stock_code1" value="054920">
-                    <input type="hidden" name="stock_code2" value="030520">
-                    <input type="hidden" name="start_date" value="2013-12-26">
-                    <input type="hidden" name="end_date" value="2014-03-26">
-                    <input type="hidden" name="report" value="두 데이터는 동시에 움직입니다.
-">
-                    <input type="submit" value="분석 페이지로">
-                </form>
-            </td>
-            <td>
-                <form action="resultDel.do" method="post">
-                    <input type="hidden" name="serviceusage_seq" value="0">
-                    <input type="hidden" name="id" value="1">
-                    <input type="hidden" name="stock_code1" value="054920">
-                    <input type="hidden" name="stock_code2" value="030520">
-                    <input type="hidden" name="start_date" value="2013-12-26">
-                    <input type="hidden" name="end_date" value="2014-03-26">
-                    <input type="hidden" name="report" value="두 데이터는 동시에 움직입니다.
-">
-                    <input type="submit" value="삭제">
-                </form>
-            </td>
-        </tr>
+    <center>
+      <h2>기업명 또는 stock_code 검색</h2>
 
-        <tr>
-            <td>1</td>
-            <td>054920</td>
-            <td>030520</td>
-            <td>2014-09-29</td>
-            <td>2014-12-26</td>
-            <td>두 데이터는 1.0주의 간격을 두고 전파되는 관계에 있습니다.
-            </td>
-            <td>
-                <form action="analysis_page2.do" method="post">
-                    <input type="hidden" name="serviceusage_seq" value="0">
-                    <input type="hidden" name="id" value="1">
-                    <input type="hidden" name="stock_code1" value="054920">
-                    <input type="hidden" name="stock_code2" value="030520">
-                    <input type="hidden" name="start_date" value="2014-09-29">
-                    <input type="hidden" name="end_date" value="2014-12-26">
-                    <input type="hidden" name="report" value="두 데이터는 1.0주의 간격을 두고 전파되는 관계에 있습니다.
-">
-                    <input type="submit" value="분석 페이지로">
-                </form>
-            </td>
-            <td>
-                <form action="resultDel.do" method="post">
-                    <input type="hidden" name="serviceusage_seq" value="0">
-                    <input type="hidden" name="id" value="1">
-                    <input type="hidden" name="stock_code1" value="054920">
-                    <input type="hidden" name="stock_code2" value="030520">
-                    <input type="hidden" name="start_date" value="2014-09-29">
-                    <input type="hidden" name="end_date" value="2014-12-26">
-                    <input type="hidden" name="report" value="두 데이터는 1.0주의 간격을 두고 전파되는 관계에 있습니다.
-">
-                    <input type="submit" value="삭제">
-                </form>
-            </td>
-        </tr>
+      stock_code_or_name:
+      <input type="text" name="stock_code_or_name" id="stock_code_or_name" />
+      <br />
 
-        <tr>
-            <td>1</td>
-            <td>054920</td>
-            <td>030520</td>
-            <td>2019-04-08</td>
-            <td>2019-07-05</td>
-            <td>두 데이터는 동시에 움직입니다.
-            </td>
-            <td>
-                <form action="analysis_page2.do" method="post">
-                    <input type="hidden" name="serviceusage_seq" value="0">
-                    <input type="hidden" name="id" value="1">
-                    <input type="hidden" name="stock_code1" value="054920">
-                    <input type="hidden" name="stock_code2" value="030520">
-                    <input type="hidden" name="start_date" value="2019-04-08">
-                    <input type="hidden" name="end_date" value="2019-07-05">
-                    <input type="hidden" name="report" value="두 데이터는 동시에 움직입니다.
-">
-                    <input type="submit" value="분석 페이지로">
-                </form>
-            </td>
-            <td>
-                <form action="resultDel.do" method="post">
-                    <input type="hidden" name="serviceusage_seq" value="0">
-                    <input type="hidden" name="id" value="1">
-                    <input type="hidden" name="stock_code1" value="054920">
-                    <input type="hidden" name="stock_code2" value="030520">
-                    <input type="hidden" name="start_date" value="2019-04-08">
-                    <input type="hidden" name="end_date" value="2019-07-05">
-                    <input type="hidden" name="report" value="두 데이터는 동시에 움직입니다.
-">
-                    <input type="submit" value="삭제">
-                </form>
-            </td>
-        </tr>
-
-        <tr>
-            <td>1</td>
-            <td>054920</td>
-            <td>030520</td>
-            <td>2019-07-08</td>
-            <td>2019-10-04</td>
-            <td>두 데이터는 동시에 움직입니다.
-            </td>
-            <td>
-                <form action="analysis_page2.do" method="post">
-                    <input type="hidden" name="serviceusage_seq" value="0">
-                    <input type="hidden" name="id" value="1">
-                    <input type="hidden" name="stock_code1" value="054920">
-                    <input type="hidden" name="stock_code2" value="030520">
-                    <input type="hidden" name="start_date" value="2019-07-08">
-                    <input type="hidden" name="end_date" value="2019-10-04">
-                    <input type="hidden" name="report" value="두 데이터는 동시에 움직입니다.
-">
-                    <input type="submit" value="분석 페이지로">
-                </form>
-            </td>
-            <td>
-                <form action="resultDel.do" method="post">
-                    <input type="hidden" name="serviceusage_seq" value="0">
-                    <input type="hidden" name="id" value="1">
-                    <input type="hidden" name="stock_code1" value="054920">
-                    <input type="hidden" name="stock_code2" value="030520">
-                    <input type="hidden" name="start_date" value="2019-07-08">
-                    <input type="hidden" name="end_date" value="2019-10-04">
-                    <input type="hidden" name="report" value="두 데이터는 동시에 움직입니다.
-">
-                    <input type="submit" value="삭제">
-                </form>
-            </td>
-        </tr>
-
-        <tr>
-            <td>1</td>
-            <td>054920</td>
-            <td>030520</td>
-            <td>2020-01-07</td>
-            <td>2020-04-02</td>
-            <td>두 데이터는 동시에 움직입니다.
-            </td>
-            <td>
-                <form action="analysis_page2.do" method="post">
-                    <input type="hidden" name="serviceusage_seq" value="0">
-                    <input type="hidden" name="id" value="1">
-                    <input type="hidden" name="stock_code1" value="054920">
-                    <input type="hidden" name="stock_code2" value="030520">
-                    <input type="hidden" name="start_date" value="2020-01-07">
-                    <input type="hidden" name="end_date" value="2020-04-02">
-                    <input type="hidden" name="report" value="두 데이터는 동시에 움직입니다.
-">
-                    <input type="submit" value="분석 페이지로">
-                </form>
-            </td>
-            <td>
-                <form action="resultDel.do" method="post">
-                    <input type="hidden" name="serviceusage_seq" value="0">
-                    <input type="hidden" name="id" value="1">
-                    <input type="hidden" name="stock_code1" value="054920">
-                    <input type="hidden" name="stock_code2" value="030520">
-                    <input type="hidden" name="start_date" value="2020-01-07">
-                    <input type="hidden" name="end_date" value="2020-04-02">
-                    <input type="hidden" name="report" value="두 데이터는 동시에 움직입니다.
-">
-                    <input type="submit" value="삭제">
-                </form>
-            </td>
-        </tr>
-
-        <tr>
-            <td>1</td>
-            <td>054920</td>
-            <td>030520</td>
-            <td>2020-07-06</td>
-            <td>2020-09-29</td>
-            <td>두 데이터는 동시에 움직입니다.
-            </td>
-            <td>
-                <form action="analysis_page2.do" method="post">
-                    <input type="hidden" name="serviceusage_seq" value="0">
-                    <input type="hidden" name="id" value="1">
-                    <input type="hidden" name="stock_code1" value="054920">
-                    <input type="hidden" name="stock_code2" value="030520">
-                    <input type="hidden" name="start_date" value="2020-07-06">
-                    <input type="hidden" name="end_date" value="2020-09-29">
-                    <input type="hidden" name="report" value="두 데이터는 동시에 움직입니다.
-">
-                    <input type="submit" value="분석 페이지로">
-                </form>
-            </td>
-            <td>
-                <form action="resultDel.do" method="post">
-                    <input type="hidden" name="serviceusage_seq" value="0">
-                    <input type="hidden" name="id" value="1">
-                    <input type="hidden" name="stock_code1" value="054920">
-                    <input type="hidden" name="stock_code2" value="030520">
-                    <input type="hidden" name="start_date" value="2020-07-06">
-                    <input type="hidden" name="end_date" value="2020-09-29">
-                    <input type="hidden" name="report" value="두 데이터는 동시에 움직입니다.
-">
-                    <input type="submit" value="삭제">
-                </form>
-            </td>
-        </tr>
-
-        <tr>
-            <td>1</td>
-            <td>054920</td>
-            <td>030520</td>
-            <td>2021-07-02</td>
-            <td>2021-10-01</td>
-            <td>두 데이터는 동시에 움직입니다.
-            </td>
-            <td>
-                <form action="analysis_page2.do" method="post">
-                    <input type="hidden" name="serviceusage_seq" value="0">
-                    <input type="hidden" name="id" value="1">
-                    <input type="hidden" name="stock_code1" value="054920">
-                    <input type="hidden" name="stock_code2" value="030520">
-                    <input type="hidden" name="start_date" value="2021-07-02">
-                    <input type="hidden" name="end_date" value="2021-10-01">
-                    <input type="hidden" name="report" value="두 데이터는 동시에 움직입니다.
-">
-                    <input type="submit" value="분석 페이지로">
-                </form>
-            </td>
-            <td>
-                <form action="resultDel.do" method="post">
-                    <input type="hidden" name="serviceusage_seq" value="0">
-                    <input type="hidden" name="id" value="1">
-                    <input type="hidden" name="stock_code1" value="054920">
-                    <input type="hidden" name="stock_code2" value="030520">
-                    <input type="hidden" name="start_date" value="2021-07-02">
-                    <input type="hidden" name="end_date" value="2021-10-01">
-                    <input type="hidden" name="report" value="두 데이터는 동시에 움직입니다.
-">
-                    <input type="submit" value="삭제">
-                </form>
-            </td>
-        </tr>
-
-        <tr>
-            <td>1</td>
-            <td>054920</td>
-            <td>030520</td>
-            <td>2021-10-05</td>
-            <td>2021-12-30</td>
-            <td>두 데이터는 동시에 움직입니다.
-            </td>
-            <td>
-                <form action="analysis_page2.do" method="post">
-                    <input type="hidden" name="serviceusage_seq" value="0">
-                    <input type="hidden" name="id" value="1">
-                    <input type="hidden" name="stock_code1" value="054920">
-                    <input type="hidden" name="stock_code2" value="030520">
-                    <input type="hidden" name="start_date" value="2021-10-05">
-                    <input type="hidden" name="end_date" value="2021-12-30">
-                    <input type="hidden" name="report" value="두 데이터는 동시에 움직입니다.
-">
-                    <input type="submit" value="분석 페이지로">
-                </form>
-            </td>
-            <td>
-                <form action="resultDel.do" method="post">
-                    <input type="hidden" name="serviceusage_seq" value="0">
-                    <input type="hidden" name="id" value="1">
-                    <input type="hidden" name="stock_code1" value="054920">
-                    <input type="hidden" name="stock_code2" value="030520">
-                    <input type="hidden" name="start_date" value="2021-10-05">
-                    <input type="hidden" name="end_date" value="2021-12-30">
-                    <input type="hidden" name="report" value="두 데이터는 동시에 움직입니다.
-">
-                    <input type="submit" value="삭제">
-                </form>
-            </td>
-        </tr>
-
-        </tbody>
-    </table>
-</div>
-
-<div class="table-container">
-    <table>
-        <thead class="fixed-header">
-        <tr>
-            <th>ID</th>
-            <th>Stock Code 1</th>
-            <th>Stock Code 2</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Report</th>
-            <th>Action</th>
-            <th>삭제</th>
-        </tr>
-        </thead>
-        <tbody>
-        <!-- result2 테이블 표시 -->
-
-        <tr>
-            <td>1</td>
-            <td>030520</td>
-            <td>054920</td>
-            <td>2013-12-26</td>
-            <td>2014-03-26</td>
-            <td>두 데이터는 동시에 움직입니다.
-            </td>
-            <td>
-                <form action="analysis_page2.do" method="post">
-                    <input type="hidden" name="serviceusage_seq" value="0">
-                    <input type="hidden" name="id" value="1">
-                    <input type="hidden" name="stock_code1" value="030520">
-                    <input type="hidden" name="stock_code2" value="054920">
-                    <input type="hidden" name="start_date" value="2013-12-26">
-                    <input type="hidden" name="end_date" value="2014-03-26">
-                    <input type="hidden" name="report" value="두 데이터는 동시에 움직입니다.
-">
-                    <input type="submit" value="분석 페이지로">
-                </form>
-            </td>
-            <td>
-                <form action="resultDel.do" method="post">
-                    <input type="hidden" name="serviceusage_seq" value="0">
-                    <input type="hidden" name="id" value="1">
-                    <input type="hidden" name="stock_code1" value="030520">
-                    <input type="hidden" name="stock_code2" value="054920">
-                    <input type="hidden" name="start_date" value="2013-12-26">
-                    <input type="hidden" name="end_date" value="2014-03-26">
-                    <input type="hidden" name="report" value="두 데이터는 동시에 움직입니다.
-">
-                    <input type="submit" value="삭제">
-                </form>
-            </td>
-        </tr>
-
-        <tr>
-            <td>1</td>
-            <td>030520</td>
-            <td>054920</td>
-            <td>2014-09-29</td>
-            <td>2014-12-26</td>
-            <td>두 데이터는 동시에 움직입니다.
-            </td>
-            <td>
-                <form action="analysis_page2.do" method="post">
-                    <input type="hidden" name="serviceusage_seq" value="0">
-                    <input type="hidden" name="id" value="1">
-                    <input type="hidden" name="stock_code1" value="030520">
-                    <input type="hidden" name="stock_code2" value="054920">
-                    <input type="hidden" name="start_date" value="2014-09-29">
-                    <input type="hidden" name="end_date" value="2014-12-26">
-                    <input type="hidden" name="report" value="두 데이터는 동시에 움직입니다.
-">
-                    <input type="submit" value="분석 페이지로">
-                </form>
-            </td>
-            <td>
-                <form action="resultDel.do" method="post">
-                    <input type="hidden" name="serviceusage_seq" value="0">
-                    <input type="hidden" name="id" value="1">
-                    <input type="hidden" name="stock_code1" value="030520">
-                    <input type="hidden" name="stock_code2" value="054920">
-                    <input type="hidden" name="start_date" value="2014-09-29">
-                    <input type="hidden" name="end_date" value="2014-12-26">
-                    <input type="hidden" name="report" value="두 데이터는 동시에 움직입니다.
-">
-                    <input type="submit" value="삭제">
-                </form>
-            </td>
-        </tr>
-
-        <tr>
-            <td>1</td>
-            <td>030520</td>
-            <td>054920</td>
-            <td>2019-04-08</td>
-            <td>2019-07-05</td>
-            <td>두 데이터는 동시에 움직입니다.
-            </td>
-            <td>
-                <form action="analysis_page2.do" method="post">
-                    <input type="hidden" name="serviceusage_seq" value="0">
-                    <input type="hidden" name="id" value="1">
-                    <input type="hidden" name="stock_code1" value="030520">
-                    <input type="hidden" name="stock_code2" value="054920">
-                    <input type="hidden" name="start_date" value="2019-04-08">
-                    <input type="hidden" name="end_date" value="2019-07-05">
-                    <input type="hidden" name="report" value="두 데이터는 동시에 움직입니다.
-">
-                    <input type="submit" value="분석 페이지로">
-                </form>
-            </td>
-            <td>
-                <form action="resultDel.do" method="post">
-                    <input type="hidden" name="serviceusage_seq" value="0">
-                    <input type="hidden" name="id" value="1">
-                    <input type="hidden" name="stock_code1" value="030520">
-                    <input type="hidden" name="stock_code2" value="054920">
-                    <input type="hidden" name="start_date" value="2019-04-08">
-                    <input type="hidden" name="end_date" value="2019-07-05">
-                    <input type="hidden" name="report" value="두 데이터는 동시에 움직입니다.
-">
-                    <input type="submit" value="삭제">
-                </form>
-            </td>
-        </tr>
-
-        <tr>
-            <td>1</td>
-            <td>030520</td>
-            <td>054920</td>
-            <td>2019-07-08</td>
-            <td>2019-10-04</td>
-            <td>두 데이터는 동시에 움직입니다.
-            </td>
-            <td>
-                <form action="analysis_page2.do" method="post">
-                    <input type="hidden" name="serviceusage_seq" value="0">
-                    <input type="hidden" name="id" value="1">
-                    <input type="hidden" name="stock_code1" value="030520">
-                    <input type="hidden" name="stock_code2" value="054920">
-                    <input type="hidden" name="start_date" value="2019-07-08">
-                    <input type="hidden" name="end_date" value="2019-10-04">
-                    <input type="hidden" name="report" value="두 데이터는 동시에 움직입니다.
-">
-                    <input type="submit" value="분석 페이지로">
-                </form>
-            </td>
-            <td>
-                <form action="resultDel.do" method="post">
-                    <input type="hidden" name="serviceusage_seq" value="0">
-                    <input type="hidden" name="id" value="1">
-                    <input type="hidden" name="stock_code1" value="030520">
-                    <input type="hidden" name="stock_code2" value="054920">
-                    <input type="hidden" name="start_date" value="2019-07-08">
-                    <input type="hidden" name="end_date" value="2019-10-04">
-                    <input type="hidden" name="report" value="두 데이터는 동시에 움직입니다.
-">
-                    <input type="submit" value="삭제">
-                </form>
-            </td>
-        </tr>
-
-        <tr>
-            <td>1</td>
-            <td>030520</td>
-            <td>054920</td>
-            <td>2020-01-07</td>
-            <td>2020-04-02</td>
-            <td>두 데이터는 동시에 움직입니다.
-            </td>
-            <td>
-                <form action="analysis_page2.do" method="post">
-                    <input type="hidden" name="serviceusage_seq" value="0">
-                    <input type="hidden" name="id" value="1">
-                    <input type="hidden" name="stock_code1" value="030520">
-                    <input type="hidden" name="stock_code2" value="054920">
-                    <input type="hidden" name="start_date" value="2020-01-07">
-                    <input type="hidden" name="end_date" value="2020-04-02">
-                    <input type="hidden" name="report" value="두 데이터는 동시에 움직입니다.
-">
-                    <input type="submit" value="분석 페이지로">
-                </form>
-            </td>
-            <td>
-                <form action="resultDel.do" method="post">
-                    <input type="hidden" name="serviceusage_seq" value="0">
-                    <input type="hidden" name="id" value="1">
-                    <input type="hidden" name="stock_code1" value="030520">
-                    <input type="hidden" name="stock_code2" value="054920">
-                    <input type="hidden" name="start_date" value="2020-01-07">
-                    <input type="hidden" name="end_date" value="2020-04-02">
-                    <input type="hidden" name="report" value="두 데이터는 동시에 움직입니다.
-">
-                    <input type="submit" value="삭제">
-                </form>
-            </td>
-        </tr>
-
-        <tr>
-            <td>1</td>
-            <td>030520</td>
-            <td>054920</td>
-            <td>2020-07-06</td>
-            <td>2020-09-29</td>
-            <td>두 데이터는 동시에 움직입니다.
-            </td>
-            <td>
-                <form action="analysis_page2.do" method="post">
-                    <input type="hidden" name="serviceusage_seq" value="0">
-                    <input type="hidden" name="id" value="1">
-                    <input type="hidden" name="stock_code1" value="030520">
-                    <input type="hidden" name="stock_code2" value="054920">
-                    <input type="hidden" name="start_date" value="2020-07-06">
-                    <input type="hidden" name="end_date" value="2020-09-29">
-                    <input type="hidden" name="report" value="두 데이터는 동시에 움직입니다.
-">
-                    <input type="submit" value="분석 페이지로">
-                </form>
-            </td>
-            <td>
-                <form action="resultDel.do" method="post">
-                    <input type="hidden" name="serviceusage_seq" value="0">
-                    <input type="hidden" name="id" value="1">
-                    <input type="hidden" name="stock_code1" value="030520">
-                    <input type="hidden" name="stock_code2" value="054920">
-                    <input type="hidden" name="start_date" value="2020-07-06">
-                    <input type="hidden" name="end_date" value="2020-09-29">
-                    <input type="hidden" name="report" value="두 데이터는 동시에 움직입니다.
-">
-                    <input type="submit" value="삭제">
-                </form>
-            </td>
-        </tr>
-
-        <tr>
-            <td>1</td>
-            <td>030520</td>
-            <td>054920</td>
-            <td>2021-07-02</td>
-            <td>2021-10-01</td>
-            <td>두 데이터는 동시에 움직입니다.
-            </td>
-            <td>
-                <form action="analysis_page2.do" method="post">
-                    <input type="hidden" name="serviceusage_seq" value="0">
-                    <input type="hidden" name="id" value="1">
-                    <input type="hidden" name="stock_code1" value="030520">
-                    <input type="hidden" name="stock_code2" value="054920">
-                    <input type="hidden" name="start_date" value="2021-07-02">
-                    <input type="hidden" name="end_date" value="2021-10-01">
-                    <input type="hidden" name="report" value="두 데이터는 동시에 움직입니다.
-">
-                    <input type="submit" value="분석 페이지로">
-                </form>
-            </td>
-            <td>
-                <form action="resultDel.do" method="post">
-                    <input type="hidden" name="serviceusage_seq" value="0">
-                    <input type="hidden" name="id" value="1">
-                    <input type="hidden" name="stock_code1" value="030520">
-                    <input type="hidden" name="stock_code2" value="054920">
-                    <input type="hidden" name="start_date" value="2021-07-02">
-                    <input type="hidden" name="end_date" value="2021-10-01">
-                    <input type="hidden" name="report" value="두 데이터는 동시에 움직입니다.
-">
-                    <input type="submit" value="삭제">
-                </form>
-            </td>
-        </tr>
-
-        <tr>
-            <td>1</td>
-            <td>030520</td>
-            <td>054920</td>
-            <td>2021-10-05</td>
-            <td>2021-12-30</td>
-            <td>두 데이터는 동시에 움직입니다.
-            </td>
-            <td>
-                <form action="analysis_page2.do" method="post">
-                    <input type="hidden" name="serviceusage_seq" value="0">
-                    <input type="hidden" name="id" value="1">
-                    <input type="hidden" name="stock_code1" value="030520">
-                    <input type="hidden" name="stock_code2" value="054920">
-                    <input type="hidden" name="start_date" value="2021-10-05">
-                    <input type="hidden" name="end_date" value="2021-12-30">
-                    <input type="hidden" name="report" value="두 데이터는 동시에 움직입니다.
-">
-                    <input type="submit" value="분석 페이지로">
-                </form>
-            </td>
-            <td>
-                <form action="resultDel.do" method="post">
-                    <input type="hidden" name="serviceusage_seq" value="0">
-                    <input type="hidden" name="id" value="1">
-                    <input type="hidden" name="stock_code1" value="030520">
-                    <input type="hidden" name="stock_code2" value="054920">
-                    <input type="hidden" name="start_date" value="2021-10-05">
-                    <input type="hidden" name="end_date" value="2021-12-30">
-                    <input type="hidden" name="report" value="두 데이터는 동시에 움직입니다.
-">
-                    <input type="submit" value="삭제">
-                </form>
-            </td>
-        </tr>
-
-        </tbody>
-    </table>
-</div>
-
-</body>
+      <div id="container_by_stock_code_or_name"></div>
+    </center>
+  </body>
 </html>

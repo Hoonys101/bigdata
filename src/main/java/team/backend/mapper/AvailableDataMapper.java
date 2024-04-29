@@ -21,5 +21,5 @@ public interface AvailableDataMapper {
 
     String getCompany(String stock_code);
 
-
+    List<AvailableData> getByNameOrStock_code(String stockCodeOrName);
 }

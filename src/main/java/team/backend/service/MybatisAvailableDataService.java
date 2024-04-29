@@ -94,4 +94,8 @@ public class MybatisAvailableDataService implements AvailableDataService {
         return availableDataMapper.getCompany(stock_code);
     }
 
+    public List<AvailableData> getByNameOrStock_code(String stock_code_or_name){
+        return availableDataMapper.getByNameOrStock_code(stock_code_or_name);
+    }
 }
+

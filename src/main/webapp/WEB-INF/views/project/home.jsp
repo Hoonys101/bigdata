@@ -225,6 +225,7 @@
                </div>
                 <div class="analyze-buttons">
                         <a href="add2.do" class="analyze-button">기업추가</a>
+                        <a href="add2_by_name.do" class="analyze-button">기업추가_by_type</a>
                     </div>
                 <div class="analyze-buttons">
                         <a href="analysis_page.do" class="analyze-button">기간분석</a>|

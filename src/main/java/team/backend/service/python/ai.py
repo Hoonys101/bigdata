@@ -11,7 +11,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # FATAL
 # import concurrent.futures
 
 # 인공지능!!!! 어예~!
-# 두개의 기업명을 받아서, db로부터 인출하여 normaling 및 라벨링된 dataFrame 산출
+# 두개의 기업명을 받아서, db로부터 인출하여 normaling 및 라벨링된 dataFrame 산출-> calculate에서 수행
 
 # dataFrame을 받아서 라벨링 훈련(3개월로 window로 옮겨가며 훈련)
 # 인자를 받아서, normalNlabel을 호출하여 df를 생성하는 것으로 변경

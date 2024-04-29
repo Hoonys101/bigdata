@@ -7,6 +7,8 @@ import ai
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import PolynomialFeatures
 import datetime
+import scraper as scr
+import concurrent.futures
 
 # import concurrent.futures
 #df 전체에 대해 1차 변화율과 2차 변화율을 추가
@@ -50,7 +52,7 @@ def make_df(stock_code:str='005810')->pd.DataFrame:
 # df를 str으로 받아서, -100~100까지로 정규화된 df 반환
 def normal(df, default='CLOSE'):
     # Close 컬럼의 최대값과 최소값 계산
-    # print(df)
+    # print(type(df))
     max_close = df['CLOSE'].max()
     min_close = df['CLOSE'].min()
     # Close 값을 -100부터 100까지의 범위로 정규화하여 새로운 열 추가
@@ -168,7 +170,7 @@ def make_trend_and_find_inflect(df:pd.DataFrame,degree:int=2,value:str='Close_no
     # plt.show()
 
 #stock code와 날짜2개를 받아서 df생성
-def make_df_with_dates(first_com:str='1008',startdate:str='20130101',lastdate:str='20130606')->pd.DataFrame:
+def make_df_with_dates(first_com:str='1008',startdate:str='20211201',lastdate:str='20220101')->pd.DataFrame:
     connection=db.connect_to_oracle()
     df=db.read_code_date(connection,first_com,startdate,lastdate)
     connection.close()
@@ -182,10 +184,11 @@ def make_df_with_dates(first_com:str='1008',startdate:str='20130101',lastdate:st
 # plt.show()
 
 # 3-1개의 파라미터를 받아서 2개의 str 반환
-def ai_anal(list)->list[str]:
+def ai_anal(list,critical_profit=1)->list[str]:
     #파라미터 설정
     first_com=list[1]
     second_com=list[2]
+    # print(first_com,second_com)
     df=normalNlabel(first_com,second_com)
     result=ai.training(df)
     if result[1]==-1:
@@ -202,26 +205,64 @@ def ai_anal(list)->list[str]:
         #result주일 전 선행지표가 하락중, 현재 사이에 변곡점 존재 변곡점의 높이가 result주일전 선행지표의 높이보다 작을 것->포기
         #result주일 전 선행지표 가격이, 선행지표의 현재 가격 사이의 가격의 max 값보다 작고, 그 차가 10보다 크다면, 사세요. max일 때 파세요.
         #result주일 전 선행지표 가격이, 선행지표의 현재 가격 사이의 가격의 min 값보다 크고, 그 차가 10보다 크다면, 파세요. min일 때 파세요.
-        
-        df=make_df_with_dates(first_com,(datetime.datetime(2022,1,1)+datetime.timedelta(days=result[1]*7)).strftime('%Y%m%d'),datetime.datetime(2022,1,1).strftime('%Y%m%d'))
+        # lastdate_for_expect=datetime.datetime(2022,1,1).strftime('%Y%m%d')
+        # startdate_for_expect=(datetime.datetime(2022,1,1)-datetime.timedelta(days=result[1])).strftime('%Y%m%d')
+        # print(first_com)
+        # print('start:',str(startdate_for_expect))
+        # print('last:',str(lastdate_for_expect))
+        df=make_df_with_dates(second_com)
+        df = df.iloc[-1*int(result[1])*5:, :]
         # print(df,first_com,(datetime.datetime(2022,1,1)+datetime.timedelta(days=result[1]*7)).strftime('%Y%m%d'),datetime.datetime(2022,1,1).strftime('%Y%m%d'))
-        df=normal(df)
-        startvalue=df['Close_normal'].iloc[0]
-        max_value=df['Close_normal'].max()
-        max_position=df['Close_normal'].idxmax()
-        min_value=df['Close_normal'].min()
-        min_position=df['Close_normal'].idxmin()
-        result[1]="현재 주가전파관계가 존재합니다. 확인해보세요. 예측치:"+str(result[1])+"주 전파"
-        if startvalue<max_value and max_value-startvalue>10:
-            result.append("지금은 살 때입니다."+str(max_position)+'업무일 후에 파세요')
-        elif startvalue>min_value and startvalue-min_value>10:
-            result.append("지금은 팔 때입니다."+str(min_position)+'업무일 후에 사세요')
+        startvalue=df['CLOSE'].iloc[0]
+        
+        max_value=df['CLOSE'].max()
+        
+        
+        # print(max_position,startvalue,max_interval)
+        min_value=df['CLOSE'].min()
+        # startdate=df.first_valid_index()
+        # max_position=df['CLOSE'].idxmax()
+        # max_interval=max_position-startdate
+        # min_position=df['CLOSE'].idxmin()
+        # min_interval=min_position-startdate
+        if startvalue<max_value:
+            max_workingdays_interval=df.reset_index()['CLOSE'].idxmax()
+            estimated_profit_ratio=(max_value-startvalue)/startvalue*100
+        elif startvalue>min_value:
+            min_workingdays_interval=df.reset_index()['CLOSE'].idxmin()
+            estimated_profit_ratio=(startvalue-min_value)/startvalue*100
+        
+        result[1]="현재 주가전파관계가 존재합니다. 확인해보세요. 예측치:"+str(result[1])+"주 후 전파"
+        result.append('기준주식: '+first_com+'비교대상주식: '+second_com)
+        if startvalue<max_value and estimated_profit_ratio>critical_profit:
+            result.append("지금은 살 때입니다."+str(max_workingdays_interval)+'업무일 후에 파세요')
+            result.append('예상수익률은 '+str(estimated_profit_ratio)+'%입니다.')
+            result.append('수익은 주당 '+str(estimate_profit(first_com,max_workingdays_interval)*100)+'%')
+        elif startvalue>min_value and estimated_profit_ratio>critical_profit:
+            result.append("지금은 팔 때입니다."+str(min_workingdays_interval)+'업무일 후에 사세요')
+            result.append('예상수익률은 '+str(estimated_profit_ratio)+'%입니다.')
+            result.append('수익은 주당 '+str(estimate_profit(first_com,min_workingdays_interval,False)*100)+'%')
         else:
-            result.append("향후 변동폭이 크지 않습니다. 판단을 보류합니다.")
+            result.append("향후 변동폭이 크지 않습니다. 판단을 보류합니다."+ '제안을 해도 예상수익률은 '+str(estimated_profit_ratio)+'%로 미진합니다.')
         #지금은 살 때입니다. ~~업무일,~~업무일,~~업무일 후에 파세요.
         #지금은 팔 때입니다. ~~업무일 후에 사세요.
     return result
 
+def estimate_profit(stock_code:str='058430',i:int=5,b: bool=True)->float:
+    if len(stock_code)==4:
+        df=scr.stock_data2('Index',stock_code,startdate='20220101',lastdate='20220220',default='Close')
+    else:
+        df=scr.stock_data2('sdf',stock_code,startdate='20220101',lastdate='20220220',default='Close')
+    # print('미래의 data \n',df)
+    # print("DataFrame의 길이:", len(df))
+    # print('i의 값',i)
+    # print(df.columns)
+    initvalue=df['Close'].iloc[0]
+    lastvalue=df['Close'].iloc[i]
+    if b:
+        return (lastvalue-initvalue)/initvalue
+    else:
+        return -(lastvalue-initvalue)/initvalue
 #7-1개의 파라미터를 받아서 파일 5개와 correlation 5개 반환
 def diff_cal_data(list,days=5)->list[str]:
     #파라미터 설정
@@ -296,6 +337,7 @@ def delay_save(df1:pd.DataFrame,df2:pd.DataFrame,name,days:int=5)->str:
     result_list=[]
     startdate=df1.index[0].date()
     lastdate=df1.index[-1].date()
+    # print(startdate,lastdate)
     for i in range(5):
         result_list.append(df1.corr(df2))
         df1,df2=delay_df(df1,df2,days)
@@ -314,14 +356,14 @@ def delay_save(df1:pd.DataFrame,df2:pd.DataFrame,name,days:int=5)->str:
 #        print(str(startdate)+','+str(lastdate)+','+str(max_inde))
         return str(startdate)+','+str(lastdate)+','+str(max_inde)
 
-# 리스트를 받아서 극대값과 극대값 위치 산출
+# 리스트를 받아서 극대값 위치와 극대값 산출
 def find_max_and_index(lst:list=[1,2,3,2,1])->tuple[int,int]:
     if not lst:  # 리스트가 비어있는 경우
         return None, None
     max_value = max(lst)
     max_index = lst.index(max_value)
     return max_value, max_index
-# 리스트를 받아서 극소값과 극소값 위치 산출
+# 리스트를 받아서 극소값 위치와 극소값 산출
 def find_min_and_index(lst:list=[3,2,1,2,3])->tuple[int,int]:
     if not lst:  # 리스트가 비어있는 경우
         return None, None
@@ -393,26 +435,32 @@ def common_date(df1:pd.DataFrame,df2:pd.DataFrame)->tuple[pd.DataFrame,pd.DataFr
     return df1,df2
     
 # 1년을 4개월씩 분석
-def yearly(df1:pd.DataFrame,df2:pd.DataFrame,normal_diff=None,diff=None,div:int=4,critic:float=0.7)->list[str]:
+def yearly(df1:pd.Series,df2:pd.Series,normal_diff=None,diff=None,div:int=4,critic:float=0.7)->list[str]:
     result=[]
     for i in range(div):
-        startdate=int(df1.shape[0]/div*i)
-        lastdate=int(df1.shape[0]/div*(i+1))
+        startdate=int(len(df1)/div*i)
+        lastdate=int(len(df1)/div*(i+1))
         if normal_diff!=None:
-            df1,df2=normal_diff(df1,df2,diff)
-        correlation = df1[startdate:lastdate].corr(df2[startdate:lastdate])
-        if correlation>critic:
-#            print(df1.index[startdate].date(),"와 " ,df1.index[lastdate-1].date(), " 사이의 분기에 양의 상관관계")
-#            print("correlation: ",correlation)            
-            result.append(delay_save(df1[startdate:lastdate],df2[startdate:lastdate],str(startdate)+'_'+str(lastdate)))
-#        elif correlation<-critic:
-#            print(df1.index[startdate].date(),"와 ",df1.index[lastdate-1].date()," 사이의 분기에 음의 상관관계")
-#            print("correlation: ",correlation)
-#            delay_save(df1[startdate:lastdate],df2[startdate:lastdate],str(startdate)+'_'+str(lastdate))
-#        else:
-#            print(df1.index[startdate].date(),"와 ",df1.index[lastdate-1].date()," 사이의 기간에 관계없음")
-#            print("correlation: ",correlation)
-#            delay_save(df1[startdate:lastdate],df2[startdate:lastdate],str(startdate)+'_'+str(lastdate))
+            df1_normal,df2_normal=normal_diff(df1,df2,diff)
+            correlation = df1_normal[startdate:lastdate].corr(df2_normal[startdate:lastdate])
+            if correlation>critic:
+    #            print(df1.index[startdate].date(),"와 " ,df1.index[lastdate-1].date(), " 사이의 분기에 양의 상관관계")
+    #            print("correlation: ",correlation)            
+                result.append(delay_save(df1_normal[startdate:lastdate],df2_normal[startdate:lastdate],str(startdate)+'_'+str(lastdate)))
+        else:
+            correlation = df1[startdate:lastdate].corr(df2[startdate:lastdate])
+            if correlation>critic:
+    #            print(df1.index[startdate].date(),"와 " ,df1.index[lastdate-1].date(), " 사이의 분기에 양의 상관관계")
+    #            print("correlation: ",correlation)            
+                result.append(delay_save(df1[startdate:lastdate],df2[startdate:lastdate],str(startdate)+'_'+str(lastdate)))
+    #        elif correlation<-critic:
+    #            print(df1.index[startdate].date(),"와 ",df1.index[lastdate-1].date()," 사이의 분기에 음의 상관관계")
+    #            print("correlation: ",correlation)
+    #            delay_save(df1[startdate:lastdate],df2[startdate:lastdate],str(startdate)+'_'+str(lastdate))
+    #        else:
+    #            print(df1.index[startdate].date(),"와 ",df1.index[lastdate-1].date()," 사이의 기간에 관계없음")
+    #            print("correlation: ",correlation)
+    #            delay_save(df1[startdate:lastdate],df2[startdate:lastdate],str(startdate)+'_'+str(lastdate))
     return result
 
 #list 0,1,2를 받아서 total_anal 실행
@@ -477,8 +525,8 @@ def diff_find_period_work(stock_code1:str='1008',diff_code:str='1001',stock_code
     df1,diff=common_date(df1,diff)
     df2,diff=common_date(df2,diff)
     df1,diff=common_date(df1,diff)
+    # print(len(df1))
     
-    # print(df1)
     # 분기별로 normalize해서 차를 계산해야 맞을 듯.
     for i in range(10):
         startdate=int(df1.shape[0]/10*i)
@@ -545,7 +593,7 @@ def normalNlabel(stock_code1:str='IBM',stock_code2:str='1008',default='CLOSE')->
         if max_val<0.7:
             pass
         else:
-            if max_inde>0:
+            if max_inde>=0:
                 # print(result)
                 result.iloc[startdate:lastdate,2]=max_inde
     return result
@@ -562,9 +610,8 @@ def normalNlabel(stock_code1:str='IBM',stock_code2:str='1008',default='CLOSE')->
 # result=ai_anal(['tree_data', '1008', 'IBM'])
 # print(result)
 
-# print(ai_anal(['sdf','1155','004020']))
-
 def find_usable(lst:list[str]=[
+    '058430',
     '1152',
     '1160',
     '1153',
@@ -577,25 +624,55 @@ def find_usable(lst:list[str]=[
     '1011',
     '058650',
     '1159',
-    '058430',
     '004020',
     '1008',
     '004100',
     '1034',
-    '1002',
     '063160',
     '1155']):
+    param=[]
+    final_result=[]
     for stock_code1 in lst:
         for stock_code2 in lst:
-            print(stock_code1,'과',stock_code2)
+            # print(stock_code1,'과',stock_code2)
             result=ai_anal(['asdf',stock_code1,stock_code2])
+            # print(result)
+            
             if result[1][0]=='아':
                 continue
             else:
-                print(result)
-            print('\n\n')
-            
-# find_usable()
+                # print(result)
+                if result[2][0]!='기' or  (result[2][0]=='기' and result[3][0]=='향'):
+                    continue
+                final_result.append(result[2])
+                final_result.append(result[-2])
+                final_result.append(result[-1])
+    return final_result
+    #         param.append(['asdf',stock_code1,stock_code2])
+    # result=multithread_results(param)
+    # return result
+    
+def multithread_results(lst:list[str,str])->list[str]:
+        #쓰레드 풀 생성
+    max_thread = 3
+    results=[]
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max_thread) as executer:
+        # print('멀티쓰레드 실행')
+        # 작업 실행 및 결과 수집
+        futures = [executer.submit(ai_anal,params) for params in lst]
+        # print('결과 수집')
+        # 결과 처리
+        results.add([future.result() for future in concurrent.futures.as_completed(futures)])
+        return results
+
+# print(make_df_with_dates())
 # print(ai_anal(['1111','1160','1152']))
 
-# print(ai_anal('1111','005740','023770'))
+# print(ai_anal(['111','1001','1004']))
+# print(diff_find_period(['111','1004','1002','1001']))
+# print(total_analy(['111','1004','1002']))
+
+# fi_result=find_usable()
+# print('최종 결과는 ',fi_result)
+# for strs in fi_result:
+#     print(strs)

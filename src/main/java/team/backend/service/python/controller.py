@@ -80,3 +80,7 @@ def main():
             print("EOF",flush=True)
 main()
 # print(scr.add_data(['add','Index','1152']))
+# scr.add_data(['add','asdf','030520'])
+# scr.add_data(['add','asdf','054920'])
+# scr.add_data(['add','asdf','047080'])
+# print(cal.diff_cal_data(['diff_call_data','030520','054920','047080','20170630','20191007']))

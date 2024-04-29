@@ -82,7 +82,8 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
         /* Table styling */
         .table-container {
         width: 100%;
-            <%--max-height: 70vh; /* Set maximum height for the table container */--%>
+
+<%--            max-height: 70vh; /* Set maximum height for the table container */--%>
             overflow-y: auto; /* Enable vertical scrolling if table exceeds maximum height */
         }
         table {
