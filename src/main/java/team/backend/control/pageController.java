@@ -818,6 +818,8 @@ public class pageController {
     @ResponseBody
     public List<AvailableData> addByNameOrCode(@RequestParam("stock_code_or_name") String stock_code_or_name){
         System.out.println(stock_code_or_name);
+        if(stock_code_or_name.length()==0)
+            return null;
         List<AvailableData> responseData = availableDataService.getByNameOrStock_code(stock_code_or_name);
         return responseData;
     }

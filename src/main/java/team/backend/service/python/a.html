@@ -39,7 +39,7 @@
       $(function () {
         $('#btnStock_code').on('keyup', function () {
           $.ajax({
-            url: '../project/add_by_name.do',
+            url: '../project/add_by_name_or_code.do',
             type: 'GET',
             data: { stock_code_or_name: $('#stock_code_or_name').val() },
             success: function (data) {

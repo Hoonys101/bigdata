@@ -1,6 +1,7 @@
 import DAO as db
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 import numpy as np
 import os
 import ai
@@ -76,8 +77,9 @@ def saveplot(df,df2,filename,column:str='Close_normal')-> float:
     plt.plot(df2.index, df2[column])
     correlation=df[column].corr(df2[column])
     correlation=f"{correlation:.4f}"
-    plt.title('Correlation is'+str(correlation))
+    plt.title('Correlation is '+ str(correlation))
     plt.xlabel('Date')
+    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%m-%d'))
     plt.grid()
     # 폴더가 없으면 생성
 #    save_dir = './src/main/resources/static/img/plots'
@@ -249,7 +251,7 @@ def ai_anal(list,critical_profit=1)->list[str]:
     return result
 
 def estimate_profit(stock_code:str='058430',i:int=5,b: bool=True)->float:
-    if len(stock_code)==4:
+    if len(stock_code)==4 and stock_code.isdigit():
         df=scr.stock_data2('Index',stock_code,startdate='20220101',lastdate='20220220',default='Close')
     else:
         df=scr.stock_data2('sdf',stock_code,startdate='20220101',lastdate='20220220',default='Close')
