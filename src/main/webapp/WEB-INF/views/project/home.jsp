@@ -226,6 +226,7 @@
                 <div class="analyze-buttons">
                         <a href="history.do" class="analyze-button">히스토리</a>|
                         <a href="add2.do" class="analyze-button">기업추가</a>
+                        <a href="add2_by_name.do" class="analyze-button">기업추가_by_type</a>
                     </div>
                 <div class="analyze-buttons">
                         <a href="analysis_page3.do" class="analyze-button">제외분석</a>|

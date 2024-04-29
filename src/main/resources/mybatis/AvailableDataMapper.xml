@@ -36,5 +36,8 @@
         INNER JOIN addition ON A.stock_code = addition.stock_code
         WHERE addition.id = #{id}
     </select>
+    <select id="getByNameOrStock_code" parameterType="String" resultType="team.backend.domain.AvailableData">
+        select name, stock_code, db_name from availabledata where name like '%' || '${stock_code_or_name}' || '%' or stock_code like '%' || '${stock_code_or_name}' || '%'
+    </select>
 
 </mapper>

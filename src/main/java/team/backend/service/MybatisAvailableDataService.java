@@ -89,4 +89,9 @@ public class MybatisAvailableDataService implements AvailableDataService {
         System.out.println("params"+params);
         return availableDataMapper.getList(params);
     }
+    @Override
+    public List<AvailableData> getByNameOrStock_code(String stock_code_or_name){
+        return availableDataMapper.getByNameOrStock_code(stock_code_or_name);
+    }
 }
+

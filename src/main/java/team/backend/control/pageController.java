@@ -813,6 +813,17 @@ public class pageController {
         // 클라이언트에게 JSON 형태로 결과를 반환합니다.
         return ResponseEntity.ok().body(aiResult2);
     }
+    @GetMapping("add_by_name_or_code.do")
+    @ResponseBody
+    public List<AvailableData> addByNameOrCode(@RequestParam("stock_code_or_name") String stock_code_or_name){
+        System.out.println(stock_code_or_name);
+        List<AvailableData> responseData = availableDataService.getByNameOrStock_code(stock_code_or_name);
+        return responseData;
+    }
+    @GetMapping("add2_by_name.do")
+    public String add2_by_name(){
+        return "/project/add2_by_name";
+    }
     @PostMapping("url.do")
     @ResponseBody
     public List<String> add2(@RequestParam("action") String action,

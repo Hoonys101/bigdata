@@ -50,6 +50,23 @@ def stock_data(db_name='sdfklj', stock_code='IBM', startdate='20120101',lastdate
     db.insert_data_to_table(connect,df)
     db.close_connection(connect)
 
+def stock_data2(db_name='sdfklj', stock_code='IBM', startdate='20120101',lastdate='20220101', default='Close'):
+    if db_name=='Index':
+#        df=stock.get_index_ohlcv(startdate, lastdate, stock_code)[['시가','고가','저가','종가','거래량','등락률']]
+#        df.rename(columns={'시가':'Open','고가':'High','저가':'Low','종가':'Close','거래량':'Volume','등락률':'various'},inplace=True)
+        df=stock.get_index_ohlcv(startdate, lastdate, stock_code)[['시가','고가','저가','종가','거래량']]
+        df.rename(columns={'시가':'Open','고가':'High','저가':'Low','종가':'Close','거래량':'Volume'},inplace=True)
+#        df['various']=0
+        df.rename_axis('data_date',inplace=True)
+        
+    else:
+        # print(stock_code,startdate,lastdate)
+#        df = fdr.DataReader(stock_code, startdate,lastdate)[['Open','High','Low','Close','Volume','Change']]
+#        df.rename(columns={'Change':'various'},inplace=True)
+        df = fdr.DataReader(stock_code, startdate,lastdate)[['Open','High','Low','Close','Volume']]
+        df.rename_axis('data_date',inplace=True)
+    return data_processing(df,db_name,stock_code)
+
 # dataFrame, str DB명, stock_code를 받아서, dataFrame에 stock_code,db_name가 추가된 df로  stock_data의 딸림
 def data_processing(df,db_name,stock_code):
         df.insert(loc=0,column="db_name",value=db_name)
@@ -73,57 +90,6 @@ def row_price_date(startdate='20150101',enddate='20220101',subject='DCOILWTICO')
     result= web.DataReader(subject,resource,start,end)
     return result
 
-# Sector, Code와 날짜 2개를 str으로 받아서, -100~100까지로 정규화된 df 반환
-'''def normal(code='IMO', db_name='sdfklj', startdate='20150101',lastdate='20220101', default='Close'):
-    if db_name=='Index':
-        df=stock.get_index_ohlcv(startdate, lastdate, code)[['시가','고가','저가','종가','거래량']]
-        df.rename(columns={'시가':'Open','고가':'High','저가':'Low','종가':'Close','거래량':'Volume'},inplace=True)
-        df.rename_axis('Date',inplace=True)
-    else:
-        df = fdr.DataReader(code, startdate,lastdate)
-'''
-
-def normal(df, default='Close'):
-    # Close 컬럼의 최대값과 최소값 계산
-    max_close = df[default].max()
-    min_close = df[default].min()
-    # Close 값을 -100부터 100까지의 범위로 정규화하여 새로운 열 추가
-    df['Close_normal'] = ((df['Close'] - min_close) / (max_close - min_close)) * 200 - 100
-    return df
-
-# 2개의 df와 filename을 받아서, plot 저장하고 corr 리턴
-def saveplot(df,df2,filename):
-    plt.plot(df.index, df['Close_normal'])
-    plt.plot(df2.index, df2['Close_normal'])
-    correlation=df['Close_normal'].corr(df2['Close_normal'])
-    plt.title('Correlation between "IMO" and "CBOE" is'+str(correlation))
-    # 폴더가 없으면 생성
-    save_dir = '../resources/static/img/plots'
-    if not os.path.exists(save_dir):
-        os.makedirs(save_dir)
-    # 그래프를 'plots' 폴더에 그림 파일로 저장
-    plt.savefig(os.path.join(save_dir, filename))
-    plt.clf()
-    return correlation
-
-# 기업명,name명 X 2개와 날짜 2개를 str으로 받고, 당기는 날짜를 int로 받아서 날짜 당기기 및 비교 5회 반복하며 plot 저장하고, corr 리턴
-def cal_corr(sector1="sdfsdf", com1='IMO', sector2="wefwef", com2='CBOE',startdate='20150101',lastdate='20220101', days=30):
-    df1=normal(sector1, com1,startdate,lastdate)
-    df2=normal(sector2, com2,startdate,lastdate)
-    list=[]
-    for i in range(5):
-        filename=com1+'_'+com2+'_'+startdate+'_'+lastdate+'_'+str(i)+'.png'
-        list.append(saveplot(df1,df2,filename)) # save 및 파일명 저장
-        df1,df2=delay_df(df1,df2,days)
-    return list
-#   return saveplot(df1,df2,filename)
-
-#df2개와 int를 받아서 int만큼 뒤로 당긴 df로 변환하고, 두 df의 격차 제거한 df 반환하는 함수
-def delay_df(df1,df2,days):
-    df1=df1.iloc[:-days]
-    df2=df2.shift(-days)
-    df2=df2.dropna()
-    return df1,df2
 
 #Sector와 Code를 입력받아서, 동일한 코드 생성
 def add_data(list=[])->str:
@@ -157,3 +123,31 @@ def stock_data_all(db_name='sdfklj',stock_code='IBM'):
 # add_data(['','Index','1008'])
 # add_data(['','SnP500','IBM'])
 
+# insertdata=[
+#     '1152',
+#     '1160',
+#     '1153',
+#     '1154',
+#     '1001',
+#     '1020',
+#     '1011',
+#     '1159',
+#     '1008',
+#     '1034',
+#     '1155']
+# for stt in insertdata:
+#     print(stt,"입력중")
+#     add_data(['','Index',stt])
+#     print(stt,'입력완료')
+# inndata=['026960',
+#     'IBM',
+#     '012330',
+#     '058650',
+#     '058430',
+#     '004020',
+#     '004100',
+#     '063160']
+# for stt in inndata:
+#     print(stt,"입력중")
+#     add_data(['','erg',stt])
+#     print(stt,'입력완료')
