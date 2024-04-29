@@ -4,11 +4,15 @@ grant connect, resource, unlimited tablespace to bigdata;
 conn bigdata/java;
 
 DROP TABLE ServiceUsage;
+DROP TABLE ServiceUsage1;
+DROP TABLE BranchHistory;
 DROP TABLE ArchivedData;
 DROP TABLE addition;
 DROP TABLE AvailableData;
 DROP TABLE ID;
 DROP SEQUENCE  serviceusage_seq;
+DROP SEQUENCE  serviceusage_seq1;
+DROP SEQUENCE  BranchHistory_seq;
 
 create table ID(
    ID varchar2(100) constraint PROJECT_PK primary key, 
@@ -51,9 +55,40 @@ CREATE TABLE addition (
    stock_code VARCHAR2(255),
    FOREIGN KEY (ID) REFERENCES ID(ID),
    FOREIGN KEY (stock_code) REFERENCES AvailableData(stock_code)
+ 
 );
 CREATE SEQUENCE serviceusage_seq START WITH 1 INCREMENT BY 1;
 CREATE TABLE ServiceUsage (
+   serviceusage_seq NUMBER PRIMARY KEY,
+   stock_code1 VARCHAR2(255),
+   stock_code2 VARCHAR2(255),
+   name1 VARCHAR2(255),
+   name2 VARCHAR2(255),
+   start_date VARCHAR2(30),
+   end_date VARCHAR2(30),
+   ID VARCHAR2(30),
+   report VARCHAR2(255),
+   FOREIGN KEY (ID) REFERENCES ID(ID),  -- ID를 참조하는 외래 키 제약 조건
+   FOREIGN KEY (stock_code1) REFERENCES AvailableData(stock_code),
+   FOREIGN KEY (stock_code2) REFERENCES AvailableData(stock_code)
+);
+CREATE SEQUENCE BranchHistory_seq START WITH 1 INCREMENT BY 1;
+CREATE TABLE BranchHistory(
+   branchHistory_seq NUMBER PRIMARY KEY,
+   stock_code1 VARCHAR2(255),
+   stock_code2 VARCHAR2(255),
+   name1 VARCHAR2(255),
+   name2 VARCHAR2(255),
+   start_date VARCHAR2(30),
+   end_date VARCHAR2(30),
+   ID VARCHAR2(30),
+   report VARCHAR2(255),
+   FOREIGN KEY (ID) REFERENCES ID(ID),  -- ID를 참조하는 외래 키 제약 조건
+   FOREIGN KEY (stock_code1) REFERENCES AvailableData(stock_code),
+   FOREIGN KEY (stock_code2) REFERENCES AvailableData(stock_code)
+);
+CREATE SEQUENCE serviceusage_seq1 START WITH 1 INCREMENT BY 1;
+CREATE TABLE ServiceUsage1 (
    serviceusage_seq NUMBER PRIMARY KEY,
    stock_code1 VARCHAR2(255),
    stock_code2 VARCHAR2(255),
@@ -65,8 +100,12 @@ CREATE TABLE ServiceUsage (
    end_date VARCHAR2(30),
    ID VARCHAR2(30),
    report VARCHAR2(255),
-   FOREIGN KEY (ID) REFERENCES ID(ID)  -- ID를 참조하는 외래 키 제약 조건
+   FOREIGN KEY (ID) REFERENCES ID(ID),  -- ID를 참조하는 외래 키 제약 조건
+   FOREIGN KEY (stock_code1) REFERENCES AvailableData(stock_code),
+   FOREIGN KEY (stock_code2) REFERENCES AvailableData(stock_code),
+   FOREIGN KEY (stock_code3) REFERENCES AvailableData(stock_code)
 );
+
 
 commit;
 
@@ -77,3 +116,4 @@ desc addition;
 desc availabledata;
 desc archiveddata;
 desc ServiceUsage;
+desc ServiceUsage1;

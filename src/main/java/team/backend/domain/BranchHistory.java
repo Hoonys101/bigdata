@@ -12,8 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @Repository
-public class ServiceUsage {
-    private int serviceusage_seq;
+public class BranchHistory {
+    private int branchHistory_seq;
     private String stock_code1;
     private String stock_code2;
     private String name1;

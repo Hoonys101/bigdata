@@ -20,6 +20,7 @@ public interface AvailableDataService {
 
     List<AvailableData> getList(String id, AvailableData availableData);
 
+    String getCompany(String stock_code);
 
 
 

@@ -15,6 +15,21 @@
     margin: 0;
     text-align: center; /* 수정된 부분: body의 텍스트를 가운데 정렬 */
   }
+  footer {
+        background-color: #555;
+        color: #fff;
+        padding: 15px;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
+        font-family: Arial, sans-serif;
+        font-size: 18px;
+        font-weight: bold;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+       background-color: rgba(0, 0, 0, 0.5); /* 투명 배경 추가 */
+          padding: 5px 10px; /* 배경에 여백 추가 */
+    }
 h2 {
     text-align: center;
     margin-top: 50px;
@@ -222,5 +237,10 @@ function validateAndSubmit() {
               <input type="submit" class="button-apply" value="기업추가">
           </div>
 </form>
+<footer>
+    <p>> &copy; 2024 빅 데이터 분석 플랫폼 - 데이터로 더 나은 미래를 만듭니다.
+
+    </p>
+    </footer>
 </body>
 </html>

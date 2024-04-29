@@ -19,6 +19,7 @@ public interface AvailableDataMapper {
 
     List<AvailableData> getList(Map<String, String> params);
 
+    String getCompany(String stock_code);
 
 
 }

@@ -53,11 +53,11 @@ public class JavaPython implements JavaPythonInter {
 
         // System.out.println("find_period");
 //        List<String> results=java.strParameter("add_data","Index","1001");
-//        List<String> results=java.strParameter("find_period","1152","1153");
+        List<String> results=java.strParameter("find_period","054920","047080");
 //        List<String> results=java.strParameter("diff_cal_data","1152","1008","1153","1008","20130101","20130501");
         //List<String> results=java.strParameter("cal_data","1152","1153","20130101","20130501");
         //List<String> results=java.strParameter("tree_data","041020","025750");
-        List<String> results=java.strParameter("diff_find_period","024720","2218","030520");
+        //List<String> results=java.strParameter("diff_find_period","024720","2218","030520");
         System.out.println("result printing");
         for(String result:results){
             System.out.println(result);

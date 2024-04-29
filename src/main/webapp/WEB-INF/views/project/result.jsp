@@ -15,6 +15,21 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
         .container {
             text-align: center;
         }
+        footer {
+              background-color: #555;
+              color: #fff;
+              padding: 15px;
+              position: fixed;
+              bottom: 0;
+              width: 100%;
+              text-align: center;
+              font-family: Arial, sans-serif;
+              font-size: 18px;
+              font-weight: bold;
+              text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+             background-color: rgba(0, 0, 0, 0.5); /* 투명 배경 추가 */
+                padding: 5px 10px; /* 배경에 여백 추가 */
+          }
 
         table {
             width: 100%;
@@ -67,7 +82,7 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
         /* Table styling */
         .table-container {
         width: 100%;
-            max-height: 70vh; /* Set maximum height for the table container */
+            <%--max-height: 70vh; /* Set maximum height for the table container */--%>
             overflow-y: auto; /* Enable vertical scrolling if table exceeds maximum height */
         }
         table {
@@ -114,8 +129,8 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
         <thead class="fixed-header">
         <tr>
             <th>ID</th>
-            <th>Stock Code 1</th>
-            <th>Stock Code 2</th>
+            <th>기업 1</th>
+            <th>기업 2</th>
             <th>Start Date</th>
             <th>End Date</th>
             <th>Report</th>
@@ -125,11 +140,11 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
         </thead>
         <tbody>
             <!-- result1 테이블 표시 -->
-            <c:forEach items="${serviceUsages1}" var="item">
+            <c:forEach items="${serviceUsages0}" var="item">
                 <tr>
                     <td>${item.id}</td>
-                    <td>${item.stock_code1}</td>
-                    <td>${item.stock_code2}</td>
+                    <td>${item.name1}</td>
+                    <td>${item.name2}</td>
                     <td>${item.start_date}</td>
                     <td>${item.end_date}</td>
                     <td>${item.report}</td>
@@ -139,6 +154,10 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
                             <input type="hidden" name="id" value="${item.id}">
                             <input type="hidden" name="stock_code1" value="${item.stock_code1}">
                             <input type="hidden" name="stock_code2" value="${item.stock_code2}">
+                            <input type="hidden" name="stock_code3" value="${item.stock_code3}">
+                            <input type="hidden" name="name1" value="${item.name1}">
+                            <input type="hidden" name="name2" value="${item.name2}">
+                            <input type="hidden" name="name3" value="${item.name3}">
                             <input type="hidden" name="start_date" value="${item.start_date}">
                             <input type="hidden" name="end_date" value="${item.end_date}">
                             <input type="hidden" name="report" value="${item.report}">
@@ -151,6 +170,10 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
                             <input type="hidden" name="id" value="${item.id}">
                             <input type="hidden" name="stock_code1" value="${item.stock_code1}">
                             <input type="hidden" name="stock_code2" value="${item.stock_code2}">
+                            <input type="hidden" name="stock_code3" value="${item.stock_code3}">
+                            <input type="hidden" name="name1" value="${item.name1}">
+                            <input type="hidden" name="name2" value="${item.name2}">
+                            <input type="hidden" name="name3" value="${item.name3}">
                             <input type="hidden" name="start_date" value="${item.start_date}">
                             <input type="hidden" name="end_date" value="${item.end_date}">
                             <input type="hidden" name="report" value="${item.report}">
@@ -186,8 +209,8 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
         <thead class="fixed-header">
         <tr>
             <th>ID</th>
-            <th>Stock Code 1</th>
-            <th>Stock Code 2</th>
+            <th>기업 1</th>
+            <th>기업 2</th>
             <th>Start Date</th>
             <th>End Date</th>
             <th>Report</th>
@@ -200,17 +223,22 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
             <c:forEach items="${serviceUsages2}" var="item">
                 <tr>
                     <td>${item.id}</td>
-                    <td>${item.stock_code1}</td>
-                    <td>${item.stock_code2}</td>
+                    <td>${item.name1}</td>
+                    <td>${item.name2}</td>
                     <td>${item.start_date}</td>
                     <td>${item.end_date}</td>
                     <td>${item.report}</td>
                     <td>
+
                         <form action="analysis_page.do" method="post">
                             <input type="hidden" name="serviceusage_seq" value="${item.serviceusage_seq}">
                             <input type="hidden" name="id" value="${item.id}">
                             <input type="hidden" name="stock_code1" value="${item.stock_code1}">
                             <input type="hidden" name="stock_code2" value="${item.stock_code2}">
+                            <input type="hidden" name="stock_code3" value="${item.stock_code3}">
+                            <input type="hidden" name="name1" value="${item.name1}">
+                            <input type="hidden" name="name2" value="${item.name2}">
+                            <input type="hidden" name="name3" value="${item.name3}">
                             <input type="hidden" name="start_date" value="${item.start_date}">
                             <input type="hidden" name="end_date" value="${item.end_date}">
                             <input type="hidden" name="report" value="${item.report}">
@@ -223,6 +251,10 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
                             <input type="hidden" name="id" value="${item.id}">
                             <input type="hidden" name="stock_code1" value="${item.stock_code1}">
                             <input type="hidden" name="stock_code2" value="${item.stock_code2}">
+                            <input type="hidden" name="stock_code3" value="${item.stock_code3}">
+                            <input type="hidden" name="name1" value="${item.name1}">
+                            <input type="hidden" name="name2" value="${item.name2}">
+                            <input type="hidden" name="name3" value="${item.name3}">
                             <input type="hidden" name="start_date" value="${item.start_date}">
                             <input type="hidden" name="end_date" value="${item.end_date}">
                             <input type="hidden" name="report" value="${item.report}">
@@ -310,5 +342,10 @@ document.getElementById('ai-analysis-button-2').addEventListener('click', functi
 
 
 </script>
+<footer>
+    <p>> &copy; 2024 빅 데이터 분석 플랫폼 - 데이터로 더 나은 미래를 만듭니다.
+
+    </p>
+    </footer>
 </body>
 </html>

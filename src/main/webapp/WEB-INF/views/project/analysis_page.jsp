@@ -17,6 +17,21 @@
       margin: 0;
       text-align: center; /* 수정된 부분: body의 텍스트를 가운데 정렬 */
     }
+    footer {
+          background-color: #555;
+          color: #fff;
+          padding: 15px;
+          position: fixed;
+          bottom: 0;
+          width: 100%;
+          text-align: center;
+          font-family: Arial, sans-serif;
+          font-size: 18px;
+          font-weight: bold;
+          text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+         background-color: rgba(0, 0, 0, 0.5); /* 투명 배경 추가 */
+            padding: 5px 10px; /* 배경에 여백 추가 */
+      }
     /* 추가된 스타일 */
     .container {
       margin: 0 auto;
@@ -102,7 +117,7 @@
                 </option>
             </c:forEach>
         </select>
-
+        <input type="hidden" id="stock_code3" name="stock_code3" value="stock_code3">
   <section style="text-align: center; color: black;">
     <h2>날짜 선택</h2>
     <div>
@@ -115,6 +130,7 @@
     </div>
   </section>
    <div class="button-container">
+
                 <input type="submit" class="button-apply" value="적용">
     </div>
 </div>
@@ -158,6 +174,10 @@ function validateAndSubmit() {
                 }
             }
 </script>
+<footer>
+    <p>> &copy; 2024 빅 데이터 분석 플랫폼 - 데이터로 더 나은 미래를 만듭니다.
 
+    </p>
+    </footer>
 </body>
 </html>

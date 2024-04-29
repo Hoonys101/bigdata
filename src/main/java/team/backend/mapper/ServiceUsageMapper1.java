@@ -12,7 +12,7 @@ import java.util.Map;
 
 @Mapper
 @Repository
-public interface ServiceUsageMapper {
+public interface ServiceUsageMapper1 {
 
     List<ServiceUsage> getHistory(String id);
 

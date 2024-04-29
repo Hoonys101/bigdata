@@ -2,55 +2,55 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="team.backend.mapper.ServiceUsageMapper">
+<mapper namespace="team.backend.mapper.BranchHistory">
 
-    <insert id="insertToServiceUsage" parameterType="Map">
-        insert into ServiceUsage(serviceusage_seq,stock_code1, stock_code2,name1,name2, start_date, end_date, id,report)
-        values(serviceusage_seq.nextval,#{stock_code1},#{stock_code2},#{name1},#{name2},#{start_date},#{end_date},#{id},#{report})
+    <insert id="insertToBranchHistory" parameterType="Map">
+        insert into BranchHistory(branchHistory_seq ,stock_code1, stock_code2,name1,name2, start_date, end_date, id,report)
+        values(branchHistory_seq.nextval,#{stock_code1},#{stock_code2},#{name1},#{name2},#{start_date},#{end_date},#{id},#{report})
     </insert>
 
-    <select id="getHistory" parameterType="String" resultType="team.backend.domain.ServiceUsage">
+    <select id="getHistorybranch" parameterType="String" resultType="team.backend.domain.BranchHistory">
         SELECT *
-        FROM ServiceUsage
+        FROM BranchHistory
         WHERE id = #{id} AND stock_code1 IS NOT NULL
         AND stock_code2 IS NOT NULL
     </select>
-    <select id="getHistory1" parameterType="String" resultType="team.backend.domain.ServiceUsage">
+    <select id="getHistory1" parameterType="String" resultType="team.backend.domain.BranchHistory">
         SELECT *
-        FROM ServiceUsage
+        FROM BranchHistory
         WHERE id = #{id} AND stock_code1 IS NOT NULL
         AND stock_code2 IS NOT NULL
         AND stock_code3 IS NOT NULL
     </select>
 
 
-    <select id="getHistoryByReport" parameterType="String" resultType="team.backend.domain.ServiceUsage">
+    <select id="getHistoryByReport" parameterType="String" resultType="team.backend.domain.BranchHistory">
         SELECT *
-        FROM ServiceUsage
+        FROM BranchHistory
         WHERE id = #{id} and stock_code1 IS NOT NULL
         AND stock_code2 IS NOT NULL
     </select>
-    <select id="getHistoryByReport1" parameterType="String" resultType="team.backend.domain.ServiceUsage">
+    <select id="getHistoryByReport1" parameterType="String" resultType="team.backend.domain.BranchHistory">
         SELECT *
-        FROM ServiceUsage
+        FROM BranchHistory
         WHERE id = #{id} and report AND stock_code1 IS NOT NULL
         AND stock_code2 IS NOT NULL
         AND stock_code3 IS NOT NULL
     </select>
     <delete id="deleteHistoryBySeq" parameterType="int">
-        DELETE FROM ServiceUsage WHERE serviceusage_seq = #{serviceusage_seq}
+        DELETE FROM BranchHistory WHERE branchHistory_seq  = #{branchHistory_seq }
     </delete>
 
-    <select id="getResult" parameterType="String" resultType="team.backend.domain.ServiceUsage">
+    <select id="getResult" parameterType="String" resultType="team.backend.domain.BranchHistory">
         SELECT *
-        FROM ServiceUsage
+        FROM BranchHistory
         WHERE id = #{id}
     </select>
     <select id="getCompany1" parameterType="String" resultType="String">
         SELECT ad.name
         FROM (
         SELECT ad.name, ROWNUM AS rn
-        FROM ServiceUsage su
+        FROM BranchHistory su
         JOIN AvailableData ad ON su.stock_code1 = ad.stock_code
         WHERE su.stock_code1 = #{stock_code1}
         ) ad
@@ -61,7 +61,7 @@
         SELECT ad.name
         FROM (
         SELECT ad.name, ROWNUM AS rn
-        FROM ServiceUsage su
+        FROM BranchHistory su
         JOIN AvailableData ad ON su.stock_code2 = ad.stock_code
         WHERE su.stock_code2 = #{stock_code2}
         ) ad
@@ -71,7 +71,7 @@
         SELECT ad.name
         FROM (
         SELECT ad.name, ROWNUM AS rn
-        FROM ServiceUsage su
+        FROM BranchHistory su
         JOIN AvailableData ad ON su.stock_code3 = ad.stock_code
         WHERE su.stock_code3 = #{stock_code}
         ) ad

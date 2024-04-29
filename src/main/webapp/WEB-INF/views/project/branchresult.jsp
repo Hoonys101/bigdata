@@ -15,21 +15,22 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
         .container {
             text-align: center;
         }
-footer {
-      background-color: #555;
-      color: #fff;
-      padding: 15px;
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      text-align: center;
-      font-family: Arial, sans-serif;
-      font-size: 18px;
-      font-weight: bold;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-     background-color: rgba(0, 0, 0, 0.5); /* 투명 배경 추가 */
-        padding: 5px 10px; /* 배경에 여백 추가 */
-  }
+        footer {
+              background-color: #555;
+              color: #fff;
+              padding: 15px;
+              position: fixed;
+              bottom: 0;
+              width: 100%;
+              text-align: center;
+              font-family: Arial, sans-serif;
+              font-size: 18px;
+              font-weight: bold;
+              text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+             background-color: rgba(0, 0, 0, 0.5); /* 투명 배경 추가 */
+                padding: 5px 10px; /* 배경에 여백 추가 */
+          }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -81,7 +82,7 @@ footer {
         /* Table styling */
         .table-container {
         width: 100%;
-            max-height: 70vh; /* Set maximum height for the table container */
+            <%--max-height: 70vh; /* Set maximum height for the table container */--%>
             overflow-y: auto; /* Enable vertical scrolling if table exceeds maximum height */
         }
         table {
@@ -120,7 +121,6 @@ footer {
         <c:forEach items="${serviceUsages1}" var="item">
             <input type="text" name="stock_code1_${item.id}" value="${item.stock_code1}">
             <input type="text" name="stock_code2_${item.id}" value="${item.stock_code2}">
-            <input type="text" name="stock_code3" value="${stock_code3}">
         </c:forEach>
     </div>
 </div>
@@ -131,7 +131,6 @@ footer {
             <th>ID</th>
             <th>기업 1</th>
             <th>기업 2</th>
-            <th>제외기업</th>
             <th>Start Date</th>
             <th>End Date</th>
             <th>Report</th>
@@ -141,25 +140,22 @@ footer {
         </thead>
         <tbody>
             <!-- result1 테이블 표시 -->
-            <c:forEach items="${serviceUsages1}" var="item">
+            <c:forEach items="${serviceUsages0}" var="item">
                 <tr>
                     <td>${item.id}</td>
                     <td>${item.name1}</td>
                     <td>${item.name2}</td>
-                    <td>${item.name3}</td>
                     <td>${item.start_date}</td>
                     <td>${item.end_date}</td>
                     <td>${item.report}</td>
                     <td>
-                        <form action="analysis_page3.do" method="post">
+                        <form action="analysis_page.do" method="post">
                             <input type="hidden" name="serviceusage_seq" value="${item.serviceusage_seq}">
                             <input type="hidden" name="id" value="${item.id}">
                             <input type="hidden" name="stock_code1" value="${item.stock_code1}">
                             <input type="hidden" name="stock_code2" value="${item.stock_code2}">
-                            <input type="hidden" name="stock_code3" value="${stock_code3}">
                             <input type="hidden" name="name1" value="${item.name1}">
                             <input type="hidden" name="name2" value="${item.name2}">
-                            <input type="hidden" name="name3" value="${item.name3}">
                             <input type="hidden" name="start_date" value="${item.start_date}">
                             <input type="hidden" name="end_date" value="${item.end_date}">
                             <input type="hidden" name="report" value="${item.report}">
@@ -172,10 +168,8 @@ footer {
                             <input type="hidden" name="id" value="${item.id}">
                             <input type="hidden" name="stock_code1" value="${item.stock_code1}">
                             <input type="hidden" name="stock_code2" value="${item.stock_code2}">
-                            <input type="hidden" name="stock_code3" value="${stock_code3}">
                             <input type="hidden" name="name1" value="${item.name1}">
                             <input type="hidden" name="name2" value="${item.name2}">
-                            <input type="hidden" name="name3" value="${item.name3}">
                             <input type="hidden" name="start_date" value="${item.start_date}">
                             <input type="hidden" name="end_date" value="${item.end_date}">
                             <input type="hidden" name="report" value="${item.report}">
@@ -203,7 +197,6 @@ footer {
         <c:forEach items="${serviceUsages2}" var="item">
             <input type="text" name="stock_code1_${item.id}" value="${item.stock_code1}">
             <input type="text" name="stock_code2_${item.id}" value="${item.stock_code2}">
-            <input type="text" name="stock_code3" value="${stock_code3}">
         </c:forEach>
     </div>
 </div>
@@ -214,7 +207,6 @@ footer {
             <th>ID</th>
             <th>기업 1</th>
             <th>기업 2</th>
-            <th>제외기업</th>
             <th>Start Date</th>
             <th>End Date</th>
             <th>Report</th>
@@ -229,20 +221,18 @@ footer {
                     <td>${item.id}</td>
                     <td>${item.name1}</td>
                     <td>${item.name2}</td>
-                    <td>${item.name3}</td>
                     <td>${item.start_date}</td>
                     <td>${item.end_date}</td>
                     <td>${item.report}</td>
                     <td>
-                        <form action="analysis_page3.do" method="post">
+
+                        <form action="analysis_page.do" method="post">
                             <input type="hidden" name="serviceusage_seq" value="${item.serviceusage_seq}">
                             <input type="hidden" name="id" value="${item.id}">
                             <input type="hidden" name="stock_code1" value="${item.stock_code1}">
                             <input type="hidden" name="stock_code2" value="${item.stock_code2}">
-                            <input type="hidden" name="stock_code3" value="${stock_code3}">
                             <input type="hidden" name="name1" value="${item.name1}">
                             <input type="hidden" name="name2" value="${item.name2}">
-                            <input type="hidden" name="name3" value="${item.name3}">
                             <input type="hidden" name="start_date" value="${item.start_date}">
                             <input type="hidden" name="end_date" value="${item.end_date}">
                             <input type="hidden" name="report" value="${item.report}">
@@ -255,10 +245,8 @@ footer {
                             <input type="hidden" name="id" value="${item.id}">
                             <input type="hidden" name="stock_code1" value="${item.stock_code1}">
                             <input type="hidden" name="stock_code2" value="${item.stock_code2}">
-                            <input type="hidden" name="stock_code3" value="${stock_code3}">
                             <input type="hidden" name="name1" value="${item.name1}">
                             <input type="hidden" name="name2" value="${item.name2}">
-                            <input type="hidden" name="name3" value="${item.name3}">
                             <input type="hidden" name="start_date" value="${item.start_date}">
                             <input type="hidden" name="end_date" value="${item.end_date}">
                             <input type="hidden" name="report" value="${item.report}">
@@ -280,7 +268,6 @@ document.getElementById('ai-analysis-button').addEventListener('click', function
         data: {
             stock_code1: $("input[name^='stock_code1_']:first").val(),
             stock_code2: $("input[name^='stock_code2_']:first").val()
-
         },
         success: function(response) {
             // 서버에서 받은 AI 분석 결과를 처리하여 화면에 표시합니다.

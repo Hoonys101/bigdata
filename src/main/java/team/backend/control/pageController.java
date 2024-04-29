@@ -1,8 +1,5 @@
-package team.backend.control;
-import java.io.File;
+ package team.backend.control;
 
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,8 +8,6 @@ import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,23 +17,14 @@ import team.backend.domain.*;
 
 import team.backend.service.*;
 
-import java.io.IOException;
-import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
-import java.net.Authenticator;
 
-import java.net.http.HttpResponse;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.mail.*;
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -59,12 +45,16 @@ public class pageController {
     private JavaPythonInter javaPy;
     @Autowired
     private ServiceUsage serviceUsage;
+    @Autowired
+    private ServiceUsage1 serviceUsage1;
+
 
     public static final String PLOTS_DIRECTORY = "C:/plots";
 
     @Autowired
-    public pageController(ServiceUsage serviceUsage) {
+    public pageController(ServiceUsage serviceUsage,ServiceUsage1 serviceUsage1) {
         this.serviceUsage = serviceUsage;
+        this.serviceUsage1 = serviceUsage1;
     }
 
     @GetMapping("home.do") //메인화면
@@ -155,20 +145,7 @@ public class pageController {
         return "/project/add2";
     }
 
-    @PostMapping("add.do")
-    public String add(
-            @RequestParam("nation") String nation,
-            @RequestParam("db_name") String db_name,
-            @RequestParam("sector") String sector,
-            @RequestParam("name") String name,
-            @RequestParam("stock_code") String stock_code,
-            Model model) {
-        System.out.println("post add");
-//        List<String> filteredData = availableDataService.getAvailableDataByFilters(nation, db_name, sector,name,stock_code);
-//        System.out.println("filteredData"+filteredData);
-//        model.addAttribute("filteredData", filteredData);
-        return "redirect:add2.do";
-    }
+
 
     @PostMapping("add2.do")
     public String excuteAdd(@RequestParam("db_name") String db_name, @RequestParam("stock_code") String stock_code, HttpSession session) {
@@ -223,7 +200,7 @@ public class pageController {
     }
 
 
-    @PostMapping("analysis_page.do") //분석하기
+    @PostMapping("analysis_page.do") //기간분석
     public String analysis_page(@RequestParam("stock_code1") String stock_code1,
                                 @RequestParam("stock_code2") String stock_code2,
                                 @RequestParam("start_date") String start_date,
@@ -239,9 +216,13 @@ public class pageController {
         start_date = start_date.replace("-", "").substring(0, 8);
         end_date = end_date.replace("-", "").substring(0, 8);
 
-
+        String name1 = availableDataService.getCompany(stock_code1);
+        String name2 = availableDataService.getCompany(stock_code2);
         serviceUsage.setStock_code1(stock_code1);
         serviceUsage.setStock_code2(stock_code2);
+        serviceUsage.setName1(name1);
+        serviceUsage.setName2(name2);
+
         serviceUsage.setStart_date(start_date);
         serviceUsage.setEnd_date(end_date);
         serviceUsage.setId(id);
@@ -274,8 +255,8 @@ public class pageController {
         for (int i = 5; i < 10; i++) {
             result2.set(i, "img/plots/" + result2.get(i));
         }
-        String company1 = addData.getCompany1(stock_code1);
-        String company2 = addData.getCompany2(stock_code2);
+        String company1 = availableDataService.getCompany(stock_code1);
+        String company2 = availableDataService.getCompany(stock_code2);
 
         System.out.println("company1"+company1);
         System.out.println("company2"+company2);
@@ -340,7 +321,7 @@ public class pageController {
     }
 
 
-    @PostMapping("analysis_page2.do")
+    @PostMapping("analysis_page2.do") //분기분석
     public String analysis_page2(@RequestParam("stock_code1") String stock_code1,
                                  @RequestParam("stock_code2") String stock_code2,
                                  HttpSession session, Model model) {
@@ -348,61 +329,70 @@ public class pageController {
         String id = (String) session.getAttribute("id");
         List<String> result1 = javaPy.strParameter("find_period", stock_code1, stock_code2);
         List<String> result2 = javaPy.strParameter("find_period", stock_code2, stock_code1);
-//        List<String> ai_1 = javaPy.strParameter("tree_data",stock_code1,stock_code2);
-//        List<String> ai_2 = javaPy.strParameter("tree_data",stock_code2,stock_code1);
-        System.out.println("result1"+ result1);
-        System.out.println("result2"+ result2);
-//        System.out.println("ai_1"+ ai_1);
-//        System.out.println("ai_2"+ ai_2);
-        System.out.println("result1"+result1);
+        System.out.println("result1" + result1);
+        System.out.println("result2" + result2);
 
-        List<ServiceUsage> serviceUsages1 = new ArrayList<>();
-        List<ServiceUsage> serviceUsages2 = new ArrayList<>();
+        String name1 = availableDataService.getCompany(stock_code1);
+        String name2 = availableDataService.getCompany(stock_code2);
 
+        List<BranchHistory> branchHistoryList = new ArrayList<>();
+        List<BranchHistory> branchHistoryList1 = new ArrayList<>();
 
         for (String item : result1) {
             String[] resultArray = item.split(",\\s*");
             if (resultArray.length >= 3) {
-                ServiceUsage serviceUsage = new ServiceUsage(); // 각 요소에 대해 새로운 ServiceUsage 객체를 생성
-                serviceUsage.setStock_code1(stock_code1);
-                serviceUsage.setStock_code2(stock_code2);
-                serviceUsage.setId(id);
-                serviceUsage.setStart_date(resultArray[0]);
-                serviceUsage.setEnd_date(resultArray[1]);
-                serviceUsage.setReport(resultArray[2]);
-
-                int reportValue = Integer.parseInt(resultArray[2]);
-                if (reportValue >= 1 && reportValue <= 5) {
-                    // 1~4 사이의 값이라면 그대로 사용
-                    serviceUsage.setReport(String.valueOf(reportValue));
-                } else {
-                    // 1~4 사이의 값이 아니라면 1로 설정
-                    serviceUsage.setReport("0");
+                BranchHistory branchHistory = new BranchHistory(); // 각 요소에 대해 새로운 ServiceUsage 객체를 생성
+                branchHistory.setStock_code1(stock_code1);
+                branchHistory.setStock_code2(stock_code2);
+                branchHistory.setName1(name1);
+                branchHistory.setName2(name2);
+                branchHistory.setId(id);
+                branchHistory.setStart_date(resultArray[0]);
+                branchHistory.setEnd_date(resultArray[1]);
+                branchHistory.setReport(resultArray[2]);
+                try {
+                    int reportValue = Integer.parseInt(branchHistory.getReport());
+                    String result = generateResult(reportValue);
+                    branchHistory.setReport(result);
+                } catch (NumberFormatException e) {
+                    // 숫자 형식이 아닌 경우 처리할 로직을 여기에 추가합니다.
+                    // 예를 들어, 기본값을 설정하거나 오류 메시지를 기록할 수 있습니다.
+                    branchHistory.setReport("Invalid Report");
+                    // 오류 메시지를 출력합니다.
+                    System.err.println("NumberFormatException occurred: " + e.getMessage());
                 }
-                // 값을 설정
-                System.out.println("reportValue"+reportValue);
-                String result = generateResult(Double.parseDouble(serviceUsage.getReport()));
-                serviceUsage.setReport(result);
 
-                addData.insertToServiceUsage(serviceUsage); // 생성된 객체를 데이터베이스에 추가
-                serviceUsages1.add(serviceUsage); // 생성된 객체를 리스트에 추가
+                addData.insertToBranchHistory(branchHistory);
+                branchHistoryList.add(branchHistory);
             }
         }
 
         for (String item : result2) {
             String[] resultArray = item.split(",\\s*");
             if (resultArray.length >= 3) {
-                ServiceUsage serviceUsage = new ServiceUsage(); // 각 요소에 대해 새로운 ServiceUsage 객체를 생성
-                serviceUsage.setStock_code1(stock_code2);
-                serviceUsage.setStock_code2(stock_code1);
-                serviceUsage.setId(id);
-                serviceUsage.setStart_date(resultArray[0]);
-                serviceUsage.setEnd_date(resultArray[1]);
-                serviceUsage.setReport(resultArray[2]);
-              String result = generateResult(Double.parseDouble(serviceUsage.getReport()));
-              serviceUsage.setReport(result);
-                addData.insertToServiceUsage(serviceUsage); // 생성된 객체를 데이터베이스에 추가
-                serviceUsages2.add(serviceUsage); // 생성된 객체를 리스트에 추가
+                BranchHistory branchHistory = new BranchHistory(); // 각 요소에 대해 새로운 ServiceUsage 객체를 생성
+                branchHistory.setStock_code1(stock_code2);
+                branchHistory.setStock_code2(stock_code1);
+                branchHistory.setName1(name2);
+                branchHistory.setName2(name1);
+                branchHistory.setId(id);
+                branchHistory.setStart_date(resultArray[0]);
+                branchHistory.setEnd_date(resultArray[1]);
+                branchHistory.setReport(resultArray[2]);
+                try {
+                    int reportValue = Integer.parseInt(branchHistory.getReport());
+                    String result = generateResult(reportValue);
+                    branchHistory.setReport(result);
+                } catch (NumberFormatException e) {
+                    // 숫자 형식이 아닌 경우 처리할 로직을 여기에 추가합니다.
+                    // 예를 들어, 기본값을 설정하거나 오류 메시지를 기록할 수 있습니다.
+                    branchHistory.setReport("Invalid Report");
+                    // 오류 메시지를 출력합니다.
+                    System.err.println("NumberFormatException occurred: " + e.getMessage());
+                }
+
+                addData.insertToBranchHistory(branchHistory);
+                branchHistoryList1.add(branchHistory);
             }
         }
 
@@ -411,21 +401,17 @@ public class pageController {
 
         System.out.println("company1: " + company1);
         System.out.println("company2: " + company2);
-        System.out.println("serviceUsages1: " + serviceUsages1);
-        System.out.println("serviceUsages2: " + serviceUsages2);
+        System.out.println("serviceUsages1: " + branchHistoryList);
+        System.out.println("serviceUsages2: " + branchHistoryList1);
         System.out.println("result1: " + result1);
         System.out.println("result2: " + result2);
-//        model.addAttribute("ai_1", ai_1);
-//        model.addAttribute("ai_2", ai_2);
+
         model.addAttribute("company1", company1);
         model.addAttribute("company2", company2);
-        model.addAttribute("serviceUsages1", serviceUsages1);
-        model.addAttribute("serviceUsages2", serviceUsages2);
+        model.addAttribute("serviceUsages0", branchHistoryList);
+        model.addAttribute("serviceUsages2", branchHistoryList1);
 
-        model.addAttribute("serviceUsage", serviceUsage);
-
-
-        return "/project/result";
+        return "/project/branchresult";
     }
     @PostMapping("analysis_page3.do") //분석하기
     public String analysis_page3(@RequestParam("stock_code1") String stock_code1,
@@ -443,14 +429,35 @@ public class pageController {
         System.out.println("id" + id);
         start_date = start_date.replace("-", "").substring(0, 8);
         end_date = end_date.replace("-", "").substring(0, 8);
+        System.out.println(stock_code1);
+        System.out.println(stock_code2);
+        System.out.println(stock_code3);
+        String name1 = availableDataService.getCompany(stock_code1);
+        String name2 = availableDataService.getCompany(stock_code2);
+        String name3 = availableDataService.getCompany(stock_code3);
+        System.out.println("company1"+name1);
+        System.out.println("company2"+name2);
+        System.out.println("company3"+name3);
+
 
         System.out.println("stock_code3"+stock_code3);
-        serviceUsage.setStock_code1(stock_code1);
-        serviceUsage.setStock_code2(stock_code2);
-        serviceUsage.setStart_date(start_date);
-        serviceUsage.setEnd_date(end_date);
-        serviceUsage.setId(id);
-        System.out.println(serviceUsage);
+        serviceUsage1.setStock_code1(stock_code1);
+        serviceUsage1.setStock_code2(stock_code2);
+        serviceUsage1.setStock_code3(stock_code3);
+
+        serviceUsage1.setName1(name1);
+        serviceUsage1.setName2(name2);
+        serviceUsage1.setName3(name3);
+        serviceUsage1.setStart_date(start_date);
+        serviceUsage1.setEnd_date(end_date);
+        serviceUsage1.setId(id);
+
+        System.out.println("서비스 3"+ serviceUsage);
+        System.out.println("stock_code1"+stock_code1);
+        System.out.println("stock_code2"+stock_code2);
+        System.out.println("stock_code3"+stock_code3);
+        System.out.println("start_date"+start_date);
+        System.out.println("end_date"+end_date);
 
         List<String> result = javaPy.strParameter("diff_cal_data", stock_code1,stock_code3, stock_code2,stock_code3, start_date, end_date);
         List<String> result2 = javaPy.strParameter("diff_cal_data", stock_code2,stock_code3, stock_code1,stock_code3, start_date, end_date);
@@ -469,8 +476,8 @@ public class pageController {
         }
         String report = javaPy.analysisData(result.subList(0, 5));
         String report2 = javaPy.analysisData(result2.subList(0, 5));
-        serviceUsage.setReport(report);
-        serviceUsage.setReport(report2);
+        serviceUsage1.setReport(report);
+        serviceUsage1.setReport(report2);
 
         for (int i = 5; i < 10; i++) {
             result.set(i, "img/plots/" + result.get(i));
@@ -480,7 +487,7 @@ public class pageController {
         }
 
 
-        addData.insertToServiceUsage(serviceUsage);
+        addData.insertToServiceUsage1(serviceUsage1);
         List<String> plotFile = new ArrayList<>();
         List<String> plotFile2 = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
@@ -505,11 +512,12 @@ public class pageController {
         dataList2.add(new String[]{"2", result2.get(2)});
         dataList2.add(new String[]{"3", result2.get(3)});
         dataList2.add(new String[]{"4", result2.get(4)});
+
         String company1 = addData.getCompany1(stock_code1);
         String company2 = addData.getCompany2(stock_code2);
+        String company3 = addData.getCompany3(stock_code3);
 
-
-        model.addAttribute("stock_code3"+stock_code3);
+//        model.addAttribute("stock_code3"+stock_code3);
         model.addAttribute("company1", company1);
         model.addAttribute("company2", company2);
         model.addAttribute("dataList", dataList);
@@ -519,7 +527,7 @@ public class pageController {
         model.addAttribute("plots", plotFile);
         model.addAttribute("plots2", plotFile2);
 
-        model.addAttribute("serviceUsage", serviceUsage);
+        model.addAttribute("serviceUsage1", serviceUsage1);
 
         return "/project/chart";
     }
@@ -537,54 +545,73 @@ public class pageController {
         System.out.println("result1"+result1);
         System.out.println("result2"+result2);
         String id = (String) session.getAttribute("id");
+        String name1 = availableDataService.getCompany(stock_code1);
+        String name2 = availableDataService.getCompany(stock_code2);
+        String name3 = availableDataService.getCompany(stock_code3);
 
-        List<ServiceUsage> serviceUsages1 = new ArrayList<>();
-        List<ServiceUsage> serviceUsages2 = new ArrayList<>();
+        List<ServiceUsage1> serviceUsages0 = new ArrayList<>();
+        List<ServiceUsage1> serviceUsages2 = new ArrayList<>();
 
 
         for (String item : result1) {
             String[] resultArray = item.split(",\\s*");
             if (resultArray.length >= 3) {
-                ServiceUsage serviceUsage = new ServiceUsage(); // 각 요소에 대해 새로운 ServiceUsage 객체를 생성
-                serviceUsage.setStock_code1(stock_code1);
-                serviceUsage.setStock_code2(stock_code2);
-                serviceUsage.setId(id);
-                serviceUsage.setStart_date(resultArray[0]);
-                serviceUsage.setEnd_date(resultArray[1]);
-                serviceUsage.setReport(resultArray[2]);
-
-                int reportValue = Integer.parseInt(resultArray[2]);
-                if (reportValue >= 1 && reportValue <= 5) {
-                    // 1~4 사이의 값이라면 그대로 사용
-                    serviceUsage.setReport(String.valueOf(reportValue));
-                } else {
-                    // 1~4 사이의 값이 아니라면 1로 설정
-                    serviceUsage.setReport("0");
+                ServiceUsage1 serviceUsage1 = new ServiceUsage1(); // 각 요소에 대해 새로운 ServiceUsage 객체를 생성
+                serviceUsage1.setStock_code1(stock_code1);
+                serviceUsage1.setStock_code2(stock_code2);
+                serviceUsage1.setStock_code3(stock_code3);
+                serviceUsage1.setName1(name1);
+                serviceUsage1.setName2(name2);
+                serviceUsage1.setName3(name3);
+                serviceUsage1.setId(id);
+                serviceUsage1.setStart_date(resultArray[0]);
+                serviceUsage1.setEnd_date(resultArray[1]);
+                serviceUsage1.setReport(resultArray[2]);
+                try {
+                    int reportValue = Integer.parseInt(serviceUsage1.getReport());
+                    String result = generateResult(reportValue);
+                    serviceUsage1.setReport(result);
+                } catch (NumberFormatException e) {
+                    // 숫자 형식이 아닌 경우 처리할 로직을 여기에 추가합니다.
+                    // 예를 들어, 기본값을 설정하거나 오류 메시지를 기록할 수 있습니다.
+                    serviceUsage1.setReport("Invalid Report");
+                    // 오류 메시지를 출력합니다.
+                    System.err.println("NumberFormatException occurred: " + e.getMessage());
                 }
-                // 값을 설정
-                System.out.println("reportValue"+reportValue);
-                String result = generateResult(Double.parseDouble(serviceUsage.getReport()));
-                serviceUsage.setReport(result);
 
-                addData.insertToServiceUsage(serviceUsage); // 생성된 객체를 데이터베이스에 추가
-                serviceUsages1.add(serviceUsage); // 생성된 객체를 리스트에 추가
+                addData.insertToServiceUsage1(serviceUsage1);
+                serviceUsages0.add(serviceUsage1);
             }
         }
 
         for (String item : result2) {
             String[] resultArray = item.split(",\\s*");
             if (resultArray.length >= 3) {
-                ServiceUsage serviceUsage = new ServiceUsage(); // 각 요소에 대해 새로운 ServiceUsage 객체를 생성
-                serviceUsage.setStock_code1(stock_code2);
-                serviceUsage.setStock_code2(stock_code1);
-                serviceUsage.setId(id);
-                serviceUsage.setStart_date(resultArray[0]);
-                serviceUsage.setEnd_date(resultArray[1]);
-                serviceUsage.setReport(resultArray[2]);
-                String result = generateResult(Double.parseDouble(serviceUsage.getReport()));
-                serviceUsage.setReport(result);
-                addData.insertToServiceUsage(serviceUsage); // 생성된 객체를 데이터베이스에 추가
-                serviceUsages2.add(serviceUsage); // 생성된 객체를 리스트에 추가
+                ServiceUsage1 serviceUsage1 = new ServiceUsage1(); // 각 요소에 대해 새로운 ServiceUsage 객체를 생성
+                serviceUsage1.setStock_code1(stock_code2);
+                serviceUsage1.setStock_code2(stock_code1);
+                serviceUsage1.setStock_code3(stock_code3);
+                serviceUsage1.setName1(name2);
+                serviceUsage1.setName2(name1);
+                serviceUsage1.setName3(name3);
+                serviceUsage1.setId(id);
+                serviceUsage1.setStart_date(resultArray[0]);
+                serviceUsage1.setEnd_date(resultArray[1]);
+                serviceUsage1.setReport(resultArray[2]);
+                try {
+                    int reportValue = Integer.parseInt(serviceUsage1.getReport());
+                    String result = generateResult(reportValue);
+                    serviceUsage1.setReport(result);
+                } catch (NumberFormatException e) {
+                    // 숫자 형식이 아닌 경우 처리할 로직을 여기에 추가합니다.
+                    // 예를 들어, 기본값을 설정하거나 오류 메시지를 기록할 수 있습니다.
+                    serviceUsage1.setReport("Invalid Report");
+                    // 오류 메시지를 출력합니다.
+                    System.err.println("NumberFormatException occurred: " + e.getMessage());
+                }
+
+                addData.insertToServiceUsage1(serviceUsage1);
+                serviceUsages2.add(serviceUsage1);
             }
         }
 
@@ -593,34 +620,51 @@ public class pageController {
 
         System.out.println("company1: " + company1);
         System.out.println("company2: " + company2);
-        System.out.println("serviceUsages1: " + serviceUsages1);
+        System.out.println("serviceUsages0: " + serviceUsages0);
         System.out.println("serviceUsages2: " + serviceUsages2);
         System.out.println("result1: " + result1);
         System.out.println("result2: " + result2);
         model.addAttribute("stock_code3", stock_code3);
         model.addAttribute("company1", company1);
         model.addAttribute("company2", company2);
-        model.addAttribute("serviceUsages1", serviceUsages1);
+        model.addAttribute("serviceUsages0", serviceUsages0);
         model.addAttribute("serviceUsages2", serviceUsages2);
 
-        model.addAttribute("serviceUsage", serviceUsage);
+        model.addAttribute("serviceUsage1", serviceUsage1);
 
 
 
         return "/project/exceptionresult";
     }
-    @GetMapping("history.do") //히스토리
-    public String history(HttpSession session, Model model) {
+    @GetMapping("periodhistory.do") //히스토리
+    public String periodhistory(HttpSession session, Model model) {
         //
         String id = (String) session.getAttribute("id");
-        List<ServiceUsage> serviceUsages = addData.getHistory(id);
-        List<ServiceUsage> serviceUsages1 = addData.getHistoryByReport(id);
+
+        List<ServiceUsage> serviceUsages = addData.getHistory(id); //기간 동시에x
+        List<ServiceUsage> serviceUsages1 = addData.getHistoryByReport(id);// 기간 동시
+
+
         System.out.println("serviceUsages"+serviceUsages);
         System.out.println("serviceUsages1"+serviceUsages1);
         model.addAttribute("serviceUsages", serviceUsages);
         model.addAttribute("serviceUsages1", serviceUsages1);
 
-        return "/project/history";
+
+        return "/project/periodhistory";
+    }
+    @GetMapping("branchhistory.do") //히스토리
+    public String branchhistory(HttpSession session, Model model) {
+        //
+        String id = (String) session.getAttribute("id");
+        List<ServiceUsage> serviceUsages2 = addData.getHistory1(id);//제외 동시에x
+        List<ServiceUsage> serviceUsages3 = addData.getHistoryByReport1(id);//제외 동시에
+        System.out.println("serviceUsages2"+serviceUsages2);
+        System.out.println("serviceUsages3"+serviceUsages3);
+        model.addAttribute("serviceUsages2", serviceUsages2);
+        model.addAttribute("serviceUsages3", serviceUsages3);
+
+        return "/project/branchhistory";
     }
     @GetMapping("historyDel.do")
     public String deleteHistory(@RequestParam("serviceusage_seq") int serviceusage_seq) {
@@ -639,7 +683,7 @@ public class pageController {
         }
         return "redirect:analysis_page2.do"; // 삭제 후 다시 히스토리 페이지로 리다이렉트
     }
-    private String generateResult(double reportValue) {
+    private String generateResult(int reportValue) {
         String result = "";
         if (reportValue == 0) {
             result = "두 데이터는 동시에 움직입니다.\n";
