@@ -501,8 +501,8 @@ def total_anal(stock_code1:str='1008',stock_code2:str='IBM',yearly=yearly,defaul
     return result
 def diff_find_period(lst:list)->list[str]:
     stock_code1=lst[1]
-    diff_code1=lst[2]
-    stock_code2=lst[3]
+    diff_code1=lst[3]
+    stock_code2=lst[2]
     # diff_code2=lst[4]
     return diff_find_period_work(stock_code1,diff_code1,stock_code2)
 def normal_series(df:pd.Series)->pd.Series:
