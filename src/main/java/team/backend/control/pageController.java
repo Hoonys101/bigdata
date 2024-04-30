@@ -816,11 +816,12 @@ public class pageController {
     }
     @GetMapping("add_by_name_or_code.do")
     @ResponseBody
-    public List<AvailableData> addByNameOrCode(@RequestParam("stock_code_or_name") String stock_code_or_name){
+    public List<AvailableData> addByNameOrCode(@RequestParam("stock_code_or_name") String stock_code_or_name,HttpSession session){
         System.out.println(stock_code_or_name);
         if(stock_code_or_name.length()==0)
             return null;
-        List<AvailableData> responseData = availableDataService.getByNameOrStock_code(stock_code_or_name);
+        String id = (String) session.getAttribute("id");
+        List<AvailableData> responseData = availableDataService.getByNameOrStock_code(id, stock_code_or_name);
         return responseData;
     }
     @GetMapping("add2_by_name.do")

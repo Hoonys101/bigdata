@@ -20,5 +20,5 @@ public interface AvailableDataMapper {
     List<AvailableData> getList(Map<String, String> params);
 
 
-    List<AvailableData> getByNameOrStock_code(String stockCodeOrName);
+    List<AvailableData> getByNameOrStock_code(Map<String,String> params);
 }
