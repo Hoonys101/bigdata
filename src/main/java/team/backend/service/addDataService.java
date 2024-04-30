@@ -1,11 +1,11 @@
 package team.backend.service;
 
-import team.backend.domain.AvailableData;
 import team.backend.domain.BranchHistory;
+import team.backend.domain.ExcludedquarterHistory;
 import team.backend.domain.ServiceUsage;
-import team.backend.domain.ServiceUsage1;
 
 import java.util.List;
+import java.util.Map;
 
 public interface addDataService {
 
@@ -22,7 +22,7 @@ public interface addDataService {
     void insertToServiceUsage(ServiceUsage serviceUsage);
     void insertToBranchHistory(BranchHistory branchHistory);
     List<BranchHistory> getHistorybranch(String id);
-    void insertToServiceUsage1(ServiceUsage1 serviceUsage1);
+    void insertToExcludedquarterHistory(ExcludedquarterHistory excludedquarterHistory);
     boolean deleteHistoryBySeq(int serviceusage_seq);
 
     public List<ServiceUsage> getResult(String id);
@@ -30,7 +30,6 @@ public interface addDataService {
     String getCompany1(String stock_code1);
     String getCompany2(String stock_code2);
 
-    String getCompany3(String stock_code3);
 
 }
 

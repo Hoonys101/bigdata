@@ -29,5 +29,4 @@ public interface ServiceUsageMapper {
     String getCompany1(String stock_code1);
     String getCompany2(String stock_code2);
 
-    String getCompany3(String stock_code3);
 }

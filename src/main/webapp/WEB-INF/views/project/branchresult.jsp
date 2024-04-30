@@ -85,6 +85,11 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
             <%--max-height: 70vh; /* Set maximum height for the table container */--%>
             overflow-y: auto; /* Enable vertical scrolling if table exceeds maximum height */
         }
+        .table-container2 {
+                width: 100%;
+                    <%--max-height: 70vh; /* Set maximum height for the table container */--%>
+                    overflow-y: auto; /* Enable vertical scrolling if table exceeds maximum height */
+                }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -134,7 +139,7 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
             <th>Start Date</th>
             <th>End Date</th>
             <th>Report</th>
-            <th>Action</th>
+            <th><button onclick="goToAnalysisPage1()">결과 열람 페이지로 이동</button></a></th>
             <th>삭제</th>
         </tr>
         </thead>
@@ -150,7 +155,7 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
                     <td>${item.report}</td>
                     <td>
                         <form action="analysis_page.do" method="post">
-                            <input type="hidden" name="serviceusage_seq" value="${item.serviceusage_seq}">
+                            <input type="hidden" name="branchHistory_seq" value="${item.branchHistory_seq}">
                             <input type="hidden" name="id" value="${item.id}">
                             <input type="hidden" name="stock_code1" value="${item.stock_code1}">
                             <input type="hidden" name="stock_code2" value="${item.stock_code2}">
@@ -164,7 +169,7 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
                     </td>
                     <td>
                         <form action="resultDel.do" method="post">
-                            <input type="hidden" name="serviceusage_seq" value="${item.serviceusage_seq}">
+                            <input type="hidden" name="branchHistory_seq" value="${item.branchHistory_seq}">
                             <input type="hidden" name="id" value="${item.id}">
                             <input type="hidden" name="stock_code1" value="${item.stock_code1}">
                             <input type="hidden" name="stock_code2" value="${item.stock_code2}">
@@ -200,7 +205,7 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
         </c:forEach>
     </div>
 </div>
-<div class="table-container">
+<div class="table-container2">
     <table>
         <thead class="fixed-header">
         <tr>
@@ -210,7 +215,7 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
             <th>Start Date</th>
             <th>End Date</th>
             <th>Report</th>
-            <th>Action</th>
+            <th><button onclick="goToAnalysisPage2()">결과 열람 페이지로 이동</button></a></th>
             <th>삭제</th>
         </tr>
         </thead>
@@ -227,7 +232,7 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
                     <td>
 
                         <form action="analysis_page.do" method="post">
-                            <input type="hidden" name="serviceusage_seq" value="${item.serviceusage_seq}">
+                            <input type="hidden" name="branchHistory_seq" value="${item.branchHistory_seq}">
                             <input type="hidden" name="id" value="${item.id}">
                             <input type="hidden" name="stock_code1" value="${item.stock_code1}">
                             <input type="hidden" name="stock_code2" value="${item.stock_code2}">
@@ -241,7 +246,7 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
                     </td>
                     <td>
                         <form action="resultDel.do" method="post">
-                            <input type="hidden" name="serviceusage_seq" value="${item.serviceusage_seq}">
+                            <input type="hidden" name="branchHistory_seq" value="${item.branchHistory_seq}">
                             <input type="hidden" name="id" value="${item.id}">
                             <input type="hidden" name="stock_code1" value="${item.stock_code1}">
                             <input type="hidden" name="stock_code2" value="${item.stock_code2}">
@@ -331,7 +336,29 @@ document.getElementById('ai-analysis-button-2').addEventListener('click', functi
          }
      });
  });
+// 결과값의 줄 수를 계산하는 JavaScript 함수
+    function countRows1() {
+        var rowCount = document.querySelectorAll('.table-container tbody tr').length;
+        return rowCount;
+    }
 
+    // 아래 테이블의 결과값의 줄 수를 계산하는 JavaScript 함수
+    function countRows2() {
+        var rowCount = document.querySelectorAll('.table-container2 tbody tr').length;
+        return rowCount;
+    }
+
+    // 분석 페이지로 이동하는 함수
+    function goToAnalysisPage1() {
+        var rowCount = countRows1();
+        window.location.href = "history.do?rowCount=" + rowCount;
+    }
+
+    // 아래 테이블의 결과값의 줄 수를 가져와서 분석 페이지로 이동하는 함수
+    function goToAnalysisPage2() {
+        var rowCount = countRows2();
+        window.location.href = "history.do?rowCount=" + rowCount;
+    }
 
 </script>
 <footer>

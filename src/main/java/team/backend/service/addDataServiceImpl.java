@@ -2,10 +2,9 @@ package team.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import team.backend.domain.AvailableData;
 import team.backend.domain.BranchHistory;
+import team.backend.domain.ExcludedquarterHistory;
 import team.backend.domain.ServiceUsage;
-import team.backend.domain.ServiceUsage1;
 import team.backend.mapper.AdditionMapper;
 import team.backend.mapper.BranchHistoryMapper;
 import team.backend.mapper.HistoryMapper;
@@ -70,7 +69,7 @@ public class addDataServiceImpl implements addDataService {
     @Override
     public void insertToBranchHistory(BranchHistory branchHistory){
         Map<String, String> list =new HashMap<>();
-        list.put("serviceusage_seq", String.valueOf(branchHistory.getBranchHistory_seq()));
+        list.put("branchHistory_seq", String.valueOf(branchHistory.getBranchHistory_seq()));
         list.put("stock_code1",branchHistory.getStock_code1());
         list.put("stock_code2",branchHistory.getStock_code2());
         list.put("name1",branchHistory.getName1());
@@ -85,19 +84,19 @@ public class addDataServiceImpl implements addDataService {
 
     }
     @Override
-    public void insertToServiceUsage1(ServiceUsage1 serviceUsage1){
+    public void insertToExcludedquarterHistory(ExcludedquarterHistory excludedquarterHistory){
         Map<String, String> list =new HashMap<>();
-        list.put("serviceusage_seq", String.valueOf(serviceUsage1.getServiceusage_seq()));
-        list.put("stock_code1",serviceUsage1.getStock_code1());
-        list.put("stock_code2",serviceUsage1.getStock_code2());
-        list.put("stock_code3",serviceUsage1.getStock_code3());
-        list.put("name1",serviceUsage1.getName1());
-        list.put("name2",serviceUsage1.getName2());
-        list.put("name3",serviceUsage1.getName3());
-        list.put("start_date",serviceUsage1.getStart_date());
-        list.put("end_date",serviceUsage1.getEnd_date());
-        list.put("id",serviceUsage1.getId());
-        list.put("report",serviceUsage1.getReport());
+        list.put("excludedquarterHistory_seq", String.valueOf(excludedquarterHistory.getExcludedquarterHistory_seq()));
+        list.put("stock_code1",excludedquarterHistory.getStock_code1());
+        list.put("stock_code2",excludedquarterHistory.getStock_code2());
+        list.put("stock_code3",excludedquarterHistory.getStock_code3());
+        list.put("name1",excludedquarterHistory.getName1());
+        list.put("name2",excludedquarterHistory.getName2());
+        list.put("name3",excludedquarterHistory.getName3());
+        list.put("start_date",excludedquarterHistory.getStart_date());
+        list.put("end_date",excludedquarterHistory.getEnd_date());
+        list.put("id",excludedquarterHistory.getId());
+        list.put("report",excludedquarterHistory.getReport());
 
 
         serviceUsageMapper.insertToServiceUsage1(list);
@@ -111,7 +110,7 @@ public class addDataServiceImpl implements addDataService {
     }
     @Override
     public List<BranchHistory> getHistorybranch(String id){
-        List<BranchHistory> historyList = branchHistoryMapper.getHistory(id);
+        List<BranchHistory> historyList = branchHistoryMapper.getHistorybranch(id);
         System.out.println("historyList"+historyList);
         return historyList;
     }
@@ -153,9 +152,5 @@ public class addDataServiceImpl implements addDataService {
         return serviceUsageMapper.getCompany2(stock_code2);
 
     }
-    @Override
-    public String getCompany3(String stock_code3){
-        return serviceUsageMapper.getCompany3(stock_code3);
 
-    }
 }

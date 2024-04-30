@@ -46,15 +46,18 @@ public class pageController {
     @Autowired
     private ServiceUsage serviceUsage;
     @Autowired
-    private ServiceUsage1 serviceUsage1;
+    private ExcludedquarterHistory excludedquarterHistory;
+    @Autowired
+    private  BranchHistory branchHistory;
 
 
     public static final String PLOTS_DIRECTORY = "C:/plots";
 
     @Autowired
-    public pageController(ServiceUsage serviceUsage,ServiceUsage1 serviceUsage1) {
+    public pageController(ServiceUsage serviceUsage, ExcludedquarterHistory excludedquarterHistory, BranchHistory branchHistory) {
         this.serviceUsage = serviceUsage;
-        this.serviceUsage1 = serviceUsage1;
+        this.excludedquarterHistory = excludedquarterHistory;
+        this.branchHistory = branchHistory;
     }
 
     @GetMapping("home.do") //메인화면
@@ -441,16 +444,16 @@ public class pageController {
 
 
         System.out.println("stock_code3"+stock_code3);
-        serviceUsage1.setStock_code1(stock_code1);
-        serviceUsage1.setStock_code2(stock_code2);
-        serviceUsage1.setStock_code3(stock_code3);
+        excludedquarterHistory.setStock_code1(stock_code1);
+        excludedquarterHistory.setStock_code2(stock_code2);
+        excludedquarterHistory.setStock_code3(stock_code3);
 
-        serviceUsage1.setName1(name1);
-        serviceUsage1.setName2(name2);
-        serviceUsage1.setName3(name3);
-        serviceUsage1.setStart_date(start_date);
-        serviceUsage1.setEnd_date(end_date);
-        serviceUsage1.setId(id);
+        excludedquarterHistory.setName1(name1);
+        excludedquarterHistory.setName2(name2);
+        excludedquarterHistory.setName3(name3);
+        excludedquarterHistory.setStart_date(start_date);
+        excludedquarterHistory.setEnd_date(end_date);
+        excludedquarterHistory.setId(id);
 
         System.out.println("서비스 3"+ serviceUsage);
         System.out.println("stock_code1"+stock_code1);
@@ -476,8 +479,8 @@ public class pageController {
         }
         String report = javaPy.analysisData(result.subList(0, 5));
         String report2 = javaPy.analysisData(result2.subList(0, 5));
-        serviceUsage1.setReport(report);
-        serviceUsage1.setReport(report2);
+        excludedquarterHistory.setReport(report);
+        excludedquarterHistory.setReport(report2);
 
         for (int i = 5; i < 10; i++) {
             result.set(i, "img/plots/" + result.get(i));
@@ -487,7 +490,7 @@ public class pageController {
         }
 
 
-        addData.insertToServiceUsage1(serviceUsage1);
+        addData.insertToServiceUsage1(excludedquarterHistory);
         List<String> plotFile = new ArrayList<>();
         List<String> plotFile2 = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
@@ -515,7 +518,6 @@ public class pageController {
 
         String company1 = addData.getCompany1(stock_code1);
         String company2 = addData.getCompany2(stock_code2);
-        String company3 = addData.getCompany3(stock_code3);
 
 //        model.addAttribute("stock_code3"+stock_code3);
         model.addAttribute("company1", company1);
@@ -527,7 +529,7 @@ public class pageController {
         model.addAttribute("plots", plotFile);
         model.addAttribute("plots2", plotFile2);
 
-        model.addAttribute("serviceUsage1", serviceUsage1);
+        model.addAttribute("serviceUsage1", excludedquarterHistory);
 
         return "/project/chart";
     }
@@ -549,14 +551,14 @@ public class pageController {
         String name2 = availableDataService.getCompany(stock_code2);
         String name3 = availableDataService.getCompany(stock_code3);
 
-        List<ServiceUsage1> serviceUsages0 = new ArrayList<>();
-        List<ServiceUsage1> serviceUsages2 = new ArrayList<>();
+        List<Excludedquarter> serviceUsages0 = new ArrayList<>();
+        List<Excludedquarter> serviceUsages2 = new ArrayList<>();
 
 
         for (String item : result1) {
             String[] resultArray = item.split(",\\s*");
             if (resultArray.length >= 3) {
-                ServiceUsage1 serviceUsage1 = new ServiceUsage1(); // 각 요소에 대해 새로운 ServiceUsage 객체를 생성
+                Excludedquarter serviceUsage1 = new Excludedquarter(); // 각 요소에 대해 새로운 ServiceUsage 객체를 생성
                 serviceUsage1.setStock_code1(stock_code1);
                 serviceUsage1.setStock_code2(stock_code2);
                 serviceUsage1.setStock_code3(stock_code3);
@@ -587,7 +589,7 @@ public class pageController {
         for (String item : result2) {
             String[] resultArray = item.split(",\\s*");
             if (resultArray.length >= 3) {
-                ServiceUsage1 serviceUsage1 = new ServiceUsage1(); // 각 요소에 대해 새로운 ServiceUsage 객체를 생성
+                Excludedquarter serviceUsage1 = new Excludedquarter(); // 각 요소에 대해 새로운 ServiceUsage 객체를 생성
                 serviceUsage1.setStock_code1(stock_code2);
                 serviceUsage1.setStock_code2(stock_code1);
                 serviceUsage1.setStock_code3(stock_code3);
@@ -653,18 +655,20 @@ public class pageController {
 
         return "/project/periodhistory";
     }
-    @GetMapping("branchhistory.do") //히스토리
-    public String branchhistory(HttpSession session, Model model) {
-        //
+    @GetMapping("history.do") //히스토리
+    public String history(HttpSession session, Model model) {
+        System.out.println("startstartstartstart");
         String id = (String) session.getAttribute("id");
-        List<ServiceUsage> serviceUsages2 = addData.getHistory1(id);//제외 동시에x
-        List<ServiceUsage> serviceUsages3 = addData.getHistoryByReport1(id);//제외 동시에
+        List<ServiceUsage> serviceUsages2 = addData.getHistory(id);//제외 동시에x
+        List<BranchHistory> serviceUsages3 = addData.getHistorybranch(id);//제외 동시에
+
         System.out.println("serviceUsages2"+serviceUsages2);
         System.out.println("serviceUsages3"+serviceUsages3);
         model.addAttribute("serviceUsages2", serviceUsages2);
         model.addAttribute("serviceUsages3", serviceUsages3);
 
-        return "/project/branchhistory";
+
+        return "/project/history";
     }
     @GetMapping("historyDel.do")
     public String deleteHistory(@RequestParam("serviceusage_seq") int serviceusage_seq) {

@@ -1,19 +1,16 @@
 package team.backend.domain;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Repository
-public class ServiceUsage1 {
-    private int serviceusage_seq;
+public class ExcludedquarterHistory {
+    private int excludedquarterHistory_seq;
     private String stock_code1;
     private String stock_code2;
     private String stock_code3;

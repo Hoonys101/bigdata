@@ -15,13 +15,7 @@
         WHERE id = #{id} AND stock_code1 IS NOT NULL
         AND stock_code2 IS NOT NULL
     </select>
-    <select id="getHistory1" parameterType="String" resultType="team.backend.domain.ServiceUsage">
-        SELECT *
-        FROM ServiceUsage
-        WHERE id = #{id} AND stock_code1 IS NOT NULL
-        AND stock_code2 IS NOT NULL
-        AND stock_code3 IS NOT NULL
-    </select>
+
 
 
     <select id="getHistoryByReport" parameterType="String" resultType="team.backend.domain.ServiceUsage">
@@ -30,13 +24,7 @@
         WHERE id = #{id} and stock_code1 IS NOT NULL
         AND stock_code2 IS NOT NULL
     </select>
-    <select id="getHistoryByReport1" parameterType="String" resultType="team.backend.domain.ServiceUsage">
-        SELECT *
-        FROM ServiceUsage
-        WHERE id = #{id} and report AND stock_code1 IS NOT NULL
-        AND stock_code2 IS NOT NULL
-        AND stock_code3 IS NOT NULL
-    </select>
+
     <delete id="deleteHistoryBySeq" parameterType="int">
         DELETE FROM ServiceUsage WHERE serviceusage_seq = #{serviceusage_seq}
     </delete>
@@ -67,15 +55,6 @@
         ) ad
         WHERE rn = 1
     </select>
-    <select id="getCompany3" parameterType="String" resultType="String">
-        SELECT ad.name
-        FROM (
-        SELECT ad.name, ROWNUM AS rn
-        FROM ServiceUsage su
-        JOIN AvailableData ad ON su.stock_code3 = ad.stock_code
-        WHERE su.stock_code3 = #{stock_code}
-        ) ad
-        WHERE rn = 1
-    </select>
+
 </mapper>
 

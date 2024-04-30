@@ -278,7 +278,7 @@
 
                     </c:forEach>
                 </tbody>
-            </table>--%>
+            </table>
             <footer>
                 <p>> &copy; 2024 빅 데이터 분석 플랫폼 - 데이터로 더 나은 미래를 만듭니다.
 

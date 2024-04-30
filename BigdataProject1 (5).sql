@@ -4,7 +4,7 @@ grant connect, resource, unlimited tablespace to bigdata;
 conn bigdata/java;
 
 DROP TABLE ServiceUsage;
-DROP TABLE ServiceUsage1;
+DROP TABLE ExcludedquarterHistory;
 DROP TABLE BranchHistory;
 DROP TABLE ArchivedData;
 DROP TABLE addition;
@@ -13,6 +13,7 @@ DROP TABLE ID;
 DROP SEQUENCE  serviceusage_seq;
 DROP SEQUENCE  serviceusage_seq1;
 DROP SEQUENCE  BranchHistory_seq;
+DROP SEQUENCE  ExcludedquarterHistory _seq;
 
 create table ID(
    ID varchar2(100) constraint PROJECT_PK primary key, 
@@ -87,9 +88,9 @@ CREATE TABLE BranchHistory(
    FOREIGN KEY (stock_code1) REFERENCES AvailableData(stock_code),
    FOREIGN KEY (stock_code2) REFERENCES AvailableData(stock_code)
 );
-CREATE SEQUENCE serviceusage_seq1 START WITH 1 INCREMENT BY 1;
-CREATE TABLE ServiceUsage1 (
-   serviceusage_seq NUMBER PRIMARY KEY,
+CREATE SEQUENCE ExcludedquarterHistory _seq START WITH 1 INCREMENT BY 1;
+CREATE TABLE ExcludedquarterHistory (
+   ExcludedquarterHistory _seq NUMBER PRIMARY KEY,
    stock_code1 VARCHAR2(255),
    stock_code2 VARCHAR2(255),
    stock_code3 VARCHAR2(255),

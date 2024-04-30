@@ -2,47 +2,47 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="team.backend.mapper.ServiceUsageMapper1">
+<mapper namespace="team.backend.mapper.ExcludedquarterHistory">
 
-    <insert id="insertToServiceUsage1" parameterType="Map">
-        insert into ServiceUsage1(serviceusage_seq,stock_code1, stock_code2,stock_code3,name1,name2,name3, start_date, end_date, id,report)
-        values(serviceusage_seq.nextval,#{stock_code1},#{stock_code2},#{stock_code3},#{name1},#{name2},#{name3},#{start_date},#{end_date},#{id},#{report})
+    <insert id="insertToExcludedquarterHistory" parameterType="Map">
+        insert into ExcludedquarterHistory(excludedquarterHistory_seq,stock_code1, stock_code2,stock_code3,name1,name2,name3, start_date, end_date, id,report)
+        values(excludedquarterHistory_seq.nextval,#{stock_code1},#{stock_code2},#{stock_code3},#{name1},#{name2},#{name3},#{start_date},#{end_date},#{id},#{report})
     </insert>
-    <select id="getHistory" parameterType="String" resultType="team.backend.domain.ServiceUsage1">
+    <select id="getHistory" parameterType="String" resultType="team.backend.domain.Excludedquarter">
         SELECT *
-        FROM ServiceUsage1
+        FROM Excludedquarter
         WHERE id = #{id} AND stock_code1 IS NOT NULL
         AND stock_code2 IS NOT NULL
     </select>
-    <select id="getHistory1" parameterType="String" resultType="team.backend.domain.ServiceUsage1">
+    <select id="getHistory1" parameterType="String" resultType="team.backend.domain.Excludedquarter">
         SELECT *
-        FROM ServiceUsage1
+        FROM Excludedquarter
         WHERE id = #{id} AND stock_code1 IS NOT NULL
         AND stock_code2 IS NOT NULL
         AND stock_code3 IS NOT NULL
     </select>
 
 
-    <select id="getHistoryByReport" parameterType="String" resultType="team.backend.domain.ServiceUsage1">
+    <select id="getHistoryByReport" parameterType="String" resultType="team.backend.domain.Excludedquarter">
         SELECT *
-        FROM ServiceUsage1
+        FROM Excludedquarter
         WHERE id = #{id} and stock_code1 IS NOT NULL
         AND stock_code2 IS NOT NULL
     </select>
-    <select id="getHistoryByReport1" parameterType="String" resultType="team.backend.domain.ServiceUsage1">
+    <select id="getHistoryByReport1" parameterType="String" resultType="team.backend.domain.Excludedquarter">
         SELECT *
-        FROM ServiceUsage1
+        FROM Excludedquarter
         WHERE id = #{id}  AND stock_code1 IS NOT NULL
         AND stock_code2 IS NOT NULL
         AND stock_code3 IS NOT NULL
     </select>
     <delete id="deleteHistoryBySeq" parameterType="int">
-        DELETE FROM ServiceUsage1 WHERE serviceusage_seq = #{serviceusage_seq}
+        DELETE FROM Excludedquarter WHERE excludedquarter_seq = #{excludedquarter_seq}
     </delete>
 
-    <select id="getResult" parameterType="String" resultType="team.backend.domain.ServiceUsage1">
+    <select id="getResult" parameterType="String" resultType="team.backend.domain.Excludedquarter">
         SELECT *
-        FROM ServiceUsage1
+        FROM Excludedquarter
         WHERE id = #{id}
     </select>
     <select id="getCompany1" parameterType="String" resultType="String">

@@ -117,7 +117,7 @@
                 </option>
             </c:forEach>
         </select>
-        <input type="hidden" id="stock_code3" name="stock_code3" value="stock_code3">
+
   <section style="text-align: center; color: black;">
     <h2>날짜 선택</h2>
     <div>
