@@ -61,6 +61,7 @@ public class pageController {
     private ServiceUsage serviceUsage;
 
     public static final String PLOTS_DIRECTORY = "C:/plots";
+    public static final String PLOTS_DIRECTORY_STATIC = "C:/plots";
 
     @Autowired
     public pageController(ServiceUsage serviceUsage) {
