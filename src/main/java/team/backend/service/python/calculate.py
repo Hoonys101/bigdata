@@ -1,6 +1,7 @@
 import DAO as db
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 import numpy as np
 import os
 import ai
@@ -76,8 +77,9 @@ def saveplot(df,df2,filename,column:str='Close_normal')-> float:
     plt.plot(df2.index, df2[column])
     correlation=df[column].corr(df2[column])
     correlation=f"{correlation:.4f}"
-    plt.title('Correlation is'+str(correlation))
+    plt.title('Correlation is '+ str(correlation))
     plt.xlabel('Date')
+    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%m-%d'))
     plt.grid()
     # 폴더가 없으면 생성
 #    save_dir = './src/main/resources/static/img/plots'
@@ -184,12 +186,12 @@ def make_df_with_dates(first_com:str='1008',startdate:str='20211201',lastdate:st
 # plt.show()
 
 # 3-1개의 파라미터를 받아서 2개의 str 반환
-def ai_anal(list,critical_profit=1)->list[str]:
+def ai_anal(list,decimal:str=None,critical_profit=1)->list[str]:
     #파라미터 설정
     first_com=list[1]
     second_com=list[2]
     # print(first_com,second_com)
-    df=normalNlabel(first_com,second_com)
+    df=normalNlabel(first_com,second_com,decimal)
     result=ai.training(df)
     if result[1]==-1:
         result[1]="아쉽게도 현재 주가 전파관계는 없는 것으로 보이네요."
@@ -249,7 +251,7 @@ def ai_anal(list,critical_profit=1)->list[str]:
     return result
 
 def estimate_profit(stock_code:str='058430',i:int=5,b: bool=True)->float:
-    if len(stock_code)==4:
+    if len(stock_code)==4 and stock_code.isdigit():
         df=scr.stock_data2('Index',stock_code,startdate='20220101',lastdate='20220220',default='Close')
     else:
         df=scr.stock_data2('sdf',stock_code,startdate='20220101',lastdate='20220220',default='Close')
@@ -435,18 +437,18 @@ def common_date(df1:pd.DataFrame,df2:pd.DataFrame)->tuple[pd.DataFrame,pd.DataFr
     return df1,df2
     
 # 1년을 4개월씩 분석
-def yearly(df1:pd.Series,df2:pd.Series,normal_diff=None,diff=None,div:int=4,critic:float=0.7)->list[str]:
+def yearly(df1:pd.Series,df2:pd.Series,diff:pd.Series=None,normal_diff=None,div:int=4,critic:float=0.7)->list[str]:
     result=[]
     for i in range(div):
         startdate=int(len(df1)/div*i)
         lastdate=int(len(df1)/div*(i+1))
         if normal_diff!=None:
-            df1_normal,df2_normal=normal_diff(df1,df2,diff)
-            correlation = df1_normal[startdate:lastdate].corr(df2_normal[startdate:lastdate])
+            df1_normal,df2_normal=normal_diff(df1[startdate:lastdate],df2[startdate:lastdate],diff[startdate:lastdate])
+            correlation = df1_normal.corr(df2_normal)
             if correlation>critic:
     #            print(df1.index[startdate].date(),"와 " ,df1.index[lastdate-1].date(), " 사이의 분기에 양의 상관관계")
     #            print("correlation: ",correlation)            
-                result.append(delay_save(df1_normal[startdate:lastdate],df2_normal[startdate:lastdate],str(startdate)+'_'+str(lastdate)))
+                result.append(delay_save(df1_normal,df2_normal,str(startdate)+'_'+str(lastdate)))
         else:
             correlation = df1[startdate:lastdate].corr(df2[startdate:lastdate])
             if correlation>critic:
@@ -499,8 +501,8 @@ def total_anal(stock_code1:str='1008',stock_code2:str='IBM',yearly=yearly,defaul
     return result
 def diff_find_period(lst:list)->list[str]:
     stock_code1=lst[1]
-    diff_code1=lst[2]
-    stock_code2=lst[3]
+    diff_code1=lst[3]
+    stock_code2=lst[2]
     # diff_code2=lst[4]
     return diff_find_period_work(stock_code1,diff_code1,stock_code2)
 def normal_series(df:pd.Series)->pd.Series:
@@ -531,7 +533,7 @@ def diff_find_period_work(stock_code1:str='1008',diff_code:str='1001',stock_code
     for i in range(10):
         startdate=int(df1.shape[0]/10*i)
         lastdate=int(df1.shape[0]/10*(i+1))
-        temp_result=yearly(df1[startdate:lastdate],df2[startdate:lastdate],normal_diff,diff)
+        temp_result=yearly(df1[startdate:lastdate],df2[startdate:lastdate],diff[startdate:lastdate],normal_diff)
         if len(temp_result)>0:
             result.extend(temp_result)
         # correlation = df1[startdate:lastdate].corr(df2[startdate:lastdate])
@@ -564,14 +566,22 @@ def diff_find_period_work(stock_code1:str='1008',diff_code:str='1001',stock_code
 # total_analy(lst)
 
 # 두개의 주가 코드를 입력받아서, 하나의 df로 변환
-def normalNlabel(stock_code1:str='IBM',stock_code2:str='1008',default='CLOSE')->pd.DataFrame:
+def normalNlabel(stock_code1:str='IBM',stock_code2:str='1008',decimal:str=None,default='CLOSE')->pd.DataFrame:
     df1=make_df(stock_code1)[[default]]
     df2=make_df(stock_code2)[[default]]
+    
     # print("df1: \n",df1)
     # print("df2: \n",df2)
     df1,df2=common_date(df1,df2)
-    df1=normal(df1)
-    df2=normal(df2)
+    if decimal!=None:
+        df3=make_df(decimal)[[default]]
+        df3=normal(df3)
+        df1=df1-df3
+        df2=df2-df3
+    else:
+        
+        df1=normal(df1)
+        df2=normal(df2)
     # print("df1: \n",df1)
     # print("df2: \n",df2)
 
@@ -618,7 +628,6 @@ def find_usable(lst:list[str]=[
     '026960',
     'IBM',
     '1154',
-    '1001',
     '1020',
     '012330',
     '1011',
@@ -629,13 +638,13 @@ def find_usable(lst:list[str]=[
     '004100',
     '1034',
     '063160',
-    '1155']):
+    '1155'],decimal:str='1001'):
     param=[]
     final_result=[]
     for stock_code1 in lst:
         for stock_code2 in lst:
             # print(stock_code1,'과',stock_code2)
-            result=ai_anal(['asdf',stock_code1,stock_code2])
+            result=ai_anal(['asdf',stock_code1,stock_code2],decimal)
             # print(result)
             
             if result[1][0]=='아':
@@ -645,8 +654,13 @@ def find_usable(lst:list[str]=[
                 if result[2][0]!='기' or  (result[2][0]=='기' and result[3][0]=='향'):
                     continue
                 final_result.append(result[2])
+                final_result.append(result[0])
                 final_result.append(result[-2])
                 final_result.append(result[-1])
+                print(result[2])
+                print(result[0])
+                print(result[-2])
+                print(result[-1])
     return final_result
     #         param.append(['asdf',stock_code1,stock_code2])
     # result=multithread_results(param)

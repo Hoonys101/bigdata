@@ -55,6 +55,7 @@ public class pageController {
 
 
     public static final String PLOTS_DIRECTORY = "C:/plots";
+    public static final String PLOTS_DIRECTORY_STATIC = "C:/plots";
 
     @Autowired
     public pageController(ServiceUsage serviceUsage, ExclusionperiodHistory exclusionperiodHistory, BranchHistory branchHistory) {
@@ -869,9 +870,12 @@ public class pageController {
     }
     @GetMapping("add_by_name_or_code.do")
     @ResponseBody
-    public List<AvailableData> addByNameOrCode(@RequestParam("stock_code_or_name") String stock_code_or_name){
+    public List<AvailableData> addByNameOrCode(@RequestParam("stock_code_or_name") String stock_code_or_name,HttpSession session){
         System.out.println(stock_code_or_name);
-        List<AvailableData> responseData = availableDataService.getByNameOrStock_code(stock_code_or_name);
+        if(stock_code_or_name.length()==0)
+            return null;
+        String id = (String) session.getAttribute("id");
+        List<AvailableData> responseData = availableDataService.getByNameOrStock_code(id, stock_code_or_name);
         return responseData;
     }
     @GetMapping("add2_by_name.do")

@@ -19,7 +19,7 @@ public interface AvailableDataService {
 //    List<String> getAvailableDataByFilters(String nation, String db_name,String sector,String name, String stock_code) ;
 
     List<AvailableData> getList(String id, AvailableData availableData);
-    List<AvailableData> getByNameOrStock_code(String stock_code_or_name);
+    List<AvailableData> getByNameOrStock_code(String id, String stock_code_or_name);
 
     String getCompany(String stock_code);
 

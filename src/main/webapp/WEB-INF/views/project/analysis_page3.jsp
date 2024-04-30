@@ -178,6 +178,9 @@ function setEndDateMin() {
                 if (stockCode1 === "" || stockCode2 === "" || stockCode3 === "" || startDate === "" || endDate === "") {
                     alert("기업 또는 날짜를 입력해주세요.");
                     return false; // 폼을 제출하지 않도록 false를 반환합니다.
+                } else if(stockCode1 == stockCode3 || stockCode2 == stockCode3){
+                    alert("제외 기업은 기업 1 및 기업 2와 달라야 합니다.");
+                    return false;
                 } else {
                     // 폼을 제출합니다.
                     return true;

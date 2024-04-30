@@ -90,12 +90,17 @@ public class MybatisAvailableDataService implements AvailableDataService {
         return availableDataMapper.getList(params);
     }
     @Override
+
     public String getCompany(String stock_code){
         return availableDataMapper.getCompany(stock_code);
     }
 
-    public List<AvailableData> getByNameOrStock_code(String stock_code_or_name){
-        return availableDataMapper.getByNameOrStock_code(stock_code_or_name);
+
+    public List<AvailableData> getByNameOrStock_code(String id, String stock_code_or_name){
+        Map<String, String> params = new HashMap<>();
+        params.put("id", id);
+        params.put("stock_code_or_name", stock_code_or_name);
+        return availableDataMapper.getByNameOrStock_code(params);
     }
 }
 

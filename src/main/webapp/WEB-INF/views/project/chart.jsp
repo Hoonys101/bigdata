@@ -77,7 +77,9 @@ body {
 <div style="font-size: 18px; font-weight: bold; color: #333; text-align: center;">결과값 : ${report}</div>
 <div class="image-container">
 <c:forEach items="${plots}" var="plot" varStatus="loop">
+<a href="${plot}" target="_blank">
     <img src="${plot}" alt="그래프" class="inline-img" >
+    </a>
 </c:forEach>
 </div>
 <script type="text/javascript">
@@ -148,7 +150,9 @@ var dataArray =[
    <div style="font-size: 18px; font-weight: bold; color: #333; text-align: center;">결과값 : ${report2}</div>
    <div class="image-container">
    <c:forEach items="${plots2}" var="plot" varStatus="loop">
+   <a href="${plot}" target="_blank">
        <img src="${plot}" alt="그래프" class="inline-img" >
+       </a>
    </c:forEach>
    </div>
   <div id="chart_div2" style="width: 120%; height: 400px; position: relative; left: -8%"></div>
