@@ -186,12 +186,12 @@ def make_df_with_dates(first_com:str='1008',startdate:str='20211201',lastdate:st
 # plt.show()
 
 # 3-1개의 파라미터를 받아서 2개의 str 반환
-def ai_anal(list,critical_profit=1)->list[str]:
+def ai_anal(list,decimal:str=None,critical_profit=1)->list[str]:
     #파라미터 설정
     first_com=list[1]
     second_com=list[2]
     # print(first_com,second_com)
-    df=normalNlabel(first_com,second_com)
+    df=normalNlabel(first_com,second_com,decimal)
     result=ai.training(df)
     if result[1]==-1:
         result[1]="아쉽게도 현재 주가 전파관계는 없는 것으로 보이네요."
@@ -566,14 +566,22 @@ def diff_find_period_work(stock_code1:str='1008',diff_code:str='1001',stock_code
 # total_analy(lst)
 
 # 두개의 주가 코드를 입력받아서, 하나의 df로 변환
-def normalNlabel(stock_code1:str='IBM',stock_code2:str='1008',default='CLOSE')->pd.DataFrame:
+def normalNlabel(stock_code1:str='IBM',stock_code2:str='1008',decimal:str=None,default='CLOSE')->pd.DataFrame:
     df1=make_df(stock_code1)[[default]]
     df2=make_df(stock_code2)[[default]]
+    
     # print("df1: \n",df1)
     # print("df2: \n",df2)
     df1,df2=common_date(df1,df2)
-    df1=normal(df1)
-    df2=normal(df2)
+    if decimal!=None:
+        df3=make_df(decimal)[[default]]
+        df3=normal(df3)
+        df1=df1-df3
+        df2=df2-df3
+    else:
+        
+        df1=normal(df1)
+        df2=normal(df2)
     # print("df1: \n",df1)
     # print("df2: \n",df2)
 
@@ -620,7 +628,6 @@ def find_usable(lst:list[str]=[
     '026960',
     'IBM',
     '1154',
-    '1001',
     '1020',
     '012330',
     '1011',
@@ -631,13 +638,13 @@ def find_usable(lst:list[str]=[
     '004100',
     '1034',
     '063160',
-    '1155']):
+    '1155'],decimal:str='1001'):
     param=[]
     final_result=[]
     for stock_code1 in lst:
         for stock_code2 in lst:
             # print(stock_code1,'과',stock_code2)
-            result=ai_anal(['asdf',stock_code1,stock_code2])
+            result=ai_anal(['asdf',stock_code1,stock_code2],decimal)
             # print(result)
             
             if result[1][0]=='아':
@@ -647,8 +654,13 @@ def find_usable(lst:list[str]=[
                 if result[2][0]!='기' or  (result[2][0]=='기' and result[3][0]=='향'):
                     continue
                 final_result.append(result[2])
+                final_result.append(result[0])
                 final_result.append(result[-2])
                 final_result.append(result[-1])
+                print(result[2])
+                print(result[0])
+                print(result[-2])
+                print(result[-1])
     return final_result
     #         param.append(['asdf',stock_code1,stock_code2])
     # result=multithread_results(param)
