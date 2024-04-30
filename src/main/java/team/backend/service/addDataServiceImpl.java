@@ -4,11 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import team.backend.domain.BranchHistory;
 import team.backend.domain.ExcludedquarterHistory;
+import team.backend.domain.ExclusionperiodHistory;
 import team.backend.domain.ServiceUsage;
-import team.backend.mapper.AdditionMapper;
-import team.backend.mapper.BranchHistoryMapper;
-import team.backend.mapper.HistoryMapper;
-import team.backend.mapper.ServiceUsageMapper;
+import team.backend.mapper.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,15 +20,22 @@ public class addDataServiceImpl implements addDataService {
 
     @Autowired
     private  final BranchHistoryMapper branchHistoryMapper;
+    @Autowired
+    private  final ExclusionperiodHistoryMapper exclusionperiodHistoryMapper;
+
+    @Autowired
+    private  final ExcludedquarterHistoryMapper excludedquarterHistoryMapper;
 
     @Autowired
     private final HistoryMapper historyMapper;
     @Autowired
-    addDataServiceImpl(AdditionMapper addMapper, ServiceUsageMapper serviceUsageMapper,HistoryMapper historyMapper,BranchHistoryMapper branchHistoryMapper){
+    addDataServiceImpl(AdditionMapper addMapper, ServiceUsageMapper serviceUsageMapper,HistoryMapper historyMapper,BranchHistoryMapper branchHistoryMapper, ExclusionperiodHistoryMapper exclusionperiodHistoryMapper,ExcludedquarterHistoryMapper excludedquarterHistoryMapper){
         this.addMapper=addMapper;
         this.serviceUsageMapper = serviceUsageMapper;
         this.historyMapper = historyMapper;
         this.branchHistoryMapper = branchHistoryMapper;
+        this.exclusionperiodHistoryMapper = exclusionperiodHistoryMapper;
+        this.excludedquarterHistoryMapper = excludedquarterHistoryMapper;
     }
 
 
@@ -84,7 +89,26 @@ public class addDataServiceImpl implements addDataService {
 
     }
     @Override
-    public void insertToExcludedquarterHistory(ExcludedquarterHistory excludedquarterHistory){
+    public void insertToExclusionperiodHistory(ExclusionperiodHistory exclusionperiodHistory){
+        Map<String, String> list =new HashMap<>();
+        list.put("exclusionperiodHistory_seq", String.valueOf(exclusionperiodHistory.getExclusionperiodHistory_seq()));
+        list.put("stock_code1",exclusionperiodHistory.getStock_code1());
+        list.put("stock_code2",exclusionperiodHistory.getStock_code2());
+        list.put("stock_code3",exclusionperiodHistory.getStock_code3());
+        list.put("name1",exclusionperiodHistory.getName1());
+        list.put("name2",exclusionperiodHistory.getName2());
+        list.put("name3",exclusionperiodHistory.getName3());
+        list.put("start_date",exclusionperiodHistory.getStart_date());
+        list.put("end_date",exclusionperiodHistory.getEnd_date());
+        list.put("id",exclusionperiodHistory.getId());
+        list.put("report",exclusionperiodHistory.getReport());
+
+
+        exclusionperiodHistoryMapper.insertToExclusionperiodHistory(list);
+
+    }
+    @Override
+    public void insertExcludedquarterHistory(ExcludedquarterHistory excludedquarterHistory){
         Map<String, String> list =new HashMap<>();
         list.put("excludedquarterHistory_seq", String.valueOf(excludedquarterHistory.getExcludedquarterHistory_seq()));
         list.put("stock_code1",excludedquarterHistory.getStock_code1());
@@ -99,7 +123,7 @@ public class addDataServiceImpl implements addDataService {
         list.put("report",excludedquarterHistory.getReport());
 
 
-        serviceUsageMapper.insertToServiceUsage1(list);
+        excludedquarterHistoryMapper.insertExcludedquarterHistory(list);
 
     }
     @Override

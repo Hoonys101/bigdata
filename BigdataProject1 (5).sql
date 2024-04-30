@@ -4,17 +4,17 @@ grant connect, resource, unlimited tablespace to bigdata;
 conn bigdata/java;
 
 DROP TABLE ServiceUsage;
-DROP TABLE ExcludedquarterHistory;
 DROP TABLE BranchHistory;
+DROP TABLE ExclusionperiodHistory;
+DROP TABLE ExcludedquarterHistory;
 DROP TABLE ArchivedData;
 DROP TABLE addition;
 DROP TABLE AvailableData;
 DROP TABLE ID;
 DROP SEQUENCE  serviceusage_seq;
-DROP SEQUENCE  serviceusage_seq1;
 DROP SEQUENCE  BranchHistory_seq;
-DROP SEQUENCE  ExcludedquarterHistory _seq;
-
+DROP SEQUENCE ExclusionperiodHistory_seq;
+DROP SEQUENCE ExcludedquarterHistory_seq;
 create table ID(
    ID varchar2(100) constraint PROJECT_PK primary key, 
    pwd varchar2(50), 
@@ -88,9 +88,10 @@ CREATE TABLE BranchHistory(
    FOREIGN KEY (stock_code1) REFERENCES AvailableData(stock_code),
    FOREIGN KEY (stock_code2) REFERENCES AvailableData(stock_code)
 );
-CREATE SEQUENCE ExcludedquarterHistory _seq START WITH 1 INCREMENT BY 1;
-CREATE TABLE ExcludedquarterHistory (
-   ExcludedquarterHistory _seq NUMBER PRIMARY KEY,
+
+CREATE SEQUENCE ExclusionperiodHistory_seq START WITH 1 INCREMENT BY 1;
+CREATE TABLE ExclusionperiodHistory(
+   ExclusionperiodHistory_seq NUMBER PRIMARY KEY,
    stock_code1 VARCHAR2(255),
    stock_code2 VARCHAR2(255),
    stock_code3 VARCHAR2(255),
@@ -106,8 +107,24 @@ CREATE TABLE ExcludedquarterHistory (
    FOREIGN KEY (stock_code2) REFERENCES AvailableData(stock_code),
    FOREIGN KEY (stock_code3) REFERENCES AvailableData(stock_code)
 );
-
-
+CREATE SEQUENCE ExcludedquarterHistory_seq START WITH 1 INCREMENT BY 1;
+CREATE TABLE ExcludedquarterHistory (
+   ExcludedquarterHistory_seq NUMBER PRIMARY KEY,
+   stock_code1 VARCHAR2(255),
+   stock_code2 VARCHAR2(255),
+   stock_code3 VARCHAR2(255),
+   name1 VARCHAR2(255),
+   name2 VARCHAR2(255),
+   name3 VARCHAR2(255),
+   start_date VARCHAR2(30),
+   end_date VARCHAR2(30),
+   ID VARCHAR2(30),
+   report VARCHAR2(255),
+   FOREIGN KEY (ID) REFERENCES ID(ID),  -- ID를 참조하는 외래 키 제약 조건
+   FOREIGN KEY (stock_code1) REFERENCES AvailableData(stock_code),
+   FOREIGN KEY (stock_code2) REFERENCES AvailableData(stock_code),
+   FOREIGN KEY (stock_code3) REFERENCES AvailableData(stock_code)
+);
 commit;
 
 select CONSTRAINT_NAME, CONSTRAINT_TYPE from user_constraints where TABLE_NAME='ID';

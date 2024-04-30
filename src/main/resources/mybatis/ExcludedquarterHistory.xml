@@ -2,54 +2,34 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="team.backend.mapper.ExcludedquarterHistory">
+<mapper namespace="team.backend.mapper.ExcludedquarterHistoryMapper">
 
-    <insert id="insertToExcludedquarterHistory" parameterType="Map">
+    <insert id="insertExcludedquarterHistory" parameterType="Map">
         insert into ExcludedquarterHistory(excludedquarterHistory_seq,stock_code1, stock_code2,stock_code3,name1,name2,name3, start_date, end_date, id,report)
         values(excludedquarterHistory_seq.nextval,#{stock_code1},#{stock_code2},#{stock_code3},#{name1},#{name2},#{name3},#{start_date},#{end_date},#{id},#{report})
     </insert>
-    <select id="getHistory" parameterType="String" resultType="team.backend.domain.Excludedquarter">
-        SELECT *
-        FROM Excludedquarter
-        WHERE id = #{id} AND stock_code1 IS NOT NULL
-        AND stock_code2 IS NOT NULL
-    </select>
-    <select id="getHistory1" parameterType="String" resultType="team.backend.domain.Excludedquarter">
-        SELECT *
-        FROM Excludedquarter
-        WHERE id = #{id} AND stock_code1 IS NOT NULL
-        AND stock_code2 IS NOT NULL
-        AND stock_code3 IS NOT NULL
-    </select>
 
-
-    <select id="getHistoryByReport" parameterType="String" resultType="team.backend.domain.Excludedquarter">
+    <select id="getHistoryByQuarter" parameterType="String" resultType="team.backend.domain.ExcludedquarterHistory">
         SELECT *
-        FROM Excludedquarter
-        WHERE id = #{id} and stock_code1 IS NOT NULL
-        AND stock_code2 IS NOT NULL
-    </select>
-    <select id="getHistoryByReport1" parameterType="String" resultType="team.backend.domain.Excludedquarter">
-        SELECT *
-        FROM Excludedquarter
+        FROM ExcludedquarterHistory
         WHERE id = #{id}  AND stock_code1 IS NOT NULL
         AND stock_code2 IS NOT NULL
         AND stock_code3 IS NOT NULL
     </select>
     <delete id="deleteHistoryBySeq" parameterType="int">
-        DELETE FROM Excludedquarter WHERE excludedquarter_seq = #{excludedquarter_seq}
+        DELETE FROM ExcludedquarterHistory WHERE excludedquarterHistory_seq = #{excludedquarterHistory_seq}
     </delete>
 
-    <select id="getResult" parameterType="String" resultType="team.backend.domain.Excludedquarter">
+    <select id="getResult" parameterType="String" resultType="team.backend.domain.ExcludedquarterHistory">
         SELECT *
-        FROM Excludedquarter
+        FROM ExcludedquarterHistory
         WHERE id = #{id}
     </select>
     <select id="getCompany1" parameterType="String" resultType="String">
         SELECT ad.name
         FROM (
         SELECT ad.name, ROWNUM AS rn
-        FROM ServiceUsage1 su
+        FROM ExcludedquarterHistory su
         JOIN AvailableData ad ON su.stock_code1 = ad.stock_code
         WHERE su.stock_code1 = #{stock_code1}
         ) ad
@@ -60,7 +40,7 @@
         SELECT ad.name
         FROM (
         SELECT ad.name, ROWNUM AS rn
-        FROM ServiceUsage1 su
+        FROM ExcludedquarterHistory su
         JOIN AvailableData ad ON su.stock_code2 = ad.stock_code
         WHERE su.stock_code2 = #{stock_code2}
         ) ad
@@ -70,7 +50,7 @@
         SELECT ad.name
         FROM (
         SELECT ad.name, ROWNUM AS rn
-        FROM ServiceUsage1 su
+        FROM ExcludedquarterHistory su
         JOIN AvailableData ad ON su.stock_code3 = ad.stock_code
         WHERE su.stock_code3 = #{stock_code}
         ) ad

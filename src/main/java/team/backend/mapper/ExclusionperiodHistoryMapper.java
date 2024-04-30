@@ -10,17 +10,17 @@ import java.util.Map;
 
 @Mapper
 @Repository
-public interface ExcludedquarterHistory {
+public interface ExclusionperiodHistoryMapper {//제외기간
 
-    List<ExcludedquarterHistory> getHistory(String id);
+    List<ExclusionperiodHistoryMapper> getHistory(String id);
 
-    List<ExcludedquarterHistory> getHistory1(String id);
-    List<ExcludedquarterHistory> getHistoryByReport(String id);
-    List<ExcludedquarterHistory> getHistoryByReport1(String id);
+    List<ExclusionperiodHistoryMapper> getHistory1(String id);
+    List<ExclusionperiodHistoryMapper> getHistoryByReport(String id);
+    List<ExclusionperiodHistoryMapper> getHistoryByReport1(String id);
 
     void deleteHistoryBySeq(int excludedquarterHistory_seq);
     void insertToServiceUsage(Map list);
-    void insertToExcludedquarterHistory(Map list);
+    void insertToExclusionperiodHistory(Map list);
 
     List<ServiceUsage> getResult(String id);
 
@@ -28,4 +28,6 @@ public interface ExcludedquarterHistory {
     String getCompany2(String stock_code2);
 
     String getCompany3(String stock_code3);
+
+
 }

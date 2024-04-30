@@ -152,7 +152,7 @@ footer {
                     <td>${item.report}</td>
                     <td>
                         <form action="analysis_page3.do" method="post">
-                            <input type="hidden" name="serviceusage_seq" value="${item.serviceusage_seq}">
+                            <input type="hidden" name="excludedquarterHistory_seq" value="${item.excludedquarterHistory_seq}">
                             <input type="hidden" name="id" value="${item.id}">
                             <input type="hidden" name="stock_code1" value="${item.stock_code1}">
                             <input type="hidden" name="stock_code2" value="${item.stock_code2}">
@@ -168,7 +168,7 @@ footer {
                     </td>
                     <td>
                         <form action="resultDel.do" method="post">
-                            <input type="hidden" name="serviceusage_seq" value="${item.serviceusage_seq}">
+                            <input type="hidden" name="excludedquarterHistory_seq" value="${item.excludedquarterHistory_seq}">
                             <input type="hidden" name="id" value="${item.id}">
                             <input type="hidden" name="stock_code1" value="${item.stock_code1}">
                             <input type="hidden" name="stock_code2" value="${item.stock_code2}">
@@ -235,7 +235,7 @@ footer {
                     <td>${item.report}</td>
                     <td>
                         <form action="analysis_page3.do" method="post">
-                            <input type="hidden" name="serviceusage_seq" value="${item.serviceusage_seq}">
+                            <input type="hidden" name="excludedquarterHistory_seq" value="${item.excludedquarterHistory_seq}">
                             <input type="hidden" name="id" value="${item.id}">
                             <input type="hidden" name="stock_code1" value="${item.stock_code1}">
                             <input type="hidden" name="stock_code2" value="${item.stock_code2}">
@@ -251,7 +251,7 @@ footer {
                     </td>
                     <td>
                         <form action="resultDel.do" method="post">
-                            <input type="hidden" name="serviceusage_seq" value="${item.serviceusage_seq}">
+                            <input type="hidden" name="excludedquarterHistory_seq" value="${item.excludedquarterHistory_seq}">
                             <input type="hidden" name="id" value="${item.id}">
                             <input type="hidden" name="stock_code1" value="${item.stock_code1}">
                             <input type="hidden" name="stock_code2" value="${item.stock_code2}">

@@ -46,17 +46,20 @@ public class pageController {
     @Autowired
     private ServiceUsage serviceUsage;
     @Autowired
-    private ExcludedquarterHistory excludedquarterHistory;
+    private ExclusionperiodHistory excludedquarterHistory;//4
     @Autowired
-    private  BranchHistory branchHistory;
+    private BranchHistory branchHistory;//2
+
+    @Autowired
+    private ExclusionperiodHistory exclusionperiodHistory;//3
 
 
     public static final String PLOTS_DIRECTORY = "C:/plots";
 
     @Autowired
-    public pageController(ServiceUsage serviceUsage, ExcludedquarterHistory excludedquarterHistory, BranchHistory branchHistory) {
+    public pageController(ServiceUsage serviceUsage, ExclusionperiodHistory exclusionperiodHistory, BranchHistory branchHistory) {
         this.serviceUsage = serviceUsage;
-        this.excludedquarterHistory = excludedquarterHistory;
+        this.exclusionperiodHistory = exclusionperiodHistory;
         this.branchHistory = branchHistory;
     }
 
@@ -416,7 +419,7 @@ public class pageController {
 
         return "/project/branchresult";
     }
-    @PostMapping("analysis_page3.do") //분석하기
+    @PostMapping("analysis_page3.do") //기간제외
     public String analysis_page3(@RequestParam("stock_code1") String stock_code1,
                                 @RequestParam("stock_code2") String stock_code2,
                                  @RequestParam("stock_code3") String stock_code3,
@@ -444,16 +447,16 @@ public class pageController {
 
 
         System.out.println("stock_code3"+stock_code3);
-        excludedquarterHistory.setStock_code1(stock_code1);
-        excludedquarterHistory.setStock_code2(stock_code2);
-        excludedquarterHistory.setStock_code3(stock_code3);
+        exclusionperiodHistory.setStock_code1(stock_code1);
+        exclusionperiodHistory.setStock_code2(stock_code2);
+        exclusionperiodHistory.setStock_code3(stock_code3);
 
-        excludedquarterHistory.setName1(name1);
-        excludedquarterHistory.setName2(name2);
-        excludedquarterHistory.setName3(name3);
-        excludedquarterHistory.setStart_date(start_date);
-        excludedquarterHistory.setEnd_date(end_date);
-        excludedquarterHistory.setId(id);
+        exclusionperiodHistory.setName1(name1);
+        exclusionperiodHistory.setName2(name2);
+        exclusionperiodHistory.setName3(name3);
+        exclusionperiodHistory.setStart_date(start_date);
+        exclusionperiodHistory.setEnd_date(end_date);
+        exclusionperiodHistory.setId(id);
 
         System.out.println("서비스 3"+ serviceUsage);
         System.out.println("stock_code1"+stock_code1);
@@ -479,8 +482,8 @@ public class pageController {
         }
         String report = javaPy.analysisData(result.subList(0, 5));
         String report2 = javaPy.analysisData(result2.subList(0, 5));
-        excludedquarterHistory.setReport(report);
-        excludedquarterHistory.setReport(report2);
+        exclusionperiodHistory.setReport(report);
+        exclusionperiodHistory.setReport(report2);
 
         for (int i = 5; i < 10; i++) {
             result.set(i, "img/plots/" + result.get(i));
@@ -490,7 +493,7 @@ public class pageController {
         }
 
 
-        addData.insertToServiceUsage1(excludedquarterHistory);
+        addData.insertToExclusionperiodHistory(exclusionperiodHistory);
         List<String> plotFile = new ArrayList<>();
         List<String> plotFile2 = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
@@ -520,8 +523,8 @@ public class pageController {
         String company2 = addData.getCompany2(stock_code2);
 
 //        model.addAttribute("stock_code3"+stock_code3);
-        model.addAttribute("company1", company1);
-        model.addAttribute("company2", company2);
+        model.addAttribute("company1", name1);
+        model.addAttribute("company2", name2);
         model.addAttribute("dataList", dataList);
         model.addAttribute("dataList2", dataList2);
         model.addAttribute("report", report);
@@ -529,7 +532,7 @@ public class pageController {
         model.addAttribute("plots", plotFile);
         model.addAttribute("plots2", plotFile2);
 
-        model.addAttribute("serviceUsage1", excludedquarterHistory);
+        model.addAttribute("serviceUsage1", exclusionperiodHistory);
 
         return "/project/chart";
     }
@@ -537,7 +540,7 @@ public class pageController {
 
 
 
-    @PostMapping("analysis_page4.do")
+    @PostMapping("analysis_page4.do") //제외분기
     public String analysis_page4(@RequestParam("stock_code1") String stock_code1,
                                  @RequestParam("stock_code2") String stock_code2,
                                  @RequestParam("stock_code3") String stock_code3,
@@ -550,15 +553,17 @@ public class pageController {
         String name1 = availableDataService.getCompany(stock_code1);
         String name2 = availableDataService.getCompany(stock_code2);
         String name3 = availableDataService.getCompany(stock_code3);
+        System.out.println("name1"+name1);
+        System.out.println("name2"+name2);
 
-        List<Excludedquarter> serviceUsages0 = new ArrayList<>();
-        List<Excludedquarter> serviceUsages2 = new ArrayList<>();
+        List<ExcludedquarterHistory> serviceUsages0 = new ArrayList<>();
+        List<ExcludedquarterHistory> serviceUsages2 = new ArrayList<>();
 
 
         for (String item : result1) {
             String[] resultArray = item.split(",\\s*");
             if (resultArray.length >= 3) {
-                Excludedquarter serviceUsage1 = new Excludedquarter(); // 각 요소에 대해 새로운 ServiceUsage 객체를 생성
+                ExcludedquarterHistory serviceUsage1 = new ExcludedquarterHistory(); // 각 요소에 대해 새로운 ServiceUsage 객체를 생성
                 serviceUsage1.setStock_code1(stock_code1);
                 serviceUsage1.setStock_code2(stock_code2);
                 serviceUsage1.setStock_code3(stock_code3);
@@ -581,7 +586,7 @@ public class pageController {
                     System.err.println("NumberFormatException occurred: " + e.getMessage());
                 }
 
-                addData.insertToServiceUsage1(serviceUsage1);
+                addData.insertExcludedquarterHistory(serviceUsage1);
                 serviceUsages0.add(serviceUsage1);
             }
         }
@@ -589,7 +594,7 @@ public class pageController {
         for (String item : result2) {
             String[] resultArray = item.split(",\\s*");
             if (resultArray.length >= 3) {
-                Excludedquarter serviceUsage1 = new Excludedquarter(); // 각 요소에 대해 새로운 ServiceUsage 객체를 생성
+                ExcludedquarterHistory serviceUsage1 = new ExcludedquarterHistory(); // 각 요소에 대해 새로운 ServiceUsage 객체를 생성
                 serviceUsage1.setStock_code1(stock_code2);
                 serviceUsage1.setStock_code2(stock_code1);
                 serviceUsage1.setStock_code3(stock_code3);
@@ -612,7 +617,7 @@ public class pageController {
                     System.err.println("NumberFormatException occurred: " + e.getMessage());
                 }
 
-                addData.insertToServiceUsage1(serviceUsage1);
+                addData.insertExcludedquarterHistory(serviceUsage1);
                 serviceUsages2.add(serviceUsage1);
             }
         }
@@ -620,8 +625,8 @@ public class pageController {
         String company1 = addData.getCompany1(stock_code1);
         String company2 = addData.getCompany2(stock_code2);
 
-        System.out.println("company1: " + company1);
-        System.out.println("company2: " + company2);
+        System.out.println("company1: " + name1);
+        System.out.println("company2: " + name2);
         System.out.println("serviceUsages0: " + serviceUsages0);
         System.out.println("serviceUsages2: " + serviceUsages2);
         System.out.println("result1: " + result1);
@@ -632,7 +637,7 @@ public class pageController {
         model.addAttribute("serviceUsages0", serviceUsages0);
         model.addAttribute("serviceUsages2", serviceUsages2);
 
-        model.addAttribute("serviceUsage1", serviceUsage1);
+
 
 
 

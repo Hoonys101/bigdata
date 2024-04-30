@@ -2,6 +2,7 @@ package team.backend.service;
 
 import team.backend.domain.BranchHistory;
 import team.backend.domain.ExcludedquarterHistory;
+import team.backend.domain.ExclusionperiodHistory;
 import team.backend.domain.ServiceUsage;
 
 import java.util.List;
@@ -22,7 +23,8 @@ public interface addDataService {
     void insertToServiceUsage(ServiceUsage serviceUsage);
     void insertToBranchHistory(BranchHistory branchHistory);
     List<BranchHistory> getHistorybranch(String id);
-    void insertToExcludedquarterHistory(ExcludedquarterHistory excludedquarterHistory);
+    void insertToExclusionperiodHistory(ExclusionperiodHistory exclusionperiodHistory);
+    void insertExcludedquarterHistory(ExcludedquarterHistory excludedquarterHistory);
     boolean deleteHistoryBySeq(int serviceusage_seq);
 
     public List<ServiceUsage> getResult(String id);
