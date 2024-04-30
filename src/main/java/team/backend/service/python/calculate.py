@@ -437,18 +437,18 @@ def common_date(df1:pd.DataFrame,df2:pd.DataFrame)->tuple[pd.DataFrame,pd.DataFr
     return df1,df2
     
 # 1년을 4개월씩 분석
-def yearly(df1:pd.Series,df2:pd.Series,normal_diff=None,diff=None,div:int=4,critic:float=0.7)->list[str]:
+def yearly(df1:pd.Series,df2:pd.Series,diff:pd.Series=None,normal_diff=None,div:int=4,critic:float=0.7)->list[str]:
     result=[]
     for i in range(div):
         startdate=int(len(df1)/div*i)
         lastdate=int(len(df1)/div*(i+1))
         if normal_diff!=None:
-            df1_normal,df2_normal=normal_diff(df1,df2,diff)
-            correlation = df1_normal[startdate:lastdate].corr(df2_normal[startdate:lastdate])
+            df1_normal,df2_normal=normal_diff(df1[startdate:lastdate],df2[startdate:lastdate],diff[startdate:lastdate])
+            correlation = df1_normal.corr(df2_normal)
             if correlation>critic:
     #            print(df1.index[startdate].date(),"와 " ,df1.index[lastdate-1].date(), " 사이의 분기에 양의 상관관계")
     #            print("correlation: ",correlation)            
-                result.append(delay_save(df1_normal[startdate:lastdate],df2_normal[startdate:lastdate],str(startdate)+'_'+str(lastdate)))
+                result.append(delay_save(df1_normal,df2_normal,str(startdate)+'_'+str(lastdate)))
         else:
             correlation = df1[startdate:lastdate].corr(df2[startdate:lastdate])
             if correlation>critic:
@@ -533,7 +533,7 @@ def diff_find_period_work(stock_code1:str='1008',diff_code:str='1001',stock_code
     for i in range(10):
         startdate=int(df1.shape[0]/10*i)
         lastdate=int(df1.shape[0]/10*(i+1))
-        temp_result=yearly(df1[startdate:lastdate],df2[startdate:lastdate],normal_diff,diff)
+        temp_result=yearly(df1[startdate:lastdate],df2[startdate:lastdate],diff[startdate:lastdate],normal_diff)
         if len(temp_result)>0:
             result.extend(temp_result)
         # correlation = df1[startdate:lastdate].corr(df2[startdate:lastdate])
