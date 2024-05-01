@@ -160,6 +160,7 @@
                                 <input type="hidden" name="start_date" value="${serviceUsage3.start_date}">
                                 <input type="hidden" name="end_date" value="${serviceUsage3.end_date}">
                                 <input type="hidden" name="report" value="${serviceUsage3.report}">
+
                                 <td>${serviceUsage3.id}</td>
                                 <td>${serviceUsage3.name1}</td>
                                 <td>${serviceUsage3.name2}</td>

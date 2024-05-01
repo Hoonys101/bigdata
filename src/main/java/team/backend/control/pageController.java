@@ -351,6 +351,7 @@ public class pageController {
             if (resultArray.length >= 3) {
 
                 BranchHistory branchHistory = new BranchHistory(); // 각 요소에 대해 새로운 ServiceUsage 객체를 생성
+
                 branchHistory.setStock_code1(stock_code1);
                 branchHistory.setStock_code2(stock_code2);
                 branchHistory.setName1(name1);
@@ -359,7 +360,7 @@ public class pageController {
                 branchHistory.setStart_date(resultArray[0]);
                 branchHistory.setEnd_date(resultArray[1]);
                 branchHistory.setReport(resultArray[2]);
-                branchHistory.setReport(String.valueOf(resultCount));
+                branchHistory.setResultcount(resultCount);
                 resultCount++;
                 try {
                     int reportValue = Integer.parseInt(branchHistory.getReport());
