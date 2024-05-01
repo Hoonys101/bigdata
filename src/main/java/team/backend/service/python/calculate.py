@@ -851,10 +851,10 @@ def find_usable(lst:list[str]=[
 # # print(diff_find_period(['111','1004','1002','1001']))
 # # print(total_analy(['111','1004','1002']))
 #############test###############
-fi_result=find_usable(period=12,delay_days=2)
-print('최종 결과는 ')
-for strs in fi_result:
-    print(strs)
+# fi_result=find_usable(period=12,delay_days=2)
+# print('최종 결과는 ')
+# for strs in fi_result:
+#     print(strs)
 # ###############################
 # # find_usable_multi()
 # def find_usable_multi(lst:list[str]=[
