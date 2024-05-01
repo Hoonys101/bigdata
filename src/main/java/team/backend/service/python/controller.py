@@ -51,7 +51,10 @@ def run_service(thread_name:str,input_data:list):
         sending_result(thread_name, result)
         # print("EOF",flush=True)
     elif input_data[0]=='tree_data':
-        result=cal.ai_anal(input_data)
+        if len(input_data)==4:
+            result=cal.ai_anal(input_data,input_data[3])
+        else:
+            result=cal.ai_anal(input_data)
         sending_result(thread_name, result)
         # print("EOF",flush=True)
     elif input_data[0]==("diff_find_period"):
@@ -80,8 +83,10 @@ def main():
             print("EOF",flush=True)
 main()
 # print(scr.add_data(['add','Index','1152']))
-# scr.add_data(['add','asdf','030520'])
-# scr.add_data(['add','asdf','054920'])
-# scr.add_data(['add','asdf','047080'])
+# print(cal.cal_data(['cal_data','1152','1011','20190107','20191212']))
+# print(cal.find_period(['find_period','1152','1001']))
 # print(cal.diff_cal_data(['diff_call_data','1152','002020','1011','002020','20190107','20191212']))
 # print(cal.diff_find_period(['diff_find_peiod','1011','1152','1001']))
+# print(cal.ai_anal(['tree_data','1008','1153'],decimal='1001',period=12,delay_days=1))
+# print(cal.ai_anal(['tree_data','1034','1155']))
+# print(cal.ai_anal(['tree_data','1034','1155'],'1001'))
