@@ -15,29 +15,23 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # FATAL
 
 # dataFrame을 받아서 라벨링 훈련(3개월로 window로 옮겨가며 훈련)
 # 인자를 받아서, normalNlabel을 호출하여 df를 생성하는 것으로 변경
-def training(df: pd.DataFrame,model=DecisionTreeClassifier(max_depth=3),default='CLOSE')->list:
+def training(df: pd.DataFrame,window_size:int=60,model=DecisionTreeClassifier(max_depth=3),default='CLOSE')->list:
 
     # tf.get_logger().setLevel('ERROR')
 #    X, y = prepare_training_data(df)
     result=[]
 
-    # 훈련 데이터와 테스트 데이터로 분할
-#    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-    train_size = int(0.8 * len(df))
-    train_df = df.iloc[:train_size]
-    test_df = df.iloc[train_size:]
+    # 훈련 데이터를 생성합니다.
+    X, y = prepare_training_data(df, window_size)
+    # 훈련 데이터와 테스트 데이터로 분할합니다.
+    train_size = int(0.8 * len(X))
+    X_train, y_train = X[:train_size], y[:train_size]
+    X_test, y_test = X[train_size:], y[train_size:]
     
-    # 훈련 데이터와 테스트 데이터를 입력 특성과 타겟 값으로 분할
-    X_train, y_train = prepare_training_data(train_df)
-    X_test, y_test = prepare_training_data(test_df)
-    
-    # # Decision Tree 모델 생성 및 훈련
-    # model = DecisionTreeClassifier(max_depth=3)
-#     print(len(X_train))
-#     print(X_train.pop().shape)
+    # 3차원 배열로 변환합니다.
     train_arrays = [np.array(lst) for lst in X_train]
-    X_train_3d=np.stack(train_arrays,axis=0)
-    X_train_flatten=X_train_3d.reshape(X_train_3d.shape[0],-1)
+    X_train_3d = np.stack(train_arrays, axis=0)
+    X_train_flatten = X_train_3d.reshape(X_train_3d.shape[0], -1)
     
 #    print('X_train:',X_train)
     model.fit(X_train_flatten, y_train)

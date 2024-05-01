@@ -778,8 +778,8 @@ public class pageController {
         // 아래는 가상의 AI 분석 결과를 생성하는 코드입니다. 실제로는 AI 분석을 수행하는 코드로 대체되어야 합니다.
         List<String> aiResult = javaPy.strParameter("tree_data",stock_code1,stock_code2);
         model.addAttribute("aiResult",aiResult);
-        session.setAttribute("aiResult", aiResult);
-        System.out.println("ai -------------- " +aiResult);
+//        session.setAttribute("aiResult", aiResult);
+//        System.out.println("ai -------------- " +aiResult);
         System.out.println("AI 결과: " + aiResult);
 
 
@@ -807,9 +807,9 @@ public class pageController {
         // 예를 들어, AI 분석 서비스를 호출하고 결과를 받아온다고 가정합니다.
 
         // 아래는 가상의 AI 분석 결과를 생성하는 코드입니다. 실제로는 AI 분석을 수행하는 코드로 대체되어야 합니다.
-        List<String> aiResult2 = javaPy.strParameter("tree_data", stock_code2, stock_code1);
+        List<String> aiResult2 = javaPy.strParameter("tree_data", stock_code1, stock_code2);
         model.addAttribute("aiResult2", aiResult2);
-        session.setAttribute("aiResult", aiResult2);
+//        session.setAttribute("aiResult", aiResult2);
         System.out.println("ai2-------------- " + aiResult2);
 
         // 클라이언트에게 JSON 형태로 결과를 반환합니다.

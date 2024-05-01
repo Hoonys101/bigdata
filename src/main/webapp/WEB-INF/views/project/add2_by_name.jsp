@@ -148,7 +148,7 @@ button {
             data: { stock_code_or_name: $('#stock_code_or_name').val() },
             success: function (data) {
               var html = '';
-              if (!data||data.length == 0) {
+              if (!data||data.length === 0) {
                 html += '<tr>';
                 html +=
                   "<td colspan='4' align='center'>그런 이름또는 코드를 가진 기업은 없음</td>";
@@ -216,6 +216,7 @@ button {
 
     <center>
     <div class="center">
+    <br/>
       <h2>기업명 또는 stock_code 검색</h2>
 
       stock_code_or_name:
