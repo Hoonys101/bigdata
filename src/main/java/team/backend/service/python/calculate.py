@@ -10,6 +10,7 @@ from sklearn.preprocessing import PolynomialFeatures
 import datetime
 import scraper as scr
 import concurrent.futures
+import threading
 
 # import concurrent.futures
 #df 전체에 대해 1차 변화율과 2차 변화율을 추가
@@ -172,7 +173,7 @@ def make_trend_and_find_inflect(df:pd.DataFrame,degree:int=2,value:str='Close_no
     # plt.show()
 
 #stock code와 날짜2개를 받아서 df생성
-def make_df_with_dates(first_com:str='1008',startdate:str='20211201',lastdate:str='20220101')->pd.DataFrame:
+def make_df_with_dates(first_com:str='1008',startdate:str='20211101',lastdate:str='20220101')->pd.DataFrame:
     connection=db.connect_to_oracle()
     df=db.read_code_date(connection,first_com,startdate,lastdate)
     connection.close()
@@ -186,13 +187,15 @@ def make_df_with_dates(first_com:str='1008',startdate:str='20211201',lastdate:st
 # plt.show()
 
 # 3-1개의 파라미터를 받아서 2개의 str 반환
-def ai_anal(list,decimal:str=None,critical_profit=1)->list[str]:
+def ai_anal(list,decimal:str=None,period:int=12,delay_days:int=2,critical_profit=1)->list[str]:
     #파라미터 설정
     first_com=list[1]
     second_com=list[2]
     # print(first_com,second_com)
-    df=normalNlabel(first_com,second_com,decimal)
-    result=ai.training(df)
+    df=normalNlabel(first_com,second_com,decimal,period,delay_days)
+    # print(df)
+    result=ai.training(df,window_size=delay_days*12)
+    # print(result)
     if result[1]==-1:
         result[1]="아쉽게도 현재 주가 전파관계는 없는 것으로 보이네요."
         result.append("주가를 예측할 수 없습니다.")
@@ -212,8 +215,9 @@ def ai_anal(list,decimal:str=None,critical_profit=1)->list[str]:
         # print(first_com)
         # print('start:',str(startdate_for_expect))
         # print('last:',str(lastdate_for_expect))
-        df=make_df_with_dates(second_com)
-        df = df.iloc[-1*int(result[1])*5:, :]
+        df=make_df_with_dates(first_com)
+        df = df.iloc[-1*int(result[1])*delay_days:, :]
+        
         # print(df,first_com,(datetime.datetime(2022,1,1)+datetime.timedelta(days=result[1]*7)).strftime('%Y%m%d'),datetime.datetime(2022,1,1).strftime('%Y%m%d'))
         startvalue=df['CLOSE'].iloc[0]
         
@@ -234,23 +238,24 @@ def ai_anal(list,decimal:str=None,critical_profit=1)->list[str]:
             min_workingdays_interval=df.reset_index()['CLOSE'].idxmin()
             estimated_profit_ratio=(startvalue-min_value)/startvalue*100
         
-        result[1]="현재 주가전파관계가 존재합니다. 확인해보세요. 예측치:"+str(result[1])+"주 후 전파"
-        result.append('기준주식: '+first_com+'비교대상주식: '+second_com)
+        result[1]="현재 주가전파관계가 존재합니다. 확인해보세요. 예측치:"+str(result[1])+"*"+str(delay_days)+" 업무일 후 전파"
+        # result.append('기준주식: '+first_com+'비교대상주식: '+second_com)
+        # result.append('기준주식: '+first_com+'비교대상주식: '+second_com)
         if startvalue<max_value and estimated_profit_ratio>critical_profit:
             result.append("지금은 살 때입니다."+str(max_workingdays_interval)+'업무일 후에 파세요')
             result.append('예상수익률은 '+str(estimated_profit_ratio)+'%입니다.')
-            result.append('수익은 주당 '+str(estimate_profit(first_com,max_workingdays_interval)*100)+'%')
+            result.append('수익은 주당 '+str(estimate_profit(second_com,max_workingdays_interval)*100)+'%')
         elif startvalue>min_value and estimated_profit_ratio>critical_profit:
             result.append("지금은 팔 때입니다."+str(min_workingdays_interval)+'업무일 후에 사세요')
             result.append('예상수익률은 '+str(estimated_profit_ratio)+'%입니다.')
-            result.append('수익은 주당 '+str(estimate_profit(first_com,min_workingdays_interval,False)*100)+'%')
+            result.append('수익은 주당 '+str(estimate_profit(second_com,min_workingdays_interval,False)*100)+'%')
         else:
             result.append("향후 변동폭이 크지 않습니다. 판단을 보류합니다."+ '제안을 해도 예상수익률은 '+str(estimated_profit_ratio)+'%로 미진합니다.')
         #지금은 살 때입니다. ~~업무일,~~업무일,~~업무일 후에 파세요.
         #지금은 팔 때입니다. ~~업무일 후에 사세요.
     return result
 
-def estimate_profit(stock_code:str='058430',i:int=5,b: bool=True)->float:
+def estimate_profit(stock_code:str,i:int,b: bool=True)->float:
     if len(stock_code)==4 and stock_code.isdigit():
         df=scr.stock_data2('Index',stock_code,startdate='20220101',lastdate='20220220',default='Close')
     else:
@@ -566,7 +571,7 @@ def diff_find_period_work(stock_code1:str='1008',diff_code:str='1001',stock_code
 # total_analy(lst)
 
 # 두개의 주가 코드를 입력받아서, 하나의 df로 변환
-def normalNlabel(stock_code1:str='IBM',stock_code2:str='1008',decimal:str=None,default='CLOSE')->pd.DataFrame:
+def normalNlabel(stock_code1:str,stock_code2:str,decimal:str=None,period:int=4,delay_days:int=5,default='CLOSE')->pd.DataFrame:
     df1=make_df(stock_code1)[[default]]
     df2=make_df(stock_code2)[[default]]
     
@@ -575,6 +580,8 @@ def normalNlabel(stock_code1:str='IBM',stock_code2:str='1008',decimal:str=None,d
     df1,df2=common_date(df1,df2)
     if decimal!=None:
         df3=make_df(decimal)[[default]]
+        df1=normal(df1)
+        df2=normal(df2)
         df3=normal(df3)
         df1=df1-df3
         df2=df2-df3
@@ -587,9 +594,9 @@ def normalNlabel(stock_code1:str='IBM',stock_code2:str='1008',decimal:str=None,d
 
     result=pd.merge(df1,df2,left_index=True,right_index=True,suffixes=('_df1','_df2'))
     result['linkage']=-1
-    for i in range(40):
-        startdate=int(df1.shape[0]/40*i)
-        lastdate=int(df1.shape[0]/40*(i+1))
+    for i in range(period*10):
+        startdate=int(df1.shape[0]/(period*10)*i)
+        lastdate=int(df1.shape[0]/(period*10)*(i+1))
         result_list=[]
         df1_delay=df1[startdate:lastdate]
         df2_delay=df2[startdate:lastdate]
@@ -598,20 +605,20 @@ def normalNlabel(stock_code1:str='IBM',stock_code2:str='1008',decimal:str=None,d
         for i in range(5):
             corr=df1_delay['Close_normal'].corr(df2_delay['Close_normal'])
             result_list.append(corr)
-            df1_delay,df2_delay=delay_df(df1_delay,df2_delay,5)
+            df1_delay,df2_delay=delay_df(df1_delay,df2_delay,delay_days)
         max_val,max_inde=find_max_and_index(result_list)
         if max_val<0.7:
             pass
         else:
             if max_inde>=0:
                 # print(result)
-                result.iloc[startdate:lastdate,2]=max_inde
+                result.iloc[startdate:lastdate,2]=max_inde                
     return result
 
 # ai.training(normalNlabel())
 
 
-# ai.deep(normalNlabel())pip
+# ai.deep(normalNlabel())
 
 # result=diff_cal_data(['diff_cal_data', '1152', '1008', '1153', '1008', '20130101', '20130501'])
 # print(result)
@@ -621,32 +628,140 @@ def normalNlabel(stock_code1:str='IBM',stock_code2:str='1008',decimal:str=None,d
 # print(result)
 
 def find_usable(lst:list[str]=[
-    '058430',
-    '1152',
-    '1160',
-    '1153',
-    '026960',
-    'IBM',
-    '1154',
-    '1020',
-    '012330',
-    '1011',
-    '058650',
-    '1159',
-    '004020',
-    '1008',
-    '004100',
-    '1034',
-    '063160',
-    '1155'],decimal:str='1001'):
+'1001',
+'1002',
+'1003',
+'1004',
+'1005',
+'1006',
+'1007',
+'1008',
+'1009',
+'1010',
+'1011',
+'1012',
+'1013',
+'1014',
+'1015',
+'1016',
+'1017',
+'1018',
+'1019',
+'1020',
+'1021',
+'1024',
+'1025',
+'1026',
+'1027',
+'1028',
+'1034',
+'1035',
+'1150',
+'1151',
+'1152',
+'1153',
+'1154',
+'1155',
+'1156',
+'1157',
+'1158',
+'1159',
+'1160',
+'1167',
+'1182',
+'1224',
+'1227',
+'1232',
+'1244',
+'2001',
+'2002',
+'2003',
+'2004',
+'2012',
+'2015',
+'2024',
+'2026',
+'2027',
+'2029',
+'2031',
+'2037',
+'2041',
+'2042',
+'2043',
+'2056',
+'2058',
+'2062',
+'2063',
+'2065',
+'2066',
+'2067',
+'2068',
+'2070',
+'2072',
+'2074',
+'2075',
+'2077',
+'2151',
+'2152',
+'2153',
+'2154',
+'2155',
+'2156',
+'2157',
+'2158',
+'2159',
+'2160',
+'2181',
+'2182',
+'2183',
+'2184',
+'2203',
+'2212',
+'2213',
+'2214',
+'2215',
+'2216',
+'2217',
+'2218',
+'5042',
+'5043',
+'5044',
+'5045',
+'5046'
+# '5048',
+# '5049',
+# '5051',
+# '5052',
+# '5054',
+# '5055',
+# '5056',
+# '5057',
+# '5061',
+# '5062',
+# '5063',
+# '5064',
+# '5065',
+# '5300',
+# '5351',
+# '5352',
+# '5353',
+# '5354',
+# '5355',
+# '5356',
+# '5357',
+# '5358',
+# '5600'
+],decimal:str=None,period:int=4,delay_days:int=5):
     param=[]
     final_result=[]
     for stock_code1 in lst:
         for stock_code2 in lst:
+            if stock_code1==stock_code2:
+                continue
             # print(stock_code1,'과',stock_code2)
-            result=ai_anal(['asdf',stock_code1,stock_code2],decimal)
+            # result=ai_anal(['asdf',stock_code1,stock_code2],period=12,delay_days=1)
+            result=ai_anal(['asdf',stock_code1,stock_code2],decimal=decimal,period=period,delay_days=delay_days)
             # print(result)
-            
             if result[1][0]=='아':
                 continue
             else:
@@ -661,32 +776,118 @@ def find_usable(lst:list[str]=[
                 print(result[0])
                 print(result[-2])
                 print(result[-1])
+                # print(result)
     return final_result
-    #         param.append(['asdf',stock_code1,stock_code2])
-    # result=multithread_results(param)
-    # return result
+
+# def find_usable_multi(lst:list[str]=[
+# '1004'
+# ,'1003'
+# ,'1009'
+# ],decimal:str=None,period:int=4,delay_days:int=5):
+#     param=[]
+#     final_result=[]
+#     for stock_code1 in lst:
+#         for stock_code2 in lst:
+#             if stock_code1==stock_code2:
+#                 continue
+#             if decimal==None:
+#                 # cal_aidata(stock_code1,stock_code2,None,period,delay_days)
+#                 threading.Thread(target=cal_aidata,args=(stock_code1,stock_code2,None,period,delay_days)).start()
+#             else:
+#                 threading.Thread(target=cal_aidata,args=(stock_code1,stock_code2,decimal,period,delay_days)).start()
+#                 # cal_aidata(stock_code1,stock_code2,decimal,period,delay_days)
+#             # print(stock_code1,'과',stock_code2)
+#             # result=ai_anal(['asdf',stock_code1,stock_code2],period=12,delay_days=1)
+# def cal_aidata(stock_code1,stock_code2,decimal,period,delay_days):
+#     result=ai_anal(['asdf',stock_code1,stock_code2],decimal,period,delay_days)
+#     # print(result)
+#     if result[1][0]=='아':
+#         return
+#     else:
+#         # print(result)
+#         if result[2][0]!='기' or  (result[2][0]=='기' and result[3][0]=='향'):
+#             return
+#         # print(result[2])
+#         # print(result[0])
+#         # print(result[-2])
+#         # print(result[-1])
+#         printing_result(result[2],result[0],result[-2],result[-1])
+#         # print(result)
+# def printing_result(result1,result2,result3,result4):
+#     lock=threading.Lock()
+#     with lock:
+#         print(result1)
+#         print(result2)
+#         print(result3)
+#         print(result4)
+
+#     #         param.append(['asdf',stock_code1,stock_code2])
+#     # result=multithread_results(param)
+#     # return result
     
-def multithread_results(lst:list[str,str])->list[str]:
-        #쓰레드 풀 생성
-    max_thread = 3
-    results=[]
-    with concurrent.futures.ThreadPoolExecutor(max_workers=max_thread) as executer:
-        # print('멀티쓰레드 실행')
-        # 작업 실행 및 결과 수집
-        futures = [executer.submit(ai_anal,params) for params in lst]
-        # print('결과 수집')
-        # 결과 처리
-        results.add([future.result() for future in concurrent.futures.as_completed(futures)])
-        return results
+# def multithread_results(lst:list[list[str,str,str]],decimal:str=None)->list[list[str]]:
+#         #쓰레드 풀 생성
+#     max_thread = 10
+#     results=[]
+#     with concurrent.futures.ThreadPoolExecutor(max_workers=max_thread) as executer:
+#         # print('멀티쓰레드 실행')
+#         # 작업 실행 및 결과 수집
+#         if decimal==None:
+#             futures = [executer.submit(ai_anal,params) for params in lst]
+#         else:
+            
+#             futures = [executer.submit(ai_anal,params,decimal) for params in lst]
+#         # 모든 Future 객체의 실행이 완료될 때까지 기다림
+#         concurrent.futures.wait(futures)
+#         # print('결과 수집')
+#         # 결과 처리
+#         results.append([future.result() for future in futures])
+#         return results
 
-# print(make_df_with_dates())
-# print(ai_anal(['1111','1160','1152']))
+# # print(make_df_with_dates())
+# # print(ai_anal(['1111','1160','1152']))
 
-# print(ai_anal(['111','1001','1004']))
-# print(diff_find_period(['111','1004','1002','1001']))
-# print(total_analy(['111','1004','1002']))
-
-# fi_result=find_usable()
-# print('최종 결과는 ',fi_result)
-# for strs in fi_result:
-#     print(strs)
+# # print(ai_anal(['111','1001','1004']))
+# # print(diff_find_period(['111','1004','1002','1001']))
+# # print(total_analy(['111','1004','1002']))
+#############test###############
+fi_result=find_usable(period=12,delay_days=2)
+print('최종 결과는 ')
+for strs in fi_result:
+    print(strs)
+# ###############################
+# # find_usable_multi()
+# def find_usable_multi(lst:list[str]=[
+#     '1004'
+#     ,'1003'
+#     ,'1009'
+#     ,'1159'
+#     ,'058650'
+#     ,'006260'
+#     ,'1008'
+#     ,'058430'
+#     ,'004020'
+#     ,'004100'
+#     ,'1034'
+#     ,'1002'
+#     ,',1155'
+#     ,'063160'
+#     ,'1152'
+#     ,'1160'
+#     ,'002020'
+#     ,'1153'
+#     ,'1154'
+#     ,'026960'
+#     ,'IBM'
+#     ,'1020'
+#     ,'1011'
+#     ,'012330'],decimal:str='1001'):
+#     param=[]
+#     final_result=[]
+#     for stock_code1 in lst:
+#         for stock_code2 in lst:
+#             param.append(['sdf',stock_code1,stock_code2])
+#     # print(param)
+#     return multithread_results(param,decimal)
+    
+# # print(find_usable_multi())
