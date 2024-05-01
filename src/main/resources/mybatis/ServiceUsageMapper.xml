@@ -5,21 +5,26 @@
 <mapper namespace="team.backend.mapper.ServiceUsageMapper">
 
     <insert id="insertToServiceUsage" parameterType="Map">
-        insert into ServiceUsage(serviceusage_seq,stock_code1, stock_code2, start_date, end_date, id,report)
-        values(serviceusage_seq.nextval,#{stock_code1},#{stock_code2},#{start_date},#{end_date},#{id},#{report})
+        insert into ServiceUsage(serviceusage_seq,stock_code1, stock_code2,name1,name2, start_date, end_date, id,report)
+        values(serviceusage_seq.nextval,#{stock_code1},#{stock_code2},#{name1},#{name2},#{start_date},#{end_date},#{id},#{report})
     </insert>
+
     <select id="getHistory" parameterType="String" resultType="team.backend.domain.ServiceUsage">
         SELECT *
         FROM ServiceUsage
-        WHERE id = #{id} and report = '두 데이터는 동시에 움직입니다.
-'
+        WHERE id = #{id} AND stock_code1 IS NOT NULL
+        AND stock_code2 IS NOT NULL
     </select>
+
+
+
     <select id="getHistoryByReport" parameterType="String" resultType="team.backend.domain.ServiceUsage">
         SELECT *
         FROM ServiceUsage
-        WHERE id = #{id} and report != '두 데이터는 동시에 움직입니다.
-'
+        WHERE id = #{id} and stock_code1 IS NOT NULL
+        AND stock_code2 IS NOT NULL
     </select>
+
     <delete id="deleteHistoryBySeq" parameterType="int">
         DELETE FROM ServiceUsage WHERE serviceusage_seq = #{serviceusage_seq}
     </delete>
@@ -35,7 +40,7 @@
         SELECT ad.name, ROWNUM AS rn
         FROM ServiceUsage su
         JOIN AvailableData ad ON su.stock_code1 = ad.stock_code
-        WHERE su.stock_code1 = #{stockCode}
+        WHERE su.stock_code1 = #{stock_code1}
         ) ad
         WHERE rn = 1
 
@@ -46,9 +51,10 @@
         SELECT ad.name, ROWNUM AS rn
         FROM ServiceUsage su
         JOIN AvailableData ad ON su.stock_code2 = ad.stock_code
-        WHERE su.stock_code2 = #{stockCode}
+        WHERE su.stock_code2 = #{stock_code2}
         ) ad
         WHERE rn = 1
     </select>
+
 </mapper>
 

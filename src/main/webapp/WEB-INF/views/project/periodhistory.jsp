@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-
 <!-- history.html -->
 <html>
 <head>
@@ -70,15 +69,6 @@
 
 </head>
 <body>
-<%
-    // URL 매개변수에서 rowCount 값을 읽어옴
-    String rowCount = request.getParameter("rowCount");
-
-    if (rowCount != null) {
-            response.addCookie(new Cookie("rowCount", rowCount));
-        }
-%>
-
 
         <div class="header">
         <button class="home-button" onclick="location.href='home.do'">Home</button>
@@ -86,7 +76,8 @@
         <div class="container">
                 <h2 style="text-align: center;">히스토리</h2>
          </div>
-         <h3 style="text-align: center;">기간분석</h3>
+
+    <h3 style="text-align: center;">제외기간분석</h3>
 
             <table>
                 <thead>
@@ -94,6 +85,7 @@
                         <th>ID</th>
                         <th>기업 1</th>
                         <th>기업 2</th>
+                        <th>제외기업</th>
                         <th>Start Date</th>
                         <th>End Date</th>
                         <th>Report</th>
@@ -103,38 +95,42 @@
                 </thead>
                 <tbody>
                     <!-- Iterate over the history list -->
-                    <c:forEach items="${serviceUsages2}" var="serviceUsage2">
+                    <c:forEach items="${serviceUsages}" var="serviceUsage">
                         <tr>
-                            <form action="analysis_page.do" method="post">
-                                <input type="hidden" name="serviceusage_seq" value="${serviceUsage2.serviceusage_seq}">
-                                <input type="hidden" name="id" value="${serviceUsage2.id}">
-                                <input type="hidden" name="stock_code1" value="${serviceUsage2.stock_code1}">
-                                <input type="hidden" name="stock_code2" value="${serviceUsage2.stock_code2}">
-                                <input type="hidden" name="name1" value="${serviceUsage2.name1}">
-                                <input type="hidden" name="name2" value="${serviceUsage2.name2}">
-                                <input type="hidden" name="start_date" value="${serviceUsage2.start_date}">
-                                <input type="hidden" name="end_date" value="${serviceUsage2.end_date}">
-                                <input type="hidden" name="report" value="${serviceUsage2.report}">
-                                <td>${serviceUsage2.id}</td>
-                                <td>${serviceUsage2.name1}</td>
-                                <td>${serviceUsage2.name2}</td>
-                                <td>${serviceUsage2.start_date}</td>
-                                <td>${serviceUsage2.end_date}</td>
-                                <td>${serviceUsage2.report}</td>
+                            <form action="analysis_page3.do" method="post">
+                                <input type="hidden" name="exclusionperiodHistory_seq" value="${serviceUsage.exclusionperiodHistory_seq}">
+                                <input type="hidden" name="id" value="${serviceUsage.id}">
+                                <input type="hidden" name="stock_code1" value="${serviceUsage.stock_code1}">
+                                <input type="hidden" name="stock_code2" value="${serviceUsage.stock_code2}">
+                                <input type="hidden" name="stock_code3" value="${serviceUsage.stock_code3}">
+                                <input type="hidden" name="name1" value="${serviceUsage.name1}">
+                                <input type="hidden" name="name2" value="${serviceUsage.name2}">
+                                <input type="hidden" name="name3" value="${serviceUsage.name3}">
+                                <input type="hidden" name="start_date" value="${serviceUsage.start_date}">
+                                <input type="hidden" name="end_date" value="${serviceUsage.end_date}">
+                                <input type="hidden" name="report" value="${serviceUsage.report}">
+                                <td>${serviceUsage.id}</td>
+                                <td>${serviceUsage.name1}</td>
+                                <td>${serviceUsage.name2}</td>
+                                <td>${serviceUsage.name3}</td>
+                                <td>${serviceUsage.start_date}</td>
+                                <td>${serviceUsage.end_date}</td>
+
+                                <td>${serviceUsage.report}</td>
                                 <td>
                                     <input type="submit" value="분석 페이지로">
                                 </td>
                                 </form>
                             <td>
 
-                                <a href='historyDel.do?serviceusage_seq=${serviceUsage.serviceusage_seq}'>삭제</a>
+                                <a href='historyDel.do?exclusionperiodHistory_seq=${serviceUsage.exclusionperiodHistory_seq}'>삭제</a>
                             </td>
                         </tr>
 
                     </c:forEach>
                 </tbody>
             </table>
-    <h3 style="text-align: center;">분기분석</h3>
+    <h3 style="text-align: center;">제외분기</h3>
 
             <table>
                 <thead>
@@ -142,49 +138,54 @@
                         <th>ID</th>
                         <th>기업 1</th>
                         <th>기업 2</th>
+                        <th>제외기업</th>
+
                         <th>Report</th>
                         <th>Action</th>
                         <th>삭제</th>
                     </tr>
                 </thead>
                 <tbody>
+                    <!-- Iterate over the history list -->
+                    <c:forEach items="${serviceUsages1}" var="serviceUsage1">
+                        <tr>
+                            <form action="analysis_page4.do" method="post">
+                                <input type="hidden" name="excludedquarterHistory_seq" value="${serviceUsage1.excludedquarterHistory_seq}">
+                                <input type="hidden" name="id" value="${serviceUsage1.id}">
+                                <input type="hidden" name="stock_code1" value="${serviceUsage1.stock_code1}">
+                                <input type="hidden" name="stock_code2" value="${serviceUsage1.stock_code2}">
+                                <input type="hidden" name="stock_code3" value="${serviceUsage1.stock_code3}">
+                                <input type="hidden" name="name1" value="${serviceUsage1.name1}">
+                                <input type="hidden" name="name2" value="${serviceUsage1.name2}">
+                                <input type="hidden" name="name3" value="${serviceUsage1.name3}">
+                                <input type="hidden" name="start_date" value="${serviceUsage1.start_date}">
+                                <input type="hidden" name="end_date" value="${serviceUsage1.end_date}">
+                                <input type="hidden" name="report" value="${serviceUsage1.report}">
+                                <td>${serviceUsage1.id}</td>
+                                <td>${serviceUsage1.name1}</td>
+                                <td>${serviceUsage1.name2}</td>
+                                <td>${serviceUsage1.name3}</td>
 
-                    <!-- Iterate over the history list --!>
-<c:forEach items="${serviceUsages3}" var="serviceUsage3">
-          <tr>
-              <form action="analysis_page2.do" method="post">
-                  <input type="hidden" name="branchHistory_seq" value="${serviceUsage3.branchHistory_seq}">
-                  <input type="hidden" name="id" value="${serviceUsage3.id}">
-                  <input type="hidden" name="stock_code1" value="${serviceUsage3.stock_code1}">
-                  <input type="hidden" name="stock_code2" value="${serviceUsage3.stock_code2}">
-                  <input type="hidden" name="name1" value="${serviceUsage3.name1}">
-                  <input type="hidden" name="name2" value="${serviceUsage3.name2}">
-                  <input type="hidden" name="start_date" value="${serviceUsage3.start_date}">
-                  <input type="hidden" name="end_date" value="${serviceUsage3.end_date}">
-                  <input type="hidden" name="report" value="${serviceUsage3.report}">
-                  <input type="hidden" name="resultcount" value="${serviceUsage3.resultcount}">
-                  <td>${serviceUsage3.id}</td>
-                  <td>${serviceUsage3.name1}</td>
-                  <td>${serviceUsage3.name2}</td>
-                  <td>${serviceUsage3.resultcount}</td>
-                  <td>
-                      <input type="submit" value="분석 페이지로">
-                  </td>
-                  </form>
-              <td>
-                  <a href='historyDel.do?branchHistory_seq=${serviceUsage.branchHistory_seq}'>삭제</a>
-              </td>
-          </tr>
+                                <td>연동된 분석 수: <span id="rowCountValue${loop.index}"></span></td>
+                                <td>
+                                    <input type="submit" value="분석 페이지로">
+                                </td>
+                                </form>
+                            <td>
 
-      </c:forEach>
+                                <a href='historyDel.do?excludedquarterHistory_seq=${serviceUsage1.excludedquarterHistory_seq}'>삭제</a>
+                            </td>
+                        </tr>
+
+                    </c:forEach>
                 </tbody>
             </table>
             <footer>
-                <p>> &copy; 2024 빅 데이터 분석 플랫폼 - 데이터로 더 나은 미래를 만듭니다.
+                <p> &copy; 2024 빅 데이터 분석 플랫폼 - 데이터로 더 나은 미래를 만듭니다.
 
                 </p>
                 </footer>
-                <script>
+<script>
                 // 각 행의 rowCountValue를 설정하는 함수
                function setRowCountValue(rowCountValue, index) {
                    var element = document.querySelector('#rowCountValue' + index);
@@ -197,8 +198,7 @@
                     // 각 행의 rowCount 값들을 가져와서 설정
                     var rowCountValues = getAllRowCountValues();
                     rowCountValues.forEach(function(rowCountValue, index) {
-                        // 각 행의 branchHistory_seq를 사용하여 ID를 설정
-                        var serviceUsageIndex = "${serviceUsages3[index].branchHistory_seq}";
+                        var serviceUsageIndex = "${serviceUsages1[index].excludedquarterHistory_seq}";
                         setRowCountValue(rowCountValue, serviceUsageIndex);
                     });
 

@@ -41,4 +41,10 @@
         (select stock_code from addition where id=#{id} group by stock_code)
     </select>
 
+    <select id="getCompany" parameterType="String" resultType="String">
+        SELECT name
+        FROM AvailableData where stock_code = #{stock_code}
+    </select>
+
+
 </mapper>

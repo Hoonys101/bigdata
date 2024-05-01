@@ -224,19 +224,30 @@
                <a href="withdraw.do?id=${sessionScope.id}" id="withdraw-link">회원탈퇴</a>
                </div>
                 <div class="analyze-buttons">
-                        <a href="history.do" class="analyze-button">히스토리</a>|
                         <a href="add2.do" class="analyze-button">기업추가</a>
                         <a href="add2_by_name.do" class="analyze-button">기업추가_by_type</a>
                     </div>
                 <div class="analyze-buttons">
-                        <a href="analysis_page3.do" class="analyze-button">제외분석</a>|
-                        <a href="analysis_page.do" class="analyze-button">기간분석</a>
-                    </div>
-                    <div class="analyze-buttons">
-                        <a href="analysis_page4.do" class="analyze-button">제외분기분석</a>|
-                        <a href="analysis_page2.do" class="analyze-button">분기분석</a>
+                        <a href="analysis_page.do" class="analyze-button">기간분석</a>|
+                        <a href="analysis_page2.do" class="analyze-button">분기분석</a>|
+                        <a href="history.do" class="analyze-button">기간,분기분석히스토리</a>
 
-                        </div>
+                    </div>
+                    <%--<div class="analyze-buttons">
+                        <a href="analysis_page2.do" class="analyze-button">분기분석</a>|
+                        <a href="branchhistory.do" class="analyze-button">분기분석히스토리</a>
+                    </div>--%>
+                    <div class="analyze-buttons">
+                    <a href="analysis_page3.do" class="analyze-button">제외기간분석</a>|
+                        <a href="analysis_page4.do" class="analyze-button">제외분기분석</a>|
+                        <a href="periodhistory.do" class="analyze-button">제외 기간,분기분석히스토리</a>
+                    </div>
+                    <%--<div class="analyze-buttons">
+
+                        <a href="branchhistory.do" class="analyze-button">제외기간분석히스토리</a>
+
+
+                        </div>--%>
             </c:if>
     </nav>
 
@@ -244,7 +255,7 @@
 
 
 <footer>
-    <p><img src="/img/platform_logo.png" alt="Platform Logo" height="40px"> &copy; 2024 빅 데이터 분석 플랫폼 - 데이터로 더 나은 미래를 만듭니다.
+    <p>> &copy; 2024 빅 데이터 분석 플랫폼 - 데이터로 더 나은 미래를 만듭니다.
 
     </p>
 </footer>
