@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="team.backend.mapper.BranchHistoryMapper">
+
+    <insert id="insertToBranchHistory" parameterType="Map">
+        insert into BranchHistory(branchHistory_seq ,stock_code1, stock_code2,name1,name2, start_date, end_date, id,report,resultCount)
+        values(branchHistory_seq.nextval,#{stock_code1},#{stock_code2},#{name1},#{name2},#{start_date},#{end_date},#{id},#{report},#{resultCount})
+    </insert>
+
+    <select id="getHistorybranch" parameterType="String" resultType="team.backend.domain.BranchHistory">
+        SELECT name1, name2
+        FROM (
+        SELECT name1, name2, COUNT(*) AS resultCount
+        FROM BranchHistory
+        WHERE id = #{id}
+        GROUP BY name1, name2
+        ORDER BY resultCount DESC
+        )
+        WHERE ROWNUM = 1;
+    </select>
+
+    <delete id="deleteHistoryBySeq" parameterType="int">
+        DELETE FROM BranchHistory WHERE branchHistory_seq  = #{branchHistory_seq }
+    </delete>
+</mapper>
+

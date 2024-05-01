@@ -21,6 +21,7 @@ public interface AvailableDataService {
     List<AvailableData> getList(String id, AvailableData availableData);
     List<AvailableData> getByNameOrStock_code(String id, String stock_code_or_name);
 
+    String getCompany(String stock_code);
 
 
 

@@ -15,21 +15,22 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
         .container {
             text-align: center;
         }
-footer {
-      background-color: #555;
-      color: #fff;
-      padding: 15px;
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      text-align: center;
-      font-family: Arial, sans-serif;
-      font-size: 18px;
-      font-weight: bold;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-     background-color: rgba(0, 0, 0, 0.5); /* 투명 배경 추가 */
-        padding: 5px 10px; /* 배경에 여백 추가 */
-  }
+        footer {
+              background-color: #555;
+              color: #fff;
+              padding: 15px;
+              position: fixed;
+              bottom: 0;
+              width: 100%;
+              text-align: center;
+              font-family: Arial, sans-serif;
+              font-size: 18px;
+              font-weight: bold;
+              text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+             background-color: rgba(0, 0, 0, 0.5); /* 투명 배경 추가 */
+                padding: 5px 10px; /* 배경에 여백 추가 */
+          }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -79,14 +80,14 @@ footer {
         }
 
         /* Table styling */
-        .table-container1 {
+        .table-container {
         width: 100%;
-            max-height: 70vh; /* Set maximum height for the table container */
+            <%--max-height: 70vh; /* Set maximum height for the table container */--%>
             overflow-y: auto; /* Enable vertical scrolling if table exceeds maximum height */
         }
         .table-container2 {
                 width: 100%;
-                    max-height: 70vh; /* Set maximum height for the table container */
+                    <%--max-height: 70vh; /* Set maximum height for the table container */--%>
                     overflow-y: auto; /* Enable vertical scrolling if table exceeds maximum height */
                 }
         table {
@@ -125,23 +126,20 @@ footer {
         <c:forEach items="${serviceUsages1}" var="item">
             <input type="text" name="stock_code1_${item.id}" value="${item.stock_code1}">
             <input type="text" name="stock_code2_${item.id}" value="${item.stock_code2}">
-            <input type="text" name="stock_code3" value="${stock_code3}">
         </c:forEach>
     </div>
 </div>
-<div class="table-container1">
+<div class="table-container">
     <table>
         <thead class="fixed-header">
         <tr>
             <th>ID</th>
             <th>기업 1</th>
             <th>기업 2</th>
-            <th>제외기업</th>
             <th>Start Date</th>
             <th>End Date</th>
             <th>Report</th>
             <th><button onclick="goToAnalysisPage1()">히스토리로</button></a></th>
-
         </tr>
         </thead>
         <tbody>
@@ -151,20 +149,17 @@ footer {
                     <td>${item.id}</td>
                     <td>${item.name1}</td>
                     <td>${item.name2}</td>
-                    <td>${item.name3}</td>
                     <td>${item.start_date}</td>
                     <td>${item.end_date}</td>
                     <td>${item.report}</td>
                     <td>
-                        <form action="analysis_page3.do" method="post">
-                            <input type="hidden" name="excludedquarterHistory_seq" value="${item.excludedquarterHistory_seq}">
+                        <form action="analysis_page.do" method="post">
+                            <input type="hidden" name="branchHistory_seq" value="${item.branchHistory_seq}">
                             <input type="hidden" name="id" value="${item.id}">
                             <input type="hidden" name="stock_code1" value="${item.stock_code1}">
                             <input type="hidden" name="stock_code2" value="${item.stock_code2}">
-                            <input type="hidden" name="stock_code3" value="${stock_code3}">
                             <input type="hidden" name="name1" value="${item.name1}">
                             <input type="hidden" name="name2" value="${item.name2}">
-                            <input type="hidden" name="name3" value="${item.name3}">
                             <input type="hidden" name="start_date" value="${item.start_date}">
                             <input type="hidden" name="end_date" value="${item.end_date}">
                             <input type="hidden" name="report" value="${item.report}">
@@ -193,7 +188,6 @@ footer {
         <c:forEach items="${serviceUsages2}" var="item">
             <input type="text" name="stock_code1_${item.id}" value="${item.stock_code1}">
             <input type="text" name="stock_code2_${item.id}" value="${item.stock_code2}">
-            <input type="text" name="stock_code3" value="${stock_code3}">
         </c:forEach>
     </div>
 </div>
@@ -204,11 +198,11 @@ footer {
             <th>ID</th>
             <th>기업 1</th>
             <th>기업 2</th>
-            <th>제외기업</th>
             <th>Start Date</th>
             <th>End Date</th>
             <th>Report</th>
             <th><button onclick="goToAnalysisPage2()">히스토리로</button></a></th>
+
         </tr>
         </thead>
         <tbody>
@@ -218,20 +212,18 @@ footer {
                     <td>${item.id}</td>
                     <td>${item.name1}</td>
                     <td>${item.name2}</td>
-                    <td>${item.name3}</td>
                     <td>${item.start_date}</td>
                     <td>${item.end_date}</td>
                     <td>${item.report}</td>
                     <td>
-                        <form action="analysis_page3.do" method="post">
-                            <input type="hidden" name="excludedquarterHistory_seq" value="${item.excludedquarterHistory_seq}">
+
+                        <form action="analysis_page.do" method="post">
+                            <input type="hidden" name="branchHistory_seq" value="${item.branchHistory_seq}">
                             <input type="hidden" name="id" value="${item.id}">
                             <input type="hidden" name="stock_code1" value="${item.stock_code1}">
                             <input type="hidden" name="stock_code2" value="${item.stock_code2}">
-                            <input type="hidden" name="stock_code3" value="${stock_code3}">
                             <input type="hidden" name="name1" value="${item.name1}">
                             <input type="hidden" name="name2" value="${item.name2}">
-                            <input type="hidden" name="name3" value="${item.name3}">
                             <input type="hidden" name="start_date" value="${item.start_date}">
                             <input type="hidden" name="end_date" value="${item.end_date}">
                             <input type="hidden" name="report" value="${item.report}">
@@ -254,7 +246,6 @@ document.getElementById('ai-analysis-button').addEventListener('click', function
         data: {
             stock_code1: $("input[name^='stock_code1_']:first").val(),
             stock_code2: $("input[name^='stock_code2_']:first").val()
-
         },
         success: function(response) {
             // 서버에서 받은 AI 분석 결과를 처리하여 화면에 표시합니다.
@@ -318,29 +309,29 @@ document.getElementById('ai-analysis-button-2').addEventListener('click', functi
          }
      });
  });
- // 분석 페이지로 이동하는 함수
-        function goToAnalysisPage1() {
-            var rowCount = countRows1();
-            window.location.href = "periodhistory.do?rowCount=" + rowCount;
-        }
+// 결과값의 줄 수를 계산하는 JavaScript 함수
+    function countRows1() {
+        var rowCount = document.querySelectorAll('.table-container tbody tr').length;
+        return rowCount;
+    }
 
-        // 아래 테이블의 결과값의 줄 수를 가져와서 분석 페이지로 이동하는 함수
-        function goToAnalysisPage2() {
-            var rowCount = countRows2();
-            window.location.href = "periodhistory.do?rowCount=" + rowCount;
-        }
+    // 아래 테이블의 결과값의 줄 수를 계산하는 JavaScript 함수
+    function countRows2() {
+        var rowCount = document.querySelectorAll('.table-container2 tbody tr').length;
+        return rowCount;
+    }
 
-        // 결과값의 줄 수를 계산하는 JavaScript 함수
-        function countRows1() {
-            var rowCount = $('.table-container1 tbody tr').length;
-            return rowCount;
-        }
+    // 분석 페이지로 이동하는 함수
+    function goToAnalysisPage1() {
+        var rowCount = countRows1();
+        window.location.href = "history.do?rowCount=" + rowCount;
+    }
 
-        // 아래 테이블의 결과값의 줄 수를 계산하는 JavaScript 함수
-        function countRows2() {
-            var rowCount = $('.table-container2 tbody tr').length;
-            return rowCount;
-        }
+    // 아래 테이블의 결과값의 줄 수를 가져와서 분석 페이지로 이동하는 함수
+    function goToAnalysisPage2() {
+        var rowCount = countRows2();
+        window.location.href = "history.do?rowCount=" + rowCount;
+    }
 
 </script>
 <footer>

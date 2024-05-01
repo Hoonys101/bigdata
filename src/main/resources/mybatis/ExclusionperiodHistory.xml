@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="team.backend.mapper.ExclusionperiodHistoryMapper">
+
+    <insert id="insertToExclusionperiodHistory" parameterType="Map">
+        insert into ExclusionperiodHistory(exclusionperiodHistory_seq,stock_code1, stock_code2,stock_code3,name1,name2,name3, start_date, end_date, id,report)
+        values(exclusionperiodHistory_seq.nextval,#{stock_code1},#{stock_code2},#{stock_code3},#{name1},#{name2},#{name3},#{start_date},#{end_date},#{id},#{report})
+    </insert>
+
+    <select id="getHistoryByPeriod" parameterType="String" resultType="team.backend.domain.ExclusionperiodHistory">
+        SELECT *
+        FROM ExclusionperiodHistory
+        WHERE id = #{id}  AND stock_code1 IS NOT NULL
+        AND stock_code2 IS NOT NULL
+        AND stock_code3 IS NOT NULL
+    </select>
+
+    <delete id="deleteHistoryBySeq" parameterType="int">
+        DELETE FROM ExclusionperiodHistory WHERE exclusionperiodHistory_seq = #{exclusionperiodHistory_seq}
+    </delete>
+
+    <select id="getResult" parameterType="String" resultType="team.backend.domain.ExclusionperiodHistory">
+        SELECT *
+        FROM ExclusionperiodHistory
+        WHERE id = #{id}
+    </select>
+    <select id="getCompany1" parameterType="String" resultType="String">
+        SELECT ad.name
+        FROM (
+        SELECT ad.name, ROWNUM AS rn
+        FROM ExclusionperiodHistory su
+        JOIN AvailableData ad ON su.stock_code1 = ad.stock_code
+        WHERE su.stock_code1 = #{stock_code1}
+        ) ad
+        WHERE rn = 1
+
+    </select>
+    <select id="getCompany2" parameterType="String" resultType="String">
+        SELECT ad.name
+        FROM (
+        SELECT ad.name, ROWNUM AS rn
+        FROM ExclusionperiodHistory su
+        JOIN AvailableData ad ON su.stock_code2 = ad.stock_code
+        WHERE su.stock_code2 = #{stock_code2}
+        ) ad
+        WHERE rn = 1
+    </select>
+    <select id="getCompany3" parameterType="String" resultType="String">
+        SELECT ad.name
+        FROM (
+        SELECT ad.name, ROWNUM AS rn
+        FROM ExclusionperiodHistory su
+        JOIN AvailableData ad ON su.stock_code3 = ad.stock_code
+        WHERE su.stock_code3 = #{stock_code}
+        ) ad
+        WHERE rn = 1
+    </select>
+</mapper>
+

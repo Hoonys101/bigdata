@@ -12,6 +12,21 @@ body {
       <%--background-image: url("/img/data-analsis-tool-img-3-1030x644.png")--%>
        background-color: white;
     }
+    footer {
+          background-color: #555;
+          color: #fff;
+          padding: 15px;
+          position: fixed;
+          bottom: 0;
+          width: 100%;
+          text-align: center;
+          font-family: Arial, sans-serif;
+          font-size: 18px;
+          font-weight: bold;
+          text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+         background-color: rgba(0, 0, 0, 0.5); /* 투명 배경 추가 */
+            padding: 5px 10px; /* 배경에 여백 추가 */
+      }
 .inline-img {
         display: inline-block;
         width: 20%; /* 한 줄에 5개의 이미지를 표시하기 위해 100%를 5등분하여 각 이미지의 너비를 설정 */
@@ -49,7 +64,8 @@ body {
 <div class="header">
         <button class="home-button" onclick="location.href='home.do'">Home</button>
 </div>
-<h3 style="text-align: center;">회사 1: ${company1}  회사 2: ${company2}</h3>
+<h3 style="text-align: center;">회사 1: ${company1}</h3>
+<h3 style="text-align: center;">회사 2: ${company2}</h3>
  <div style="text-align: left;">
      <span style="color: blue;">ㅡ : </span>
      <span>${company1}</span>
@@ -121,7 +137,8 @@ var dataArray =[
 
   <!-- 그래프가 표시될 div 요소 -->
   <div id="chart_div" style="width: 120%; height: 400px; position: relative; left: -8%"></div>
-<h3 style="text-align: center;">회사 1: ${company2}  회사 2: ${company1}</h3>
+<h3 style="text-align: center;">회사 1: ${company2}</h3>
+<h3 style="text-align: center;">회사 2: ${company1}</h3>
  <div style="text-align: left;">
      <span style="color: blue;">ㅡ : </span>
      <span>${company2}</span>
@@ -190,6 +207,11 @@ function drawSecondChart() {
     drawSecondChartWithResize();
 }
 </script>
+<footer>
+    <p>> &copy; 2024 빅 데이터 분석 플랫폼 - 데이터로 더 나은 미래를 만듭니다.
+
+    </p>
+    </footer>
 </body>
 
 </html>
