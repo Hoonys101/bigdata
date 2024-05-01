@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 @Data
 @Repository
 public class ExcludedquarterHistory { //제외분기
-        private String excludedquarterHistory_seq;
+        private int excludedquarterHistory_seq;
         private String stock_code1;
         private String stock_code2;
         private String stock_code3;

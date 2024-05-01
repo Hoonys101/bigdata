@@ -5,16 +5,17 @@
 <mapper namespace="team.backend.mapper.BranchHistoryMapper">
 
     <insert id="insertToBranchHistory" parameterType="Map">
-        insert into BranchHistory(branchHistory_seq ,stock_code1, stock_code2,name1,name2, start_date, end_date, id,report)
-        values(branchHistory_seq.nextval,#{stock_code1},#{stock_code2},#{name1},#{name2},#{start_date},#{end_date},#{id},#{report})
+        insert into BranchHistory(branchHistory_seq ,stock_code1, stock_code2,name1,name2, start_date, end_date, id,report,resultCount)
+        values(branchHistory_seq.nextval,#{stock_code1},#{stock_code2},#{name1},#{name2},#{start_date},#{end_date},#{id},#{report},#{resultCount})
     </insert>
 
     <select id="getHistorybranch" parameterType="String" resultType="team.backend.domain.BranchHistory">
-        SELECT DISTINCT branchHistory_seq, id, name1,name2,stock_code1, stock_code2
+        SELECT DISTINCT name1,name2,stock_code1, stock_code2, resultcount
         FROM BranchHistory
-        WHERE id = #{id} AND stock_code1 IS NOT NULL
-        AND stock_code2 IS NOT NULL
+        WHERE id = '1' AND stock_code1 IS NOT NULL
+        AND stock_code2 IS NOT NULL;
     </select>
+
     <select id="getHistory1" parameterType="String" resultType="team.backend.domain.BranchHistory">
         SELECT *
         FROM BranchHistory

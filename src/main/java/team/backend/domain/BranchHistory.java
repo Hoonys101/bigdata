@@ -22,6 +22,7 @@ public class BranchHistory {
     private String end_date;
     private String id;
     private String report;
+    private int resultcount;
 
 }
 //2013-12-26

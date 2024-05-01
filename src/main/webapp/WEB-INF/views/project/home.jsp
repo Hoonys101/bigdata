@@ -240,7 +240,7 @@
                     <div class="analyze-buttons">
                     <a href="analysis_page3.do" class="analyze-button">제외기간분석</a>|
                         <a href="analysis_page4.do" class="analyze-button">제외분기분석</a>|
-                        <a href="branchhistory.do" class="analyze-button">제외 기간,분기분석히스토리</a>
+                        <a href="periodhistory.do" class="analyze-button">제외 기간,분기분석히스토리</a>
                     </div>
                     <%--<div class="analyze-buttons">
 

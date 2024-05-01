@@ -11,11 +11,6 @@ import java.util.Map;
 public interface addDataService {
 
     List<ServiceUsage> getHistory(String id);
-
-    List<ServiceUsage> getHistory1(String id);
-
-    List<ServiceUsage> getHistoryByReport(String id);
-    List<ServiceUsage> getHistoryByReport1(String id);
     List<String> getArchivedDataStockCode(String stockCode);
     void insertToAddition(String id, String stockCode);
 
@@ -26,8 +21,8 @@ public interface addDataService {
     void insertToExclusionperiodHistory(ExclusionperiodHistory exclusionperiodHistory);
     void insertExcludedquarterHistory(ExcludedquarterHistory excludedquarterHistory);
     boolean deleteHistoryBySeq(int serviceusage_seq);
-
-    public List<ServiceUsage> getResult(String id);
+    List<ExcludedquarterHistory> getHistoryByQuarter(String id);
+    List<ExclusionperiodHistory> getHistoryByPeriod(String id);
 
     String getCompany1(String stock_code1);
     String getCompany2(String stock_code2);

@@ -162,16 +162,17 @@
                   <input type="hidden" name="start_date" value="${serviceUsage3.start_date}">
                   <input type="hidden" name="end_date" value="${serviceUsage3.end_date}">
                   <input type="hidden" name="report" value="${serviceUsage3.report}">
+                  <input type="hidden" name="resultcount" value="${serviceUsage3.resultcount}">
                   <td>${serviceUsage3.id}</td>
                   <td>${serviceUsage3.name1}</td>
                   <td>${serviceUsage3.name2}</td>
-                  <td>연동된 분석 수: <span id="rowCountValue${loop.index}"></span></td>
+                  <td>${serviceUsage3.resultcount}</td>
                   <td>
                       <input type="submit" value="분석 페이지로">
                   </td>
                   </form>
               <td>
-                  <a href='historyDel.do?serviceusage_seq=${serviceUsage.serviceusage_seq}'>삭제</a>
+                  <a href='historyDel.do?branchHistory_seq=${serviceUsage.branchHistory_seq}'>삭제</a>
               </td>
           </tr>
 

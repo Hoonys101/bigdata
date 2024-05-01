@@ -56,7 +56,6 @@ CREATE TABLE addition (
    stock_code VARCHAR2(255),
    FOREIGN KEY (ID) REFERENCES ID(ID),
    FOREIGN KEY (stock_code) REFERENCES AvailableData(stock_code)
- 
 );
 CREATE SEQUENCE serviceusage_seq START WITH 1 INCREMENT BY 1;
 CREATE TABLE ServiceUsage (
@@ -84,6 +83,7 @@ CREATE TABLE BranchHistory(
    end_date VARCHAR2(30),
    ID VARCHAR2(30),
    report VARCHAR2(255),
+   resultCount NUMBER,
    FOREIGN KEY (ID) REFERENCES ID(ID),  -- ID를 참조하는 외래 키 제약 조건
    FOREIGN KEY (stock_code1) REFERENCES AvailableData(stock_code),
    FOREIGN KEY (stock_code2) REFERENCES AvailableData(stock_code)
@@ -91,7 +91,7 @@ CREATE TABLE BranchHistory(
 
 CREATE SEQUENCE ExclusionperiodHistory_seq START WITH 1 INCREMENT BY 1;
 CREATE TABLE ExclusionperiodHistory(
-   ExclusionperiodHistory_seq NUMBER PRIMARY KEY,
+   exclusionperiodHistory_seq NUMBER PRIMARY KEY,
    stock_code1 VARCHAR2(255),
    stock_code2 VARCHAR2(255),
    stock_code3 VARCHAR2(255),
@@ -109,7 +109,7 @@ CREATE TABLE ExclusionperiodHistory(
 );
 CREATE SEQUENCE ExcludedquarterHistory_seq START WITH 1 INCREMENT BY 1;
 CREATE TABLE ExcludedquarterHistory (
-   ExcludedquarterHistory_seq NUMBER PRIMARY KEY,
+   excludedquarterHistory_seq NUMBER PRIMARY KEY,
    stock_code1 VARCHAR2(255),
    stock_code2 VARCHAR2(255),
    stock_code3 VARCHAR2(255),

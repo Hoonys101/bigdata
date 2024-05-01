@@ -68,6 +68,7 @@ public class addDataServiceImpl implements addDataService {
         list.put("report",serviceUsage.getReport());
 
 
+
         serviceUsageMapper.insertToServiceUsage(list);
 
     }
@@ -83,6 +84,7 @@ public class addDataServiceImpl implements addDataService {
         list.put("end_date",branchHistory.getEnd_date());
         list.put("id",branchHistory.getId());
         list.put("report",branchHistory.getReport());
+        list.put("resultCount", String.valueOf(branchHistory.getResultcount()));
 
 
         branchHistoryMapper.insertToBranchHistory(list);
@@ -90,8 +92,8 @@ public class addDataServiceImpl implements addDataService {
     }
     @Override
     public void insertToExclusionperiodHistory(ExclusionperiodHistory exclusionperiodHistory){
-        Map<String, String> list =new HashMap<>();
-        list.put("exclusionperiodHistory_seq", String.valueOf(exclusionperiodHistory.getExclusionperiodHistory_seq()));
+        Map<String, Object> list =new HashMap<>();
+        list.put("exclusionperiodHistory_seq", exclusionperiodHistory.getExclusionperiodHistory_seq());
         list.put("stock_code1",exclusionperiodHistory.getStock_code1());
         list.put("stock_code2",exclusionperiodHistory.getStock_code2());
         list.put("stock_code3",exclusionperiodHistory.getStock_code3());
@@ -102,6 +104,7 @@ public class addDataServiceImpl implements addDataService {
         list.put("end_date",exclusionperiodHistory.getEnd_date());
         list.put("id",exclusionperiodHistory.getId());
         list.put("report",exclusionperiodHistory.getReport());
+        System.out.println("insertToExclusionperiodHistory : "+list);
 
 
         exclusionperiodHistoryMapper.insertToExclusionperiodHistory(list);
@@ -109,8 +112,8 @@ public class addDataServiceImpl implements addDataService {
     }
     @Override
     public void insertExcludedquarterHistory(ExcludedquarterHistory excludedquarterHistory){
-        Map<String, String> list =new HashMap<>();
-        list.put("excludedquarterHistory_seq", String.valueOf(excludedquarterHistory.getExcludedquarterHistory_seq()));
+        Map<String, Object> list =new HashMap<>();
+        list.put("excludedquarterHistory_seq", excludedquarterHistory.getExcludedquarterHistory_seq());
         list.put("stock_code1",excludedquarterHistory.getStock_code1());
         list.put("stock_code2",excludedquarterHistory.getStock_code2());
         list.put("stock_code3",excludedquarterHistory.getStock_code3());
@@ -122,7 +125,7 @@ public class addDataServiceImpl implements addDataService {
         list.put("id",excludedquarterHistory.getId());
         list.put("report",excludedquarterHistory.getReport());
 
-
+        System.out.println("insertExcludedquarterHistory : "+list);
         excludedquarterHistoryMapper.insertExcludedquarterHistory(list);
 
     }
@@ -138,28 +141,18 @@ public class addDataServiceImpl implements addDataService {
         System.out.println("historyList"+historyList);
         return historyList;
     }
-    @Override
-    public List<ServiceUsage> getHistory1(String id){
-        List<ServiceUsage> historyList = serviceUsageMapper.getHistory1(id);
-        System.out.println("historyList"+historyList);
-        return historyList;
-    }
-    @Override
-    public List<ServiceUsage> getHistoryByReport(String id){
-        List<ServiceUsage> historyListByReport = serviceUsageMapper.getHistoryByReport(id);
-        return historyListByReport;
-    }
 
     @Override
-    public List<ServiceUsage> getHistoryByReport1(String id){
-        List<ServiceUsage> historyListByReport = serviceUsageMapper.getHistoryByReport1(id);
-        return historyListByReport;
+    public List<ExcludedquarterHistory> getHistoryByQuarter(String id){
+        List<ExcludedquarterHistory> historyListByQuarter = excludedquarterHistoryMapper.getHistoryByQuarter(id);
+        return historyListByQuarter;
     }
     @Override
-    public List<ServiceUsage> getResult(String id){
-        List<ServiceUsage> resultList = serviceUsageMapper.getResult(id);
-        return resultList;
+    public List<ExclusionperiodHistory> getHistoryByPeriod(String id){
+        List<ExclusionperiodHistory> historyListByPeriod = exclusionperiodHistoryMapper.getHistoryByPeriod(id);
+        return historyListByPeriod;
     }
+
     @Override
     public boolean deleteHistoryBySeq(int serviceusage_seq) {
         serviceUsageMapper.deleteHistoryBySeq(serviceusage_seq);

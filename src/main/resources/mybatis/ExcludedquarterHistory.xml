@@ -10,7 +10,7 @@
     </insert>
 
     <select id="getHistoryByQuarter" parameterType="String" resultType="team.backend.domain.ExcludedquarterHistory">
-        SELECT *
+        SELECT DISTINCT  id, name1,name2,name3,stock_code1, stock_code2, stock_code3
         FROM ExcludedquarterHistory
         WHERE id = #{id}  AND stock_code1 IS NOT NULL
         AND stock_code2 IS NOT NULL

@@ -344,10 +344,12 @@ public class pageController {
 
         List<BranchHistory> branchHistoryList = new ArrayList<>();
         List<BranchHistory> branchHistoryList1 = new ArrayList<>();
-
+        int resultCount = 0;
+        int resultCount1 = 0;
         for (String item : result1) {
             String[] resultArray = item.split(",\\s*");
             if (resultArray.length >= 3) {
+
                 BranchHistory branchHistory = new BranchHistory(); // 각 요소에 대해 새로운 ServiceUsage 객체를 생성
                 branchHistory.setStock_code1(stock_code1);
                 branchHistory.setStock_code2(stock_code2);
@@ -357,6 +359,8 @@ public class pageController {
                 branchHistory.setStart_date(resultArray[0]);
                 branchHistory.setEnd_date(resultArray[1]);
                 branchHistory.setReport(resultArray[2]);
+                branchHistory.setReport(String.valueOf(resultCount));
+                resultCount++;
                 try {
                     int reportValue = Integer.parseInt(branchHistory.getReport());
                     String result = generateResult(reportValue);
@@ -373,6 +377,8 @@ public class pageController {
                 branchHistoryList.add(branchHistory);
             }
         }
+            System.out.println("resultCount"+resultCount);
+
 
         for (String item : result2) {
             String[] resultArray = item.split(",\\s*");
@@ -386,6 +392,8 @@ public class pageController {
                 branchHistory.setStart_date(resultArray[0]);
                 branchHistory.setEnd_date(resultArray[1]);
                 branchHistory.setReport(resultArray[2]);
+//                branchHistory.setReport(String.valueOf(resultCount1));
+
                 try {
                     int reportValue = Integer.parseInt(branchHistory.getReport());
                     String result = generateResult(reportValue);
@@ -412,7 +420,6 @@ public class pageController {
         System.out.println("serviceUsages2: " + branchHistoryList1);
         System.out.println("result1: " + result1);
         System.out.println("result2: " + result2);
-
         model.addAttribute("company1", company1);
         model.addAttribute("company2", company2);
         model.addAttribute("serviceUsages0", branchHistoryList);
@@ -596,6 +603,7 @@ public class pageController {
             String[] resultArray = item.split(",\\s*");
             if (resultArray.length >= 3) {
                 ExcludedquarterHistory serviceUsage1 = new ExcludedquarterHistory(); // 각 요소에 대해 새로운 ServiceUsage 객체를 생성
+
                 serviceUsage1.setStock_code1(stock_code2);
                 serviceUsage1.setStock_code2(stock_code1);
                 serviceUsage1.setStock_code3(stock_code3);
@@ -649,12 +657,20 @@ public class pageController {
         //
         String id = (String) session.getAttribute("id");
 
-        List<ServiceUsage> serviceUsages = addData.getHistory(id); //기간 동시에x
-        List<ServiceUsage> serviceUsages1 = addData.getHistoryByReport(id);// 기간 동시
+
+        List<ExclusionperiodHistory> serviceUsages = addData.getHistoryByPeriod(id); //기간
+        List<ExcludedquarterHistory> serviceUsages1 = addData.getHistoryByQuarter(id); //분기
 
 
         System.out.println("serviceUsages"+serviceUsages);
         System.out.println("serviceUsages1"+serviceUsages1);
+//        for (ExcludedquarterHistory history : serviceUsages) {
+//            System.out.println("ExcludedquarterHistory_seq type: " + history.getExcludedquarterHistory_seq());
+//        }
+//
+//        for (ExclusionperiodHistory history : serviceUsages1) {
+//            System.out.println("ExclusionperiodHistory_seq type: " + history.getExclusionperiodHistory_seq());
+//        }
         model.addAttribute("serviceUsages", serviceUsages);
         model.addAttribute("serviceUsages1", serviceUsages1);
 

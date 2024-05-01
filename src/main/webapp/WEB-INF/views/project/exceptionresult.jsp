@@ -79,11 +79,16 @@ footer {
         }
 
         /* Table styling */
-        .table-container {
+        .table-container1 {
         width: 100%;
             max-height: 70vh; /* Set maximum height for the table container */
             overflow-y: auto; /* Enable vertical scrolling if table exceeds maximum height */
         }
+        .table-container2 {
+                width: 100%;
+                    max-height: 70vh; /* Set maximum height for the table container */
+                    overflow-y: auto; /* Enable vertical scrolling if table exceeds maximum height */
+                }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -124,7 +129,7 @@ footer {
         </c:forEach>
     </div>
 </div>
-<div class="table-container">
+<div class="table-container1">
     <table>
         <thead class="fixed-header">
         <tr>
@@ -135,13 +140,13 @@ footer {
             <th>Start Date</th>
             <th>End Date</th>
             <th>Report</th>
-            <th>Action</th>
-            <th>삭제</th>
+            <th><button onclick="goToAnalysisPage1()">히스토리로</button></a></th>
+
         </tr>
         </thead>
         <tbody>
             <!-- result1 테이블 표시 -->
-            <c:forEach items="${serviceUsages1}" var="item">
+            <c:forEach items="${serviceUsages0}" var="item">
                 <tr>
                     <td>${item.id}</td>
                     <td>${item.name1}</td>
@@ -166,22 +171,7 @@ footer {
                             <input type="submit" value="분석 페이지로">
                         </form>
                     </td>
-                    <td>
-                        <form action="resultDel.do" method="post">
-                            <input type="hidden" name="excludedquarterHistory_seq" value="${item.excludedquarterHistory_seq}">
-                            <input type="hidden" name="id" value="${item.id}">
-                            <input type="hidden" name="stock_code1" value="${item.stock_code1}">
-                            <input type="hidden" name="stock_code2" value="${item.stock_code2}">
-                            <input type="hidden" name="stock_code3" value="${stock_code3}">
-                            <input type="hidden" name="name1" value="${item.name1}">
-                            <input type="hidden" name="name2" value="${item.name2}">
-                            <input type="hidden" name="name3" value="${item.name3}">
-                            <input type="hidden" name="start_date" value="${item.start_date}">
-                            <input type="hidden" name="end_date" value="${item.end_date}">
-                            <input type="hidden" name="report" value="${item.report}">
-                            <input type="submit" value="삭제">
-                        </form>
-                    </td>
+
                 </tr>
             </c:forEach>
         </tbody>
@@ -207,7 +197,7 @@ footer {
         </c:forEach>
     </div>
 </div>
-<div class="table-container">
+<div class="table-container2">
     <table>
         <thead class="fixed-header">
         <tr>
@@ -218,8 +208,7 @@ footer {
             <th>Start Date</th>
             <th>End Date</th>
             <th>Report</th>
-            <th>Action</th>
-            <th>삭제</th>
+            <th><button onclick="goToAnalysisPage2()">히스토리로</button></a></th>
         </tr>
         </thead>
         <tbody>
@@ -249,22 +238,7 @@ footer {
                             <input type="submit" value="분석 페이지로">
                         </form>
                     </td>
-                    <td>
-                        <form action="resultDel.do" method="post">
-                            <input type="hidden" name="excludedquarterHistory_seq" value="${item.excludedquarterHistory_seq}">
-                            <input type="hidden" name="id" value="${item.id}">
-                            <input type="hidden" name="stock_code1" value="${item.stock_code1}">
-                            <input type="hidden" name="stock_code2" value="${item.stock_code2}">
-                            <input type="hidden" name="stock_code3" value="${stock_code3}">
-                            <input type="hidden" name="name1" value="${item.name1}">
-                            <input type="hidden" name="name2" value="${item.name2}">
-                            <input type="hidden" name="name3" value="${item.name3}">
-                            <input type="hidden" name="start_date" value="${item.start_date}">
-                            <input type="hidden" name="end_date" value="${item.end_date}">
-                            <input type="hidden" name="report" value="${item.report}">
-                            <input type="submit" value="삭제">
-                        </form>
-                    </td>
+
                 </tr>
             </c:forEach>
         </tbody>
@@ -344,7 +318,29 @@ document.getElementById('ai-analysis-button-2').addEventListener('click', functi
          }
      });
  });
+ // 분석 페이지로 이동하는 함수
+        function goToAnalysisPage1() {
+            var rowCount = countRows1();
+            window.location.href = "periodhistory.do?rowCount=" + rowCount;
+        }
 
+        // 아래 테이블의 결과값의 줄 수를 가져와서 분석 페이지로 이동하는 함수
+        function goToAnalysisPage2() {
+            var rowCount = countRows2();
+            window.location.href = "periodhistory.do?rowCount=" + rowCount;
+        }
+
+        // 결과값의 줄 수를 계산하는 JavaScript 함수
+        function countRows1() {
+            var rowCount = $('.table-container1 tbody tr').length;
+            return rowCount;
+        }
+
+        // 아래 테이블의 결과값의 줄 수를 계산하는 JavaScript 함수
+        function countRows2() {
+            var rowCount = $('.table-container2 tbody tr').length;
+            return rowCount;
+        }
 
 </script>
 <footer>

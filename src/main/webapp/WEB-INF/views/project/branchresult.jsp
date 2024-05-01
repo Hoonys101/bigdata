@@ -139,8 +139,7 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
             <th>Start Date</th>
             <th>End Date</th>
             <th>Report</th>
-            <th><button onclick="goToAnalysisPage1()">결과 열람 페이지로 이동</button></a></th>
-            <th>삭제</th>
+            <th><button onclick="goToAnalysisPage1()">히스토리로</button></a></th>
         </tr>
         </thead>
         <tbody>
@@ -167,20 +166,7 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
                             <input type="submit" value="분석 페이지로">
                         </form>
                     </td>
-                    <td>
-                        <form action="resultDel.do" method="post">
-                            <input type="hidden" name="branchHistory_seq" value="${item.branchHistory_seq}">
-                            <input type="hidden" name="id" value="${item.id}">
-                            <input type="hidden" name="stock_code1" value="${item.stock_code1}">
-                            <input type="hidden" name="stock_code2" value="${item.stock_code2}">
-                            <input type="hidden" name="name1" value="${item.name1}">
-                            <input type="hidden" name="name2" value="${item.name2}">
-                            <input type="hidden" name="start_date" value="${item.start_date}">
-                            <input type="hidden" name="end_date" value="${item.end_date}">
-                            <input type="hidden" name="report" value="${item.report}">
-                            <input type="submit" value="삭제">
-                        </form>
-                    </td>
+
                 </tr>
             </c:forEach>
         </tbody>
@@ -215,8 +201,8 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
             <th>Start Date</th>
             <th>End Date</th>
             <th>Report</th>
-            <th><button onclick="goToAnalysisPage2()">결과 열람 페이지로 이동</button></a></th>
-            <th>삭제</th>
+            <th><button onclick="goToAnalysisPage2()">히스토리로</button></a></th>
+
         </tr>
         </thead>
         <tbody>
@@ -244,20 +230,7 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
                             <input type="submit" value="분석 페이지로">
                         </form>
                     </td>
-                    <td>
-                        <form action="resultDel.do" method="post">
-                            <input type="hidden" name="branchHistory_seq" value="${item.branchHistory_seq}">
-                            <input type="hidden" name="id" value="${item.id}">
-                            <input type="hidden" name="stock_code1" value="${item.stock_code1}">
-                            <input type="hidden" name="stock_code2" value="${item.stock_code2}">
-                            <input type="hidden" name="name1" value="${item.name1}">
-                            <input type="hidden" name="name2" value="${item.name2}">
-                            <input type="hidden" name="start_date" value="${item.start_date}">
-                            <input type="hidden" name="end_date" value="${item.end_date}">
-                            <input type="hidden" name="report" value="${item.report}">
-                            <input type="submit" value="삭제">
-                        </form>
-                    </td>
+
                 </tr>
             </c:forEach>
         </tbody>

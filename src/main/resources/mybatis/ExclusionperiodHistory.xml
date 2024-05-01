@@ -16,6 +16,7 @@
         AND stock_code2 IS NOT NULL
         AND stock_code3 IS NOT NULL
     </select>
+
     <delete id="deleteHistoryBySeq" parameterType="int">
         DELETE FROM ExclusionperiodHistory WHERE exclusionperiodHistory_seq = #{exclusionperiodHistory_seq}
     </delete>
