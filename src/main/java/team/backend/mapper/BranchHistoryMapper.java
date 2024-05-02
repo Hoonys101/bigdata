@@ -13,4 +13,7 @@ public interface BranchHistoryMapper {
     void insertToBranchHistory(Map list);
 
     List<BranchHistory> getHistorybranch(String id);
+
+
+    void deleteBranchHistoryBySeq(int branchHistory_seq);
 }

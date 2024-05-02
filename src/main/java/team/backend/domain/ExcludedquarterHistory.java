@@ -20,6 +20,7 @@ public class ExcludedquarterHistory { //제외분기
         private String end_date;
         private String id;
         private String report;
+        private int resultcount;
 
     }
 

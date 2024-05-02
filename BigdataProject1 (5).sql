@@ -79,6 +79,8 @@ CREATE TABLE BranchHistory(
    stock_code2 VARCHAR2(255),
    name1 VARCHAR2(255),
    name2 VARCHAR2(255),
+   start_date VARCHAR2(30),
+   end_date VARCHAR2(30),
    ID VARCHAR2(30),
    report VARCHAR2(255),
    resultcount NUMBER,
@@ -118,6 +120,7 @@ CREATE TABLE ExcludedquarterHistory (
    end_date VARCHAR2(30),
    ID VARCHAR2(30),
    report VARCHAR2(255),
+   resultcount NUMBER,
    FOREIGN KEY (ID) REFERENCES ID(ID),  -- ID를 참조하는 외래 키 제약 조건
    FOREIGN KEY (stock_code1) REFERENCES AvailableData(stock_code),
    FOREIGN KEY (stock_code2) REFERENCES AvailableData(stock_code),

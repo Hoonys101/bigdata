@@ -10,16 +10,22 @@
     </insert>
 
     <select id="getHistorybranch" parameterType="String" resultType="team.backend.domain.BranchHistory">
-        SELECT name1, name2
+        SELECT *
         FROM (
-        SELECT name1, name2, COUNT(*) AS resultCount
+        SELECT id, name1, name2, stock_code1, stock_code2, resultCount,
+        ROW_NUMBER() OVER (ORDER BY resultCount DESC) AS rn
+        FROM (
+        SELECT id, name1, name2, stock_code1, stock_code2, COUNT(*) AS resultCount
         FROM BranchHistory
         WHERE id = #{id}
-        GROUP BY name1, name2
-        ORDER BY resultCount DESC
+        GROUP BY id, name1, name2, stock_code1, stock_code2
+        ) t
         )
-        WHERE ROWNUM = 1;
+        WHERE rn &lt;= 100
     </select>
+    <delete id="deleteBranchHistoryBySeq" parameterType="int">
+        DELETE FROM BranchHistory WHERE branchHistory_seq = #{branchHistory_seq}
+    </delete>
 
     <delete id="deleteHistoryBySeq" parameterType="int">
         DELETE FROM BranchHistory WHERE branchHistory_seq  = #{branchHistory_seq }
