@@ -125,7 +125,12 @@ public class JavaPython implements JavaPythonInter {
         String threadName=String.valueOf(assignIndex());
         pln("threadName: "+threadName);
         //명령어 및 파라미터 개수 체크
-        if (args[0].equals("diff_cal_data")&&(args.length==7)||args[0].equals("add_data")&&args.length==3||args[0].equals("cal_data")&&args.length==5||args[0].equals("find_period")&&args.length==3||args[0].equals("tree_data")&&args.length==3||args[0].equals("diff_find_period")&&(args.length==4)){
+        if ((args[0].equals("diff_cal_data")&&(args.length==7))||
+                (args[0].equals("add_data")&&args.length==3)||
+                (args[0].equals("cal_data")&&args.length==5)||
+                (args[0].equals("find_period")&&args.length==3)||
+                (args[0].equals("tree_data")&&((args.length==3)||(args.length==4))) ||
+                (args[0].equals("diff_find_period")&&(args.length==4))){
             String resultString=threadName+"\n"+args[0];
             pln("strParam 첫번째 인자\n"+args[0]);
             for(int i=1;i<args.length;i++){
