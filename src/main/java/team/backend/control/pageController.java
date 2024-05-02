@@ -141,7 +141,6 @@ public class pageController {
         return "redirect:logout.do"; // 로그아웃 페이지로 리다이렉트 또는 다른 페이지로 이동할 수 있습니다.
     }
 
-
     @GetMapping("add2.do") //기업추가
     public String add(Model model, HttpSession session) {
 
@@ -151,8 +150,6 @@ public class pageController {
         System.out.println("Nation: " + nation);
         return "/project/add2";
     }
-
-
 
     @PostMapping("add2.do")
     public String excuteAdd(@RequestParam("db_name") String db_name, @RequestParam("stock_code") String stock_code, HttpSession session) {
@@ -831,6 +828,7 @@ public class pageController {
     @ResponseBody
     public ResponseEntity<?> performAIAnalysis(@RequestParam("stock_code1") String stock_code1,
                                                @RequestParam("stock_code2") String stock_code2,
+                                               @RequestParam("stock_code3") String stock_code3,
                                                 Model model,
                                                HttpSession session
                                                ) {
@@ -841,12 +839,20 @@ public class pageController {
         System.out.println("performAIAnalysis start");
         System.out.println("stock_code1"+stock_code1);
         System.out.println("stock_code2"+stock_code2);
+        if (stock_code3!=null) {
+            System.out.println("stock_code3" + stock_code3);
+        }
 
         // AI 분석을 수행하고 결과를 얻는 로직을 작성합니다.
         // 예를 들어, AI 분석 서비스를 호출하고 결과를 받아온다고 가정합니다.
 
         // 아래는 가상의 AI 분석 결과를 생성하는 코드입니다. 실제로는 AI 분석을 수행하는 코드로 대체되어야 합니다.
-        List<String> aiResult = javaPy.strParameter("tree_data",stock_code1,stock_code2);
+        List<String> aiResult=null;
+        if(stock_code3==null){
+            aiResult = javaPy.strParameter("tree_data",stock_code1,stock_code2);
+        }else{
+            aiResult = javaPy.strParameter("tree_data",stock_code1,stock_code2,stock_code3);
+        }
         model.addAttribute("aiResult",aiResult);
 //        session.setAttribute("aiResult", aiResult);
 //        System.out.println("ai -------------- " +aiResult);
@@ -854,7 +860,7 @@ public class pageController {
 
 
 
-        List<String> ai_2 = javaPy.strParameter("tree_data",stock_code2,stock_code1);
+
         // 클라이언트에게 JSON 형태로 결과를 반환합니다.
         return ResponseEntity.ok().body(aiResult);
     }
@@ -862,6 +868,7 @@ public class pageController {
     @ResponseBody
     public ResponseEntity<?> performAIAnalysiss(@RequestParam("stock_code1") String stock_code1,
                                                @RequestParam("stock_code2") String stock_code2,
+                                                @RequestParam("stock_code3") String stock_code3,
                                                Model model,
                                                HttpSession session
     ) {
@@ -877,7 +884,12 @@ public class pageController {
         // 예를 들어, AI 분석 서비스를 호출하고 결과를 받아온다고 가정합니다.
 
         // 아래는 가상의 AI 분석 결과를 생성하는 코드입니다. 실제로는 AI 분석을 수행하는 코드로 대체되어야 합니다.
-        List<String> aiResult2 = javaPy.strParameter("tree_data", stock_code1, stock_code2);
+        List<String> aiResult2 = null;
+        if (stock_code3==null){
+            aiResult2 = javaPy.strParameter("tree_data", stock_code2, stock_code1);
+        }else{
+            aiResult2 = javaPy.strParameter("tree_data", stock_code2, stock_code1,stock_code3);
+        }
         model.addAttribute("aiResult2", aiResult2);
 //        session.setAttribute("aiResult", aiResult2);
         System.out.println("ai2-------------- " + aiResult2);
@@ -949,6 +961,3 @@ public class pageController {
         return responseData;
     }
 }
-
-
-

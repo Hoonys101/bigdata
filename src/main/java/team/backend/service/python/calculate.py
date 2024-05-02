@@ -187,7 +187,7 @@ def make_df_with_dates(first_com:str='1008',startdate:str='20211101',lastdate:st
 # plt.show()
 
 # 3-1개의 파라미터를 받아서 2개의 str 반환
-def ai_anal(list,decimal:str=None,period:int=12,delay_days:int=2,critical_profit=1)->list[str]:
+def ai_anal(list,decimal:str=None,period:int=4,delay_days:int=5,critical_profit=1)->list[str]:
     #파라미터 설정
     first_com=list[1]
     second_com=list[2]
@@ -534,7 +534,7 @@ def diff_find_period_work(stock_code1:str='1008',diff_code:str='1001',stock_code
     df1,diff=common_date(df1,diff)
     # print(len(df1))
     
-    # 분기별로 normalize해서 차를 계산해야 맞을 듯.
+    # 분기별로 normalize해서 차를 계산해야 맞을 듯.-->구현
     for i in range(10):
         startdate=int(df1.shape[0]/10*i)
         lastdate=int(df1.shape[0]/10*(i+1))
@@ -559,14 +559,7 @@ def diff_find_period_work(stock_code1:str='1008',diff_code:str='1001',stock_code
     # df1,df2=delay_df(df1,df2)
     return result
 
-# print(diff_find_period_work('1152','1153','1034'))
-# print(total_anal('1152','1153'))
-# df1=make_diff('1008')
-# df2=make_diff('IBM')
-# for i in range(5):
-#     correlation = df1.loc['2012-01-01':'2013-02-02','Diff'].corr(df2.loc['2012-01-01':'2013-02-02','Diff'])
-#     print(correlation)
-#     df1,df2=delay_df(df1,df2)
+
 # lst=['find_period','023440','1153']
 # total_analy(lst)
 
@@ -628,7 +621,6 @@ def normalNlabel(stock_code1:str,stock_code2:str,decimal:str=None,period:int=4,d
 # print(result)
 
 def find_usable(lst:list[str]=[
-'1001',
 '1002',
 '1003',
 '1004',
@@ -727,30 +719,30 @@ def find_usable(lst:list[str]=[
 '5043',
 '5044',
 '5045',
-'5046'
+'5046',
 # '5048',
-# '5049',
-# '5051',
-# '5052',
-# '5054',
-# '5055',
-# '5056',
-# '5057',
-# '5061',
-# '5062',
-# '5063',
-# '5064',
-# '5065',
-# '5300',
-# '5351',
-# '5352',
-# '5353',
-# '5354',
-# '5355',
-# '5356',
-# '5357',
-# '5358',
-# '5600'
+'5049',
+'5051',
+'5052',
+'5054',
+'5055',
+'5056',
+'5057',
+'5061',
+'5062',
+'5063',
+'5064',
+'5065',
+'5300',
+'5351',
+'5352',
+'5353',
+'5354',
+'5355',
+'5356',
+'5357',
+'5358',
+'5600'
 ],decimal:str=None,period:int=4,delay_days:int=5):
     param=[]
     final_result=[]
@@ -758,10 +750,10 @@ def find_usable(lst:list[str]=[
         for stock_code2 in lst:
             if stock_code1==stock_code2:
                 continue
-            # print(stock_code1,'과',stock_code2)
+            print(stock_code1,'과',stock_code2)
             # result=ai_anal(['asdf',stock_code1,stock_code2],period=12,delay_days=1)
             result=ai_anal(['asdf',stock_code1,stock_code2],decimal=decimal,period=period,delay_days=delay_days)
-            # print(result)
+            print(result)
             if result[1][0]=='아':
                 continue
             else:
@@ -851,7 +843,7 @@ def find_usable(lst:list[str]=[
 # # print(diff_find_period(['111','1004','1002','1001']))
 # # print(total_analy(['111','1004','1002']))
 #############test###############
-# fi_result=find_usable(period=12,delay_days=2)
+# fi_result=find_usable(period=4,delay_days=5,decimal='1001')
 # print('최종 결과는 ')
 # for strs in fi_result:
 #     print(strs)
