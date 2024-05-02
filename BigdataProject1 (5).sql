@@ -75,6 +75,8 @@ CREATE TABLE ServiceUsage (
 CREATE SEQUENCE BranchHistory_seq START WITH 1 INCREMENT BY 1;
 CREATE TABLE BranchHistory(
    branchHistory_seq NUMBER PRIMARY KEY,
+   stock_code1 VARCHAR2(255),
+   stock_code2 VARCHAR2(255),
    name1 VARCHAR2(255),
    name2 VARCHAR2(255),
    ID VARCHAR2(30),

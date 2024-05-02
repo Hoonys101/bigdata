@@ -81,13 +81,13 @@ footer {
         /* Table styling */
         .table-container1 {
         width: 100%;
-            max-height: 70vh; /* Set maximum height for the table container */
-            overflow-y: auto; /* Enable vertical scrolling if table exceeds maximum height */
+  //          max-height: 70vh; /* Set maximum height for the table container */
+  //          overflow-y: auto; /* Enable vertical scrolling if table exceeds maximum height */
         }
         .table-container2 {
                 width: 100%;
-                    max-height: 70vh; /* Set maximum height for the table container */
-                    overflow-y: auto; /* Enable vertical scrolling if table exceeds maximum height */
+  //                  max-height: 70vh; /* Set maximum height for the table container */
+  //                  overflow-y: auto; /* Enable vertical scrolling if table exceeds maximum height */
                 }
         table {
             width: 100%;
@@ -253,7 +253,8 @@ document.getElementById('ai-analysis-button').addEventListener('click', function
         method: 'POST',
         data: {
             stock_code1: $("input[name^='stock_code1_']:first").val(),
-            stock_code2: $("input[name^='stock_code2_']:first").val()
+            stock_code2: $("input[name^='stock_code2_']:first").val(),
+            stock_code3: $("input[name^='stock_code3']:first").val(),
 
         },
         success: function(response) {
@@ -290,7 +291,8 @@ document.getElementById('ai-analysis-button-2').addEventListener('click', functi
          method: 'POST',
          data: {
              stock_code1: $("input[name^='stock_code1_']:first").val(),
-             stock_code2: $("input[name^='stock_code2_']:first").val()
+             stock_code2: $("input[name^='stock_code2_']:first").val(),
+             stock_code3: $("input[name^='stock_code3']:first").val()
          },
          success: function(response) {
              // 서버에서 받은 AI 분석 결과를 처리하여 화면에 표시합니다.
