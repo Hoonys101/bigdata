@@ -16,13 +16,11 @@ public interface ServiceUsageMapper {
 
     List<ServiceUsage> getHistory(String id);
 
-    List<ServiceUsage> getHistory1(String id);
-    List<ServiceUsage> getHistoryByReport(String id);
-    List<ServiceUsage> getHistoryByReport1(String id);
+
 
     void deleteHistoryBySeq(int serviceusage_seq);
     void insertToServiceUsage(Map list);
-    void insertToServiceUsage1(Map list);
+
 
     List<ServiceUsage> getResult(String id);
 

@@ -123,7 +123,7 @@
                                 </form>
                             <td>
 
-                                <a href='historyDel.do?exclusionperiodHistory_seq=${serviceUsage.exclusionperiodHistory_seq}'>삭제</a>
+                                <a href='exclusionperiodHistoryDel.do?exclusionperiodHistory_seq=${serviceUsage.exclusionperiodHistory_seq}'>삭제</a>
                             </td>
                         </tr>
 
@@ -139,7 +139,6 @@
                         <th>기업 1</th>
                         <th>기업 2</th>
                         <th>제외기업</th>
-
                         <th>Report</th>
                         <th>Action</th>
                         <th>삭제</th>
@@ -161,12 +160,14 @@
                                 <input type="hidden" name="start_date" value="${serviceUsage1.start_date}">
                                 <input type="hidden" name="end_date" value="${serviceUsage1.end_date}">
                                 <input type="hidden" name="report" value="${serviceUsage1.report}">
+                                <input type="hidden" name="resultcount" value="${serviceUsage1.resultcount}">
                                 <td>${serviceUsage1.id}</td>
                                 <td>${serviceUsage1.name1}</td>
                                 <td>${serviceUsage1.name2}</td>
                                 <td>${serviceUsage1.name3}</td>
+                                <td>연동된 결과값의 수 : ${serviceUsage1.resultcount}</td>
 
-                                <td>연동된 분석 수: <span id="rowCountValue${loop.index}"></span></td>
+
                                 <td>
                                     <input type="submit" value="분석 페이지로">
                                 </td>
@@ -185,51 +186,6 @@
 
                 </p>
                 </footer>
-<script>
-                // 각 행의 rowCountValue를 설정하는 함수
-               function setRowCountValue(rowCountValue, index) {
-                   var element = document.querySelector('#rowCountValue' + index);
-                   if (element) {
-                       element.innerText = rowCountValue;
-                   }
-               }
 
-                window.onload = function() {
-                    // 각 행의 rowCount 값들을 가져와서 설정
-                    var rowCountValues = getAllRowCountValues();
-                    rowCountValues.forEach(function(rowCountValue, index) {
-                        var serviceUsageIndex = "${serviceUsages1[index].excludedquarterHistory_seq}";
-                        setRowCountValue(rowCountValue, serviceUsageIndex);
-                    });
-
-                    // 쿠키에서 rowCount 값을 가져와서 설정
-                    var rowCount = getCookie("rowCount");
-                    if (rowCount != null) {
-                        document.getElementById("rowCountValue").innerText = rowCount;
-                    }
-                };
-
-                // 쿠키에서 값을 가져오는 함수
-                function getCookie(name) {
-                    var nameEQ = name + "=";
-                    var ca = document.cookie.split(';');
-                    for (var i = 0; i < ca.length; i++) {
-                        var c = ca[i];
-                        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-                        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-                    }
-                    return null;
-                }
-
-                // 각 행의 모든 rowCountValue를 가져오는 함수
-                function getAllRowCountValues() {
-                    var rowCountValues = [];
-                    var rowCountElements = document.querySelectorAll('span[id^="rowCountValue"]');
-                    rowCountElements.forEach(function(element) {
-                        rowCountValues.push(element.innerText);
-                    });
-                    return rowCountValues;
-                }
-                </script>
 </body>
 </html>

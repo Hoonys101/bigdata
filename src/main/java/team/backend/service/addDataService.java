@@ -21,6 +21,7 @@ public interface addDataService {
     void insertToExclusionperiodHistory(ExclusionperiodHistory exclusionperiodHistory);
     void insertExcludedquarterHistory(ExcludedquarterHistory excludedquarterHistory);
     boolean deleteHistoryBySeq(int serviceusage_seq);
+    boolean deleteBranchHistoryBySeq(int branchHistory_seq);
     List<ExcludedquarterHistory> getHistoryByQuarter(String id);
     List<ExclusionperiodHistory> getHistoryByPeriod(String id);
 
@@ -28,5 +29,6 @@ public interface addDataService {
     String getCompany2(String stock_code2);
 
 
+    boolean deleteExclusionperiodHistoryBySeq(int exclusionperiodHistory_seq);
 }
 

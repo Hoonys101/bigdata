@@ -85,6 +85,7 @@ public class addDataServiceImpl implements addDataService {
         list.put("id",branchHistory.getId());
         list.put("report",branchHistory.getReport());
         list.put("resultCount", String.valueOf(branchHistory.getResultcount()));
+        System.out.println("insertlist"+list);
 
 
         branchHistoryMapper.insertToBranchHistory(list);
@@ -124,6 +125,7 @@ public class addDataServiceImpl implements addDataService {
         list.put("end_date",excludedquarterHistory.getEnd_date());
         list.put("id",excludedquarterHistory.getId());
         list.put("report",excludedquarterHistory.getReport());
+        list.put("resultcount",excludedquarterHistory.getResultcount());
 
         System.out.println("insertExcludedquarterHistory : "+list);
         excludedquarterHistoryMapper.insertExcludedquarterHistory(list);
@@ -156,8 +158,19 @@ public class addDataServiceImpl implements addDataService {
     @Override
     public boolean deleteHistoryBySeq(int serviceusage_seq) {
         serviceUsageMapper.deleteHistoryBySeq(serviceusage_seq);
-        return false;
+        return true;
     }
+    @Override
+    public  boolean deleteBranchHistoryBySeq(int branchHistory_seq) {
+        branchHistoryMapper.deleteBranchHistoryBySeq(branchHistory_seq);
+        return true;
+    }
+    @Override
+    public boolean deleteExclusionperiodHistoryBySeq(int exclusionperiodHistory_seq) {
+        exclusionperiodHistoryMapper.deleteExclusionperiodHistoryBySeq(exclusionperiodHistory_seq);
+        return true;
+    }
+
     @Override
     public String getCompany1(String stock_code1){
         String com = serviceUsageMapper.getCompany1(stock_code1);

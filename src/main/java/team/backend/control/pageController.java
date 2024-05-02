@@ -333,7 +333,10 @@ public class pageController {
                                  @RequestParam("stock_code2") String stock_code2,
                                  HttpSession session, Model model) {
         FileDeletionUtil.deleteFiles(PLOTS_DIRECTORY);
+        System.out.println("test");
         String id = (String) session.getAttribute("id");
+        System.out.println("stock_code1"+stock_code1);
+        System.out.println("stock_code2"+stock_code2);
         List<String> result1 = javaPy.strParameter("find_period", stock_code1, stock_code2);
         List<String> result2 = javaPy.strParameter("find_period", stock_code2, stock_code1);
         System.out.println("result1" + result1);
@@ -345,7 +348,6 @@ public class pageController {
         List<BranchHistory> branchHistoryList = new ArrayList<>();
         List<BranchHistory> branchHistoryList1 = new ArrayList<>();
         int resultCount = 0;
-        int resultCount1 = 0;
         for (String item : result1) {
             String[] resultArray = item.split(",\\s*");
             if (resultArray.length >= 3) {
@@ -378,8 +380,8 @@ public class pageController {
                 branchHistoryList.add(branchHistory);
             }
         }
-            System.out.println("resultCount"+resultCount);
-
+            System.out.println("카운트"+resultCount);
+        int count = resultCount;
 
         for (String item : result2) {
             String[] resultArray = item.split(",\\s*");
@@ -393,7 +395,8 @@ public class pageController {
                 branchHistory.setStart_date(resultArray[0]);
                 branchHistory.setEnd_date(resultArray[1]);
                 branchHistory.setReport(resultArray[2]);
-//                branchHistory.setReport(String.valueOf(resultCount1));
+                branchHistory.setResultcount(resultCount);
+                resultCount++;
 
                 try {
                     int reportValue = Integer.parseInt(branchHistory.getReport());
@@ -412,6 +415,7 @@ public class pageController {
             }
         }
 
+
         String company1 = addData.getCompany1(stock_code1);
         String company2 = addData.getCompany2(stock_code2);
 
@@ -421,6 +425,7 @@ public class pageController {
         System.out.println("serviceUsages2: " + branchHistoryList1);
         System.out.println("result1: " + result1);
         System.out.println("result2: " + result2);
+        model.addAttribute("count", count);
         model.addAttribute("company1", company1);
         model.addAttribute("company2", company2);
         model.addAttribute("serviceUsages0", branchHistoryList);
@@ -568,7 +573,7 @@ public class pageController {
         List<ExcludedquarterHistory> serviceUsages0 = new ArrayList<>();
         List<ExcludedquarterHistory> serviceUsages2 = new ArrayList<>();
 
-
+        int resultCount = 0;
         for (String item : result1) {
             String[] resultArray = item.split(",\\s*");
             if (resultArray.length >= 3) {
@@ -583,6 +588,8 @@ public class pageController {
                 serviceUsage1.setStart_date(resultArray[0]);
                 serviceUsage1.setEnd_date(resultArray[1]);
                 serviceUsage1.setReport(resultArray[2]);
+                serviceUsage1.setResultcount(resultCount);
+                resultCount++;
                 try {
                     int reportValue = Integer.parseInt(serviceUsage1.getReport());
                     String result = generateResult(reportValue);
@@ -615,6 +622,8 @@ public class pageController {
                 serviceUsage1.setStart_date(resultArray[0]);
                 serviceUsage1.setEnd_date(resultArray[1]);
                 serviceUsage1.setReport(resultArray[2]);
+                serviceUsage1.setResultcount(resultCount);
+                resultCount++;
                 try {
                     int reportValue = Integer.parseInt(serviceUsage1.getReport());
                     String result = generateResult(reportValue);
@@ -697,6 +706,19 @@ public class pageController {
     public String deleteHistory(@RequestParam("serviceusage_seq") int serviceusage_seq) {
 
         addData.deleteHistoryBySeq(serviceusage_seq);
+        return "redirect:history.do"; // 삭제 후 다시 히스토리 페이지로 리다이렉트
+    }
+    @GetMapping("exclusionperiodHistoryDel.do")
+    public String deleteExclusionperiodHistoryDel(@RequestParam("exclusionperiodHistory_seq") int exclusionperiodHistory_seq) {
+
+        addData.deleteExclusionperiodHistoryBySeq(exclusionperiodHistory_seq);
+        return "redirect:history.do"; // 삭제 후 다시 히스토리 페이지로 리다이렉트
+    }
+
+    @GetMapping("branchHistoryDel.do")
+    public String deleteBranchHistory(@RequestParam("branchHistory_seq") int branchHistory_seq) {
+
+        addData.deleteBranchHistoryBySeq(branchHistory_seq);
         return "redirect:history.do"; // 삭제 후 다시 히스토리 페이지로 리다이렉트
     }
     @PostMapping("resultDel.do")

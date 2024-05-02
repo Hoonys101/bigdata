@@ -28,4 +28,5 @@ public interface ExclusionperiodHistoryMapper {//제외기간
     String getCompany3(String stock_code3);
 
 
+    void deleteExclusionperiodHistoryBySeq(int exclusionperiodHistory_Seq);
 }

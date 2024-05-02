@@ -139,7 +139,7 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
             <th>Start Date</th>
             <th>End Date</th>
             <th>Report</th>
-            <th><button onclick="goToAnalysisPage1()">히스토리로</button></a></th>
+            <th>Analysis</th>
         </tr>
         </thead>
         <tbody>
@@ -163,6 +163,7 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
                             <input type="hidden" name="start_date" value="${item.start_date}">
                             <input type="hidden" name="end_date" value="${item.end_date}">
                             <input type="hidden" name="report" value="${item.report}">
+                            <input type="hidden" name="resultcount" value="${item.resultcount}">
                             <input type="submit" value="분석 페이지로">
                         </form>
                     </td>
@@ -201,7 +202,7 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
             <th>Start Date</th>
             <th>End Date</th>
             <th>Report</th>
-            <th><button onclick="goToAnalysisPage2()">히스토리로</button></a></th>
+            <th>Analysis</th>
 
         </tr>
         </thead>
@@ -227,6 +228,7 @@ List<String> aiResultFromSession = (List<String>) session.getAttribute("aiResult
                             <input type="hidden" name="start_date" value="${item.start_date}">
                             <input type="hidden" name="end_date" value="${item.end_date}">
                             <input type="hidden" name="report" value="${item.report}">
+                            <input type="hidden" name="resultcount" value="${item.resultcount}">
                             <input type="submit" value="분석 페이지로">
                         </form>
                     </td>
@@ -309,29 +311,9 @@ document.getElementById('ai-analysis-button-2').addEventListener('click', functi
          }
      });
  });
-// 결과값의 줄 수를 계산하는 JavaScript 함수
-    function countRows1() {
-        var rowCount = document.querySelectorAll('.table-container tbody tr').length;
-        return rowCount;
-    }
 
-    // 아래 테이블의 결과값의 줄 수를 계산하는 JavaScript 함수
-    function countRows2() {
-        var rowCount = document.querySelectorAll('.table-container2 tbody tr').length;
-        return rowCount;
-    }
 
-    // 분석 페이지로 이동하는 함수
-    function goToAnalysisPage1() {
-        var rowCount = countRows1();
-        window.location.href = "history.do?rowCount=" + rowCount;
-    }
 
-    // 아래 테이블의 결과값의 줄 수를 가져와서 분석 페이지로 이동하는 함수
-    function goToAnalysisPage2() {
-        var rowCount = countRows2();
-        window.location.href = "history.do?rowCount=" + rowCount;
-    }
 
 </script>
 <footer>

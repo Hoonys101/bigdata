@@ -127,7 +127,7 @@
                                 </form>
                             <td>
 
-                                <a href='historyDel.do?serviceusage_seq=${serviceUsage.serviceusage_seq}'>삭제</a>
+                                <a href='historyDel.do?serviceusage_seq=${serviceUsage2.serviceusage_seq}'>삭제</a>
                             </td>
                         </tr>
 
@@ -166,13 +166,13 @@
                   <td>${serviceUsage3.id}</td>
                   <td>${serviceUsage3.name1}</td>
                   <td>${serviceUsage3.name2}</td>
-                  <td>${serviceUsage3.resultcount}</td>
+                  <td>연동된 결과값의 수 : ${serviceUsage3.resultcount}</td>
                   <td>
                       <input type="submit" value="분석 페이지로">
                   </td>
                   </form>
               <td>
-                  <a href='historyDel.do?branchHistory_seq=${serviceUsage.branchHistory_seq}'>삭제</a>
+                  <a href='branchHistoryDel.do?branchHistory_seq=${serviceUsage.branchHistory_seq}'>삭제</a>
               </td>
           </tr>
 
@@ -184,52 +184,7 @@
 
                 </p>
                 </footer>
-                <script>
-                // 각 행의 rowCountValue를 설정하는 함수
-               function setRowCountValue(rowCountValue, index) {
-                   var element = document.querySelector('#rowCountValue' + index);
-                   if (element) {
-                       element.innerText = rowCountValue;
-                   }
-               }
 
-                window.onload = function() {
-                    // 각 행의 rowCount 값들을 가져와서 설정
-                    var rowCountValues = getAllRowCountValues();
-                    rowCountValues.forEach(function(rowCountValue, index) {
-                        // 각 행의 branchHistory_seq를 사용하여 ID를 설정
-                        var serviceUsageIndex = "${serviceUsages3[index].branchHistory_seq}";
-                        setRowCountValue(rowCountValue, serviceUsageIndex);
-                    });
 
-                    // 쿠키에서 rowCount 값을 가져와서 설정
-                    var rowCount = getCookie("rowCount");
-                    if (rowCount != null) {
-                        document.getElementById("rowCountValue").innerText = rowCount;
-                    }
-                };
-
-                // 쿠키에서 값을 가져오는 함수
-                function getCookie(name) {
-                    var nameEQ = name + "=";
-                    var ca = document.cookie.split(';');
-                    for (var i = 0; i < ca.length; i++) {
-                        var c = ca[i];
-                        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-                        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-                    }
-                    return null;
-                }
-
-                // 각 행의 모든 rowCountValue를 가져오는 함수
-                function getAllRowCountValues() {
-                    var rowCountValues = [];
-                    var rowCountElements = document.querySelectorAll('span[id^="rowCountValue"]');
-                    rowCountElements.forEach(function(element) {
-                        rowCountValues.push(element.innerText);
-                    });
-                    return rowCountValues;
-                }
-                </script>
 </body>
 </html>

@@ -82,12 +82,12 @@ footer {
         .table-container1 {
         width: 100%;
             max-height: 70vh; /* Set maximum height for the table container */
-            overflow-y: auto; /* Enable vertical scrolling if table exceeds maximum height */
+
         }
         .table-container2 {
                 width: 100%;
                     max-height: 70vh; /* Set maximum height for the table container */
-                    overflow-y: auto; /* Enable vertical scrolling if table exceeds maximum height */
+
                 }
         table {
             width: 100%;
@@ -140,7 +140,7 @@ footer {
             <th>Start Date</th>
             <th>End Date</th>
             <th>Report</th>
-            <th><button onclick="goToAnalysisPage1()">히스토리로</button></a></th>
+            <th>Analysis</th>
 
         </tr>
         </thead>
@@ -208,7 +208,7 @@ footer {
             <th>Start Date</th>
             <th>End Date</th>
             <th>Report</th>
-            <th><button onclick="goToAnalysisPage2()">히스토리로</button></a></th>
+            <th>Analysis</th>
         </tr>
         </thead>
         <tbody>

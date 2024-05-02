@@ -5,16 +5,23 @@
 <mapper namespace="team.backend.mapper.ExcludedquarterHistoryMapper">
 
     <insert id="insertExcludedquarterHistory" parameterType="Map">
-        insert into ExcludedquarterHistory(excludedquarterHistory_seq,stock_code1, stock_code2,stock_code3,name1,name2,name3, start_date, end_date, id,report)
-        values(excludedquarterHistory_seq.nextval,#{stock_code1},#{stock_code2},#{stock_code3},#{name1},#{name2},#{name3},#{start_date},#{end_date},#{id},#{report})
+        insert into ExcludedquarterHistory(excludedquarterHistory_seq,stock_code1, stock_code2,stock_code3,name1,name2,name3, start_date, end_date, id,report, resultcount)
+        values(excludedquarterHistory_seq.nextval,#{stock_code1},#{stock_code2},#{stock_code3},#{name1},#{name2},#{name3},#{start_date},#{end_date},#{id},#{report},#{resultcount})
     </insert>
 
     <select id="getHistoryByQuarter" parameterType="String" resultType="team.backend.domain.ExcludedquarterHistory">
-        SELECT DISTINCT  id, name1,name2,name3,stock_code1, stock_code2, stock_code3
+        SELECT *
+        FROM (
+        SELECT id, name1, name2,name3 ,stock_code1, stock_code2,stock_code3, resultcount,
+        ROW_NUMBER() OVER (ORDER BY resultCount DESC) AS rn
+        FROM (
+        SELECT id, name1, name2,name3, stock_code1, stock_code2,stock_code3, COUNT(*) AS resultcount
         FROM ExcludedquarterHistory
-        WHERE id = #{id}  AND stock_code1 IS NOT NULL
-        AND stock_code2 IS NOT NULL
-        AND stock_code3 IS NOT NULL
+        WHERE id = #{id}
+        GROUP BY id, name1, name2,name3, stock_code1, stock_code2,stock_code3
+        ) t
+        )
+        WHERE rn &lt;= 100
     </select>
     <delete id="deleteHistoryBySeq" parameterType="int">
         DELETE FROM ExcludedquarterHistory WHERE excludedquarterHistory_seq = #{excludedquarterHistory_seq}
