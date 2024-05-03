@@ -43,7 +43,7 @@ form {
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     overflow-y: auto; /* 세로 스크롤이 내용이 넘칠 때만 표시 */
-    max-height: 400px; /* 최대 높이 설정 */
+    max-height: 300px; /* 최대 높이 설정 */
 }
 select {
   width: 100%;
