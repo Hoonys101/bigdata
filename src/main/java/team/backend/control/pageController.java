@@ -337,7 +337,9 @@ public class pageController {
         List<String> result1 = javaPy.strParameter("find_period", stock_code1, stock_code2);
         List<String> result2 = javaPy.strParameter("find_period", stock_code2, stock_code1);
         System.out.println("result1" + result1);
+        System.out.println("총 연관된 결과수"+result1.size());
         System.out.println("result2" + result2);
+
 
         String name1 = availableDataService.getCompany(stock_code1);
         String name2 = availableDataService.getCompany(stock_code2);
@@ -345,8 +347,9 @@ public class pageController {
         List<BranchHistory> branchHistoryList = new ArrayList<>();
         List<BranchHistory> branchHistoryList1 = new ArrayList<>();
         int resultCount = 0;
+        String[] resultArray = null;
         for (String item : result1) {
-            String[] resultArray = item.split(",\\s*");
+            resultArray = item.split(",\\s*");
             if (resultArray.length >= 3) {
 
                 BranchHistory branchHistory = new BranchHistory(); // 각 요소에 대해 새로운 ServiceUsage 객체를 생성
@@ -373,15 +376,17 @@ public class pageController {
                     System.err.println("NumberFormatException occurred: " + e.getMessage());
                 }
 
-                addData.insertToBranchHistory(branchHistory);
+
                 branchHistoryList.add(branchHistory);
             }
+
         }
+
             System.out.println("카운트"+resultCount);
         int count = resultCount;
 
         for (String item : result2) {
-            String[] resultArray = item.split(",\\s*");
+            resultArray = item.split(",\\s*");
             if (resultArray.length >= 3) {
                 BranchHistory branchHistory = new BranchHistory(); // 각 요소에 대해 새로운 ServiceUsage 객체를 생성
                 branchHistory.setStock_code1(stock_code2);
@@ -407,7 +412,7 @@ public class pageController {
                     System.err.println("NumberFormatException occurred: " + e.getMessage());
                 }
 
-                addData.insertToBranchHistory(branchHistory);
+//                addData.insertToBranchHistory(branchHistory);
                 branchHistoryList1.add(branchHistory);
             }
         }
@@ -599,7 +604,7 @@ public class pageController {
                     System.err.println("NumberFormatException occurred: " + e.getMessage());
                 }
 
-                addData.insertExcludedquarterHistory(serviceUsage1);
+//                addData.insertExcludedquarterHistory(serviceUsage1);
                 serviceUsages0.add(serviceUsage1);
             }
         }
@@ -633,7 +638,7 @@ public class pageController {
                     System.err.println("NumberFormatException occurred: " + e.getMessage());
                 }
 
-                addData.insertExcludedquarterHistory(serviceUsage1);
+//                addData.insertExcludedquarterHistory(serviceUsage1);
                 serviceUsages2.add(serviceUsage1);
             }
         }
@@ -850,7 +855,7 @@ public class pageController {
     @ResponseBody
     public ResponseEntity<?> performAIAnalysis(@RequestParam("stock_code1") String stock_code1,
                                                @RequestParam("stock_code2") String stock_code2,
-                                               @RequestParam("stock_code3") String stock_code3,
+                                               @RequestParam(name = "stock_code3", required = false) String stock_code3,
                                                 Model model,
                                                HttpSession session
                                                ) {
@@ -890,7 +895,7 @@ public class pageController {
     @ResponseBody
     public ResponseEntity<?> performAIAnalysiss(@RequestParam("stock_code1") String stock_code1,
                                                @RequestParam("stock_code2") String stock_code2,
-                                                @RequestParam("stock_code3") String stock_code3,
+                                                @RequestParam(name = "stock_code3", required = false) String stock_code3,
                                                Model model,
                                                HttpSession session
     ) {
