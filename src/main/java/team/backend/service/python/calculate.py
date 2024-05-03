@@ -750,10 +750,10 @@ def find_usable(lst:list[str]=[
         for stock_code2 in lst:
             if stock_code1==stock_code2:
                 continue
-            print(stock_code1,'과',stock_code2)
+            # print(stock_code1,'과',stock_code2)
             # result=ai_anal(['asdf',stock_code1,stock_code2],period=12,delay_days=1)
             result=ai_anal(['asdf',stock_code1,stock_code2],decimal=decimal,period=period,delay_days=delay_days)
-            print(result)
+            # print(result)
             if result[1][0]=='아':
                 continue
             else:
@@ -843,10 +843,11 @@ def find_usable(lst:list[str]=[
 # # print(diff_find_period(['111','1004','1002','1001']))
 # # print(total_analy(['111','1004','1002']))
 #############test###############
-# fi_result=find_usable(period=4,delay_days=5,decimal='1001')
+# fi_result=find_usable(period=4,delay_days=5)
 # print('최종 결과는 ')
 # for strs in fi_result:
 #     print(strs)
+### 기업명 출력 주석처리 수정하고 돌릴 것.
 # ###############################
 # # find_usable_multi()
 # def find_usable_multi(lst:list[str]=[

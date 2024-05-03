@@ -224,8 +224,8 @@
                <a href="withdraw.do?id=${sessionScope.id}" id="withdraw-link">회원탈퇴</a>
                </div>
                 <div class="analyze-buttons">
-                        <a href="add2.do" class="analyze-button">기업추가</a>
-                        <a href="add2_by_name.do" class="analyze-button">기업추가_by_type</a>
+                        <a href="add2.do" class="analyze-button">기업추가</a>|
+                        <a href="add2_by_name.do" class="analyze-button">기업추가(by_typing)</a>
                     </div>
                 <div class="analyze-buttons">
                         <a href="analysis_page.do" class="analyze-button">기간분석</a>|
