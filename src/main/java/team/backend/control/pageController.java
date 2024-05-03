@@ -238,6 +238,7 @@ public class pageController {
         System.out.println("result"+result);
         System.out.println("result2"+result2);
         int length = result.size();
+
         System.out.println("length: " + length);
         for (int i = 0; i < 10; i++) {
             result.set(i, result.get(length + i - 10));
@@ -338,13 +339,13 @@ public class pageController {
         List<String> result2 = javaPy.strParameter("find_period", stock_code2, stock_code1);
         System.out.println("result1" + result1);
         System.out.println("result2" + result2);
+        System.out.println("사이즈"+result1.size());
 
         String name1 = availableDataService.getCompany(stock_code1);
         String name2 = availableDataService.getCompany(stock_code2);
 
         List<BranchHistory> branchHistoryList = new ArrayList<>();
         List<BranchHistory> branchHistoryList1 = new ArrayList<>();
-        int resultCount = 0;
         for (String item : result1) {
             String[] resultArray = item.split(",\\s*");
             if (resultArray.length >= 3) {
@@ -359,8 +360,7 @@ public class pageController {
                 branchHistory.setStart_date(resultArray[0]);
                 branchHistory.setEnd_date(resultArray[1]);
                 branchHistory.setReport(resultArray[2]);
-                branchHistory.setResultcount(resultCount);
-                resultCount++;
+                branchHistory.setResultcount(result1.size());
                 try {
                     int reportValue = Integer.parseInt(branchHistory.getReport());
                     String result = generateResult(reportValue);
@@ -377,8 +377,8 @@ public class pageController {
                 branchHistoryList.add(branchHistory);
             }
         }
-            System.out.println("카운트"+resultCount);
-        int count = resultCount;
+
+
 
         for (String item : result2) {
             String[] resultArray = item.split(",\\s*");
@@ -392,8 +392,8 @@ public class pageController {
                 branchHistory.setStart_date(resultArray[0]);
                 branchHistory.setEnd_date(resultArray[1]);
                 branchHistory.setReport(resultArray[2]);
-                branchHistory.setResultcount(resultCount);
-                resultCount++;
+                branchHistory.setResultcount(result2.size());
+
 
                 try {
                     int reportValue = Integer.parseInt(branchHistory.getReport());
@@ -413,6 +413,7 @@ public class pageController {
         }
 
 
+
         String company1 = addData.getCompany1(stock_code1);
         String company2 = addData.getCompany2(stock_code2);
 
@@ -422,7 +423,7 @@ public class pageController {
         System.out.println("serviceUsages2: " + branchHistoryList1);
         System.out.println("result1: " + result1);
         System.out.println("result2: " + result2);
-        model.addAttribute("count", count);
+
         model.addAttribute("company1", company1);
         model.addAttribute("company2", company2);
         model.addAttribute("serviceUsages0", branchHistoryList);
@@ -482,6 +483,7 @@ public class pageController {
         System.out.println("result2" + result2);
         System.out.println(result.toString());
         int length = result.size();
+
         System.out.println("length: " + length);
         for (int i = 0; i < 10; i++) {
             result.set(i, result.get(length + i - 10));
