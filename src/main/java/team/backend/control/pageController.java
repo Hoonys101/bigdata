@@ -376,7 +376,7 @@ public class pageController {
                     System.err.println("NumberFormatException occurred: " + e.getMessage());
                 }
 
-
+                addData.insertToBranchHistory(branchHistory);
                 branchHistoryList.add(branchHistory);
             }
 
@@ -411,7 +411,7 @@ public class pageController {
                     System.err.println("NumberFormatException occurred: " + e.getMessage());
                 }
 
-//                addData.insertToBranchHistory(branchHistory);
+                addData.insertToBranchHistory(branchHistory);
                 branchHistoryList1.add(branchHistory);
             }
         }
@@ -421,15 +421,15 @@ public class pageController {
         String company1 = addData.getCompany1(stock_code1);
         String company2 = addData.getCompany2(stock_code2);
 
-        System.out.println("company1: " + company1);
-        System.out.println("company2: " + company2);
+        System.out.println("company1: " + name1);
+        System.out.println("company2: " + name2);
         System.out.println("serviceUsages1: " + branchHistoryList);
         System.out.println("serviceUsages2: " + branchHistoryList1);
         System.out.println("result1: " + result1);
         System.out.println("result2: " + result2);
 
-        model.addAttribute("company1", company1);
-        model.addAttribute("company2", company2);
+        model.addAttribute("company1", name1);
+        model.addAttribute("company2", name2);
         model.addAttribute("serviceUsages0", branchHistoryList);
         model.addAttribute("serviceUsages2", branchHistoryList1);
 
@@ -591,7 +591,7 @@ public class pageController {
                 serviceUsage1.setStart_date(resultArray[0]);
                 serviceUsage1.setEnd_date(resultArray[1]);
                 serviceUsage1.setReport(resultArray[2]);
-                serviceUsage1.setResultcount(resultCount);
+                serviceUsage1.setResultcount(result1.size());
                 resultCount++;
                 try {
                     int reportValue = Integer.parseInt(serviceUsage1.getReport());
@@ -605,7 +605,7 @@ public class pageController {
                     System.err.println("NumberFormatException occurred: " + e.getMessage());
                 }
 
-//                addData.insertExcludedquarterHistory(serviceUsage1);
+                addData.insertExcludedquarterHistory(serviceUsage1);
                 serviceUsages0.add(serviceUsage1);
             }
         }
@@ -625,7 +625,7 @@ public class pageController {
                 serviceUsage1.setStart_date(resultArray[0]);
                 serviceUsage1.setEnd_date(resultArray[1]);
                 serviceUsage1.setReport(resultArray[2]);
-                serviceUsage1.setResultcount(resultCount);
+                serviceUsage1.setResultcount(result2.size());
                 resultCount++;
                 try {
                     int reportValue = Integer.parseInt(serviceUsage1.getReport());
@@ -639,7 +639,7 @@ public class pageController {
                     System.err.println("NumberFormatException occurred: " + e.getMessage());
                 }
 
-//                addData.insertExcludedquarterHistory(serviceUsage1);
+                addData.insertExcludedquarterHistory(serviceUsage1);
                 serviceUsages2.add(serviceUsage1);
             }
         }
@@ -654,8 +654,8 @@ public class pageController {
         System.out.println("result1: " + result1);
         System.out.println("result2: " + result2);
         model.addAttribute("stock_code3", stock_code3);
-        model.addAttribute("company1", company1);
-        model.addAttribute("company2", company2);
+        model.addAttribute("company1", name1);
+        model.addAttribute("company2", name2);
         model.addAttribute("serviceUsages0", serviceUsages0);
         model.addAttribute("serviceUsages2", serviceUsages2);
 
@@ -907,6 +907,7 @@ public class pageController {
         System.out.println("performAIAnalysis start");
         System.out.println("stock_code1" + stock_code1);
         System.out.println("stock_code2" + stock_code2);
+        System.out.println("stock_code3" + stock_code3);
 
         // AI 분석을 수행하고 결과를 얻는 로직을 작성합니다.
         // 예를 들어, AI 분석 서비스를 호출하고 결과를 받아온다고 가정합니다.

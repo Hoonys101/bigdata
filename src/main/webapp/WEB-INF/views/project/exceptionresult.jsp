@@ -110,7 +110,7 @@ footer {
 </div>
 
 <div class="container">
-<h2 style="text-align: center;">회사 1: ${company1}  회사 2: ${company2}</h2>
+<h2 style="text-align: center;">회사 1: ${company1} , 회사 2: ${company2}</h2>
 <button id="ai-analysis-button" class="ai-button">AI 분석</button>
 
 </div>
@@ -180,7 +180,7 @@ footer {
     </table>
 </div>
 <div class="container">
-<h2 style="text-align: center;">회사 1: ${company2}  회사 2: ${company1}</h2>
+<h2 style="text-align: center;">회사 1: ${company2} , 회사 2: ${company1}</h2>
 <button id="ai-analysis-button-2" class="ai-button2">AI 분석</button> <!-- 수정된 아이디 사용 -->
 
 </div>

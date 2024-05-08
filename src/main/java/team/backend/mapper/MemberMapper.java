@@ -20,6 +20,9 @@ public interface MemberMapper {
     void deleteUserByAddition(String id);
 
     void deleteUserByServiceUsage(String id);
+    void deleteUserByBranchHistory(String id);
+    void deleteUserByExclusionperiodHistory(String id);
+    void deleteUserByExcludedquarterHistory(String id);
 
 
 

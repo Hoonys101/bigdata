@@ -25,6 +25,16 @@
     <delete id="deleteUserByServiceUsage" parameterType="String">
         DELETE FROM ServiceUsage WHERE ID = #{id}
     </delete>
+    <delete id="deleteUserByBranchHistory" parameterType="String">
+        DELETE FROM BranchHistory WHERE ID = #{id}
+    </delete>
+    <delete id="deleteUserByExclusionperiodHistory" parameterType="String">
+        DELETE FROM ExclusionperiodHistory WHERE ID = #{id}
+    </delete>
+    <delete id="deleteUserByExcludedquarterHistory" parameterType="String">
+        DELETE FROM ExcludedquarterHistory WHERE ID = #{id}
+    </delete>
+
     <select id="findUserByUsernameDobAndEmail" resultType="team.backend.domain.Member">
         SELECT id FROM ID
         WHERE user_name = #{user_name}

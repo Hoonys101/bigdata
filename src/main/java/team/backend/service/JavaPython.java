@@ -20,7 +20,7 @@ public class JavaPython implements JavaPythonInter {
     private static BufferedReader br;
     private static Process pythonProcess;
     private int currentIndex=0;
-    private List<List<String>> results=new ArrayList<List<String>>();
+    private List<List<String>> results=new CopyOnWriteArrayList<List<String>>();
 //    private static ThreadLocal<List<String>> threadResult= new ThreadLocal<>();
     private ThreadLocal<Object> lock=new ThreadLocal<>();
     public synchronized int assignIndex(){
