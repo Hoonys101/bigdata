@@ -238,6 +238,7 @@ public class pageController {
         System.out.println("result"+result);
         System.out.println("result2"+result2);
         int length = result.size();
+
         System.out.println("length: " + length);
         for (int i = 0; i < 10; i++) {
             result.set(i, result.get(length + i - 10));
@@ -339,6 +340,7 @@ public class pageController {
         System.out.println("result1" + result1);
         System.out.println("총 연관된 결과수"+result1.size());
         System.out.println("result2" + result2);
+        System.out.println("사이즈"+result1.size());
 
 
         String name1 = availableDataService.getCompany(stock_code1);
@@ -346,10 +348,9 @@ public class pageController {
 
         List<BranchHistory> branchHistoryList = new ArrayList<>();
         List<BranchHistory> branchHistoryList1 = new ArrayList<>();
-        int resultCount = 0;
-        String[] resultArray = null;
+
         for (String item : result1) {
-            resultArray = item.split(",\\s*");
+            String[] resultArray = item.split(",\\s*");
             if (resultArray.length >= 3) {
 
                 BranchHistory branchHistory = new BranchHistory(); // 각 요소에 대해 새로운 ServiceUsage 객체를 생성
@@ -362,8 +363,7 @@ public class pageController {
                 branchHistory.setStart_date(resultArray[0]);
                 branchHistory.setEnd_date(resultArray[1]);
                 branchHistory.setReport(resultArray[2]);
-                branchHistory.setResultcount(resultCount);
-                resultCount++;
+                branchHistory.setResultcount(result1.size());
                 try {
                     int reportValue = Integer.parseInt(branchHistory.getReport());
                     String result = generateResult(reportValue);
@@ -376,17 +376,16 @@ public class pageController {
                     System.err.println("NumberFormatException occurred: " + e.getMessage());
                 }
 
-
+                addData.insertToBranchHistory(branchHistory);
                 branchHistoryList.add(branchHistory);
             }
 
         }
 
-            System.out.println("카운트"+resultCount);
-        int count = resultCount;
+
 
         for (String item : result2) {
-            resultArray = item.split(",\\s*");
+            String[] resultArray = item.split(",\\s*");
             if (resultArray.length >= 3) {
                 BranchHistory branchHistory = new BranchHistory(); // 각 요소에 대해 새로운 ServiceUsage 객체를 생성
                 branchHistory.setStock_code1(stock_code2);
@@ -397,8 +396,8 @@ public class pageController {
                 branchHistory.setStart_date(resultArray[0]);
                 branchHistory.setEnd_date(resultArray[1]);
                 branchHistory.setReport(resultArray[2]);
-                branchHistory.setResultcount(resultCount);
-                resultCount++;
+                branchHistory.setResultcount(result2.size());
+
 
                 try {
                     int reportValue = Integer.parseInt(branchHistory.getReport());
@@ -412,24 +411,25 @@ public class pageController {
                     System.err.println("NumberFormatException occurred: " + e.getMessage());
                 }
 
-//                addData.insertToBranchHistory(branchHistory);
+                addData.insertToBranchHistory(branchHistory);
                 branchHistoryList1.add(branchHistory);
             }
         }
 
 
+
         String company1 = addData.getCompany1(stock_code1);
         String company2 = addData.getCompany2(stock_code2);
 
-        System.out.println("company1: " + company1);
-        System.out.println("company2: " + company2);
+        System.out.println("company1: " + name1);
+        System.out.println("company2: " + name2);
         System.out.println("serviceUsages1: " + branchHistoryList);
         System.out.println("serviceUsages2: " + branchHistoryList1);
         System.out.println("result1: " + result1);
         System.out.println("result2: " + result2);
-        model.addAttribute("count", count);
-        model.addAttribute("company1", company1);
-        model.addAttribute("company2", company2);
+
+        model.addAttribute("company1", name1);
+        model.addAttribute("company2", name2);
         model.addAttribute("serviceUsages0", branchHistoryList);
         model.addAttribute("serviceUsages2", branchHistoryList1);
 
@@ -487,6 +487,7 @@ public class pageController {
         System.out.println("result2" + result2);
         System.out.println(result.toString());
         int length = result.size();
+
         System.out.println("length: " + length);
         for (int i = 0; i < 10; i++) {
             result.set(i, result.get(length + i - 10));
@@ -590,7 +591,7 @@ public class pageController {
                 serviceUsage1.setStart_date(resultArray[0]);
                 serviceUsage1.setEnd_date(resultArray[1]);
                 serviceUsage1.setReport(resultArray[2]);
-                serviceUsage1.setResultcount(resultCount);
+                serviceUsage1.setResultcount(result1.size());
                 resultCount++;
                 try {
                     int reportValue = Integer.parseInt(serviceUsage1.getReport());
@@ -604,7 +605,7 @@ public class pageController {
                     System.err.println("NumberFormatException occurred: " + e.getMessage());
                 }
 
-//                addData.insertExcludedquarterHistory(serviceUsage1);
+                addData.insertExcludedquarterHistory(serviceUsage1);
                 serviceUsages0.add(serviceUsage1);
             }
         }
@@ -624,7 +625,7 @@ public class pageController {
                 serviceUsage1.setStart_date(resultArray[0]);
                 serviceUsage1.setEnd_date(resultArray[1]);
                 serviceUsage1.setReport(resultArray[2]);
-                serviceUsage1.setResultcount(resultCount);
+                serviceUsage1.setResultcount(result2.size());
                 resultCount++;
                 try {
                     int reportValue = Integer.parseInt(serviceUsage1.getReport());
@@ -638,7 +639,7 @@ public class pageController {
                     System.err.println("NumberFormatException occurred: " + e.getMessage());
                 }
 
-//                addData.insertExcludedquarterHistory(serviceUsage1);
+                addData.insertExcludedquarterHistory(serviceUsage1);
                 serviceUsages2.add(serviceUsage1);
             }
         }
@@ -653,8 +654,8 @@ public class pageController {
         System.out.println("result1: " + result1);
         System.out.println("result2: " + result2);
         model.addAttribute("stock_code3", stock_code3);
-        model.addAttribute("company1", company1);
-        model.addAttribute("company2", company2);
+        model.addAttribute("company1", name1);
+        model.addAttribute("company2", name2);
         model.addAttribute("serviceUsages0", serviceUsages0);
         model.addAttribute("serviceUsages2", serviceUsages2);
 
@@ -906,6 +907,7 @@ public class pageController {
         System.out.println("performAIAnalysis start");
         System.out.println("stock_code1" + stock_code1);
         System.out.println("stock_code2" + stock_code2);
+        System.out.println("stock_code3" + stock_code3);
 
         // AI 분석을 수행하고 결과를 얻는 로직을 작성합니다.
         // 예를 들어, AI 분석 서비스를 호출하고 결과를 받아온다고 가정합니다.

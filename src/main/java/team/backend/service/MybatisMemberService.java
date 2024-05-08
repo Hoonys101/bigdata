@@ -41,6 +41,9 @@ public class MybatisMemberService implements MemberService {
     public void withdraw(String id){
         mapper.deleteUserByAddition(id);
         mapper.deleteUserByServiceUsage(id);
+        mapper.deleteUserByBranchHistory(id);
+        mapper.deleteUserByExcludedquarterHistory(id);
+        mapper.deleteUserByExclusionperiodHistory(id);
         mapper.deleteUser(id);
     }
 
